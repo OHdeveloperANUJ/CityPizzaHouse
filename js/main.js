@@ -428,13 +428,12 @@
       preloader.style.display = "none";
       preloader.remove();
     } else {
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          preloader.classList.add("fade-out");
-          sessionStorage.setItem(VISIT_FLAG_KEY, "true");
-          setTimeout(() => preloader.remove(), 500);
-        }, 1500);
-      });
+      // Fast dismiss after a short delay so the user doesn't wait for all heavy images
+      setTimeout(() => {
+        preloader.classList.add("fade-out");
+        sessionStorage.setItem(VISIT_FLAG_KEY, "true");
+        setTimeout(() => preloader.remove(), 500);
+      }, 400);
     }
   }
 
@@ -814,13 +813,75 @@
           }
         });
 
-        // Render each category grid
-        categoriesList.forEach(cat => {
-          const items = itemsByCategory[cat.id] || [];
-          renderCategoryGrid(cat.id, items);
-        });
+        // Helper to render a category section with animations
+        const triggerRenderCategory = (catId) => {
+          const section = document.getElementById(catId);
+          if (!section) return;
+          const grid = section.querySelector(".products-grid");
+          if (grid && grid.children.length === 0) {
+            const items = itemsByCategory[catId] || [];
+            renderCategoryGrid(catId, items);
+            bindProductCardEvents(); // Re-bind card click event handlers
+            
+            // Stagger fade-in + slide-up motion animation
+            const cards = grid.querySelectorAll(".product-card");
+            cards.forEach((card, idx) => {
+              card.style.opacity = "0";
+              card.style.transform = "translateY(25px)";
+              card.style.transition = "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+              setTimeout(() => {
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+              }, idx * 45);
+            });
+          }
+        };
 
-        bindProductCardEvents();
+        // Lazy load categories using IntersectionObserver
+        if ('IntersectionObserver' in window) {
+          const observerOptions = {
+            rootMargin: "250px 0px 250px 0px", // pre-render 250px before entering viewport
+            threshold: 0.01
+          };
+
+          const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const catId = entry.target.id;
+                triggerRenderCategory(catId);
+                obs.unobserve(entry.target);
+              }
+            });
+          }, observerOptions);
+
+          categoriesList.forEach(cat => {
+            const sec = document.getElementById(cat.id);
+            if (sec) observer.observe(sec);
+          });
+        } else {
+          // Fallback: render all immediately
+          categoriesList.forEach(cat => {
+            renderCategoryGrid(cat.id, itemsByCategory[cat.id] || []);
+          });
+          bindProductCardEvents();
+        }
+
+        // Handle immediate rendering when filter pill is clicked
+        const filterBar = document.getElementById("menu-filter-bar");
+        if (filterBar) {
+          // Since they are rendered as <a> filter-pills in loadDynamicMenu
+          filterBar.addEventListener("click", (e) => {
+            const pill = e.target.closest(".filter-pill");
+            if (pill) {
+              const href = pill.getAttribute("href");
+              if (href && href.startsWith("#")) {
+                const catId = href.substring(1);
+                triggerRenderCategory(catId);
+              }
+            }
+          });
+        }
+
         initCategoryFilterScrolling();
       });
     });
@@ -1963,6 +2024,29 @@
   }
 
   /* ==========================================================================
+     18. GLOBAL SCROLL REVEAL ANIMATIONS
+     ========================================================================== */
+  function initScrollAnimations() {
+    if (!('IntersectionObserver' in window)) return;
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: "0px 0px -50px 0px", // Trigger reveal slightly before it's fully on screen
+      threshold: 0.05
+    });
+
+    document.querySelectorAll(".reveal-on-scroll").forEach(el => {
+      revealObserver.observe(el);
+    });
+  }
+
+  /* ==========================================================================
      APPLICATION INITIATION
      ========================================================================== */
   document.addEventListener("DOMContentLoaded", () => {
@@ -1983,5 +2067,6 @@
     initHomePage();
     initDineInFlow();
     initContactPage();
+    initScrollAnimations();
   });
 })();
