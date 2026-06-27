@@ -1343,12 +1343,17 @@
         }
       } else {
         // Takeaway or Dine In
+        name = document.getElementById("client-name-dt").value.trim();
         phone = document.getElementById("client-phone-dt").value.trim();
         email = document.getElementById("client-email-dt").value.trim();
         if (selectedMode === "dinein") {
           tableNo = document.getElementById("client-table-dt").value;
         }
 
+        if (!name) {
+          document.getElementById("client-name-dt").parentNode.querySelector(".form-error").style.display = "block";
+          isValid = false;
+        }
         if (!phone) {
           document.getElementById("client-phone-dt").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
@@ -1382,7 +1387,7 @@
           });
 
           await newOrderRef.set({
-            customerName: `${tableNo} Table Guest`,
+            customerName: name || `${tableNo} Table Guest`,
             phone: phone,
             email: email,
             tableCode: tableNo,
@@ -1395,7 +1400,7 @@
           // Save active session
           sessionStorage.setItem("cityhut_current_order_id", newOrderRef.key);
           sessionStorage.setItem("cityhut_dinein_table", tableNo);
-          sessionStorage.setItem("cityhut_dinein_name", `${tableNo} Table Guest`);
+          sessionStorage.setItem("cityhut_dinein_name", name || `${tableNo} Table Guest`);
           sessionStorage.setItem("cityhut_table_session_active", "true");
 
           // Update navbar table badge if dinein and active table is stored
