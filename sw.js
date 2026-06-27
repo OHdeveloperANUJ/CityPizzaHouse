@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cityhut-pizza-v3';
+const CACHE_NAME = 'cityhut-pizza-v4';
 const ASSETS = [
   '/',
   '/menu',
@@ -14,6 +14,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS).catch(() => {});
@@ -31,7 +32,7 @@ self.addEventListener('activate', (e) => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
