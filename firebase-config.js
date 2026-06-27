@@ -187,10 +187,9 @@ if (isPlaceholderConfig) {
               },
               "categories": {
                 "pizza": { "id": "pizza", "name": "Pizza", "icon": "🍕" },
-                "burger": { "id": "burger", "name": "Burgers", "icon": "🍔" },
-                "sandwich": { "id": "sandwich", "name": "Sandwiches", "icon": "🥪" },
-                "garlic-bread": { "id": "garlic-bread", "name": "Garlic Bread", "icon": "🧄" },
-                "beverage": { "id": "beverage", "name": "Beverages", "icon": "☕" }
+                "snakes": { "id": "snakes", "name": "Snacks", "icon": "🍟" },
+                "chinase": { "id": "chinase", "name": "Chinese", "icon": "🍜" },
+                "drink": { "id": "drink", "name": "Drinks", "icon": "🍹" }
               },
               "instagram": {
                 "headline": "@cityhut_pizza on Instagram",
@@ -208,7 +207,7 @@ if (isPlaceholderConfig) {
                     { "name": "Classic Hand Tossed", "price": 0 },
                     { "name": "Wheat Thin Crust", "price": 30 },
                     { "name": "Fresh Pan Pizza", "price": 40 },
-                    { "name": "Cheese Burst", "price": 60 }
+                    { "name": "Cheese Burst", "price": 100 }
                   ],
                   "addons": [
                     { "name": "Extra Cheese", "price": 40 },
@@ -218,24 +217,15 @@ if (isPlaceholderConfig) {
                     { "name": "Capsicum & Onion", "price": 25 }
                   ]
                 },
-                "burger": {
+                "snakes": {
                   "addons": [
+                    { "name": "Extra Cheese", "price": 20 },
+                    { "name": "Extra Paneer", "price": 30 },
                     { "name": "Extra Cheese Slice", "price": 15 },
                     { "name": "Double Patty", "price": 35 }
                   ]
                 },
-                "sandwich": {
-                  "addons": [
-                    { "name": "Extra Cheese", "price": 20 },
-                    { "name": "Extra Paneer", "price": 30 }
-                  ]
-                },
-                "garlic-bread": {
-                  "addons": [
-                    { "name": "Extra Cheese", "price": 30 }
-                  ]
-                },
-                "beverage": {
+                "drink": {
                   "addons": [
                     { "name": "Ice Cream Scoop", "price": 20 },
                     { "name": "Whipped Cream", "price": 15 }

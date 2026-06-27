@@ -92,6 +92,12 @@
         padding: 10px !important;
       }
     }
+    
+    .filter-tab-btn.active {
+      background-color: var(--primary) !important;
+      color: var(--surface) !important;
+      border-color: var(--primary) !important;
+    }
   </style>
 </head>
 <body style="background-color: var(--background); min-height: 100vh;">
@@ -105,11 +111,27 @@
   <div id="admin-nav" class="admin-navbar-wrapper"></div>
 
   <main class="container section-padding" style="padding-top: 40px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h1 style="color: var(--dark); font-size: 28px;">📋 Live Order Dashboard</h1>
-      <button id="enable-notifications" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); font-size: 13px; padding: 6px 12px; min-height: auto;">
-        🔔 Enable Sound & Alerts
-      </button>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+      <h1 style="color: var(--dark); font-size: 28px; margin: 0;">📋 Live Order Dashboard</h1>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <!-- Sound Customization Dropdown -->
+        <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 12px;">
+          <label for="sound-selector" style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 4px; cursor: pointer;">
+            🔊 Alert Sound:
+          </label>
+          <select id="sound-selector" style="border: none; background: transparent; font-weight: 600; font-size: 13px; color: var(--dark); cursor: pointer; outline: none; padding: 0 4px;">
+            <option value="double-beep">Double Beep (Default)</option>
+            <option value="bell-chime">Bell Chime</option>
+            <option value="retro-arcade">Retro Arcade</option>
+            <option value="digital-ring">Digital Ring</option>
+            <option value="soft-notice">Soft Notice</option>
+          </select>
+          <button type="button" onclick="testNotificationSound()" style="background: none; border: none; cursor: pointer; font-size: 13px; padding: 0 2px;" title="Test Sound">▶️</button>
+        </div>
+        <button id="enable-notifications" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); font-size: 13px; padding: 6px 12px; min-height: auto; margin: 0;">
+          🔔 Enable Sound & Alerts
+        </button>
+      </div>
     </div>
 
     <!-- Stats Bar -->
@@ -139,6 +161,23 @@
         <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #2ECC71;"></span>
         Active Orders
       </h2>
+      
+      <!-- Active Orders Filter Tabs -->
+      <div class="active-orders-filter-tabs" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+        <button type="button" class="filter-tab-btn active" onclick="setActiveFilter('all')" id="filter-btn-all" style="padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border); background-color: var(--surface); color: var(--dark); font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px;">
+          <span>📋</span> All Active
+        </button>
+        <button type="button" class="filter-tab-btn" onclick="setActiveFilter('delivery')" id="filter-btn-delivery" style="padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border); background-color: var(--surface); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px;">
+          <span>🚚</span> Online Orders
+        </button>
+        <button type="button" class="filter-tab-btn" onclick="setActiveFilter('takeaway')" id="filter-btn-takeaway" style="padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border); background-color: var(--surface); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px;">
+          <span>📦</span> Takeaway
+        </button>
+        <button type="button" class="filter-tab-btn" onclick="setActiveFilter('dine-in')" id="filter-btn-dine-in" style="padding: 10px 18px; border-radius: var(--radius); border: 1px solid var(--border); background-color: var(--surface); color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px;">
+          <span>🍽️</span> Dine In
+        </button>
+      </div>
+
       <div class="order-grid" id="active-orders-grid">
         <!-- Rendered dynamically -->
       </div>
@@ -351,13 +390,15 @@
           audioCtx.resume();
         }
         
-        // Dynamic double beep sound
-        const playBeep = (time, freq, duration) => {
+        const soundTypeSelect = document.getElementById("sound-selector");
+        const soundType = soundTypeSelect ? soundTypeSelect.value : (localStorage.getItem("notification_sound") || "double-beep");
+        
+        const playBeep = (time, freq, duration, type = 'triangle', startVol = 0.15) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
-          osc.type = 'triangle';
+          osc.type = type;
           osc.frequency.setValueAtTime(freq, time);
-          gain.gain.setValueAtTime(0.15, time);
+          gain.gain.setValueAtTime(startVol, time);
           gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
@@ -366,12 +407,39 @@
         };
         
         const now = audioCtx.currentTime;
-        playBeep(now, 523.25, 0.2); // C5
-        playBeep(now + 0.15, 659.25, 0.35); // E5
+        
+        if (soundType === 'bell-chime') {
+          playBeep(now, 880.00, 0.1, 'sine', 0.2); // A5
+          playBeep(now + 0.05, 1046.50, 0.8, 'sine', 0.2); // C6
+        } else if (soundType === 'retro-arcade') {
+          playBeep(now, 261.63, 0.05, 'square', 0.08); // C4
+          playBeep(now + 0.05, 329.63, 0.05, 'square', 0.08); // E4
+          playBeep(now + 0.10, 392.00, 0.05, 'square', 0.08); // G4
+          playBeep(now + 0.15, 523.25, 0.2, 'square', 0.08); // C5
+        } else if (soundType === 'digital-ring') {
+          playBeep(now, 880.00, 0.04, 'triangle', 0.15);
+          playBeep(now + 0.04, 987.77, 0.04, 'triangle', 0.15);
+          playBeep(now + 0.08, 880.00, 0.04, 'triangle', 0.15);
+          playBeep(now + 0.12, 987.77, 0.04, 'triangle', 0.15);
+          playBeep(now + 0.16, 880.00, 0.2, 'triangle', 0.15);
+        } else if (soundType === 'soft-notice') {
+          playBeep(now, 440.00, 0.5, 'sine', 0.25); // A4
+        } else {
+          // default double-beep
+          playBeep(now, 523.25, 0.2, 'triangle', 0.15); // C5
+          playBeep(now + 0.15, 659.25, 0.35, 'triangle', 0.15); // E5
+        }
       } catch (e) {
         console.error("Audio Synthesis failed:", e);
       }
     }
+
+    window.testNotificationSound = function() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      playChime();
+    };
 
     // Setup Notifications
     const notifyBtn = document.getElementById('enable-notifications');
@@ -413,6 +481,21 @@
     let knownOrderIds = new Set();
     let isInitialLoad = true;
     let currentOrdersList = [];
+    let activeFilter = 'all';
+
+    window.setActiveFilter = function(filterVal) {
+      activeFilter = filterVal;
+      document.querySelectorAll('.filter-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById(`filter-btn-${filterVal}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+      if (currentOrdersList) {
+        renderDashboard(currentOrdersList);
+      }
+    };
     let activeWhatsAppNumber = "917880105006";
     let activeRestaurantName = "CityHut Pizza House";
     let activeBillSettings = {
@@ -513,7 +596,13 @@
         const cardHtml = createOrderCard(order, subtotal);
 
         if (order.status !== 'completed') {
-          activeOrdersGrid.appendChild(cardHtml);
+          const matchesFilter = (activeFilter === 'all') || 
+                                (activeFilter === 'delivery' && order.type === 'delivery') ||
+                                (activeFilter === 'takeaway' && order.type === 'takeaway') ||
+                                (activeFilter === 'dine-in' && order.type === 'dine-in');
+          if (matchesFilter) {
+            activeOrdersGrid.appendChild(cardHtml);
+          }
           
           // Check if this is a new order
           if (!isInitialLoad && !knownOrderIds.has(order.id) && order.status === 'active') {
@@ -599,9 +688,14 @@
       }
 
       const isDineIn = order.type === 'dine-in';
-      const orderTypeBadge = isDineIn 
-        ? `<span class="status-badge" style="background-color: #FDEDEC; color: var(--primary);">Dine-In (${escapeHTML(order.tableCode)} Table)</span>`
-        : `<span class="status-badge" style="background-color: #EAF2F8; color: #2980B9;">Takeaway No. ${order.takeawayNum || '#'}</span>`;
+      let orderTypeBadge = '';
+      if (order.type === 'dine-in') {
+        orderTypeBadge = `<span class="status-badge" style="background-color: #FDEDEC; color: var(--primary);">🍽️ Dine-In (${escapeHTML(order.tableCode)} Table)</span>`;
+      } else if (order.type === 'delivery') {
+        orderTypeBadge = `<span class="status-badge" style="background-color: #E8F8F5; color: #16A085;">🚚 Online Delivery</span>`;
+      } else {
+        orderTypeBadge = `<span class="status-badge" style="background-color: #EAF2F8; color: #2980B9;">📦 Takeaway No. ${order.takeawayNum || '#'}</span>`;
+      }
 
       const whatsappButton = !isDineIn && order.phone 
         ? `<div style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
