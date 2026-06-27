@@ -8,7 +8,7 @@
 
   // Default Fallbacks
   let activeWhatsAppNumber = "917880105006";
-  let activeRestaurantName = "CityHut Pizza House";
+  let activeRestaurantName = "Cafe Pizza House";
   let activeOpeningHours = "11:00 AM – 10:00 PM";
   let activeTableCodes = ["Pizza", "Burger", "Sandwich", "Garlic Bread", "Beverage", "Dessert"];
   
@@ -16,7 +16,7 @@
     gstEnabled: true,
     gstPercentage: 5,
     serviceCharge: 0,
-    headerText: "🍕 CITYHUT PIZZA",
+    headerText: "🍕 CAFE PIZZA HOUSE",
     footerText: "Thank you for ordering!\nPlease visit again! 🙏"
   };
   
@@ -226,7 +226,7 @@
             if (!settingsSnap.exists()) {
               db.ref("cityhut/cms/settings").set({
                 whatsappNumber: "917880105006",
-                restaurantName: "CityHut Pizza House",
+                restaurantName: "Cafe Pizza House",
                 openingHours: "11:00 AM – 10:00 PM",
                 ownerPassword: "owner2025",
                 waiterPassword: "waiter2025",
@@ -235,7 +235,7 @@
                   gstEnabled: true,
                   gstPercentage: 5,
                   serviceCharge: 0,
-                  headerText: "🍕 CITYHUT PIZZA",
+                  headerText: "🍕 CAFE PIZZA HOUSE",
                   footerText: "Thank you for ordering!\nPlease visit again! 🙏"
                 },
                 whatsappTemplates: {
@@ -262,8 +262,8 @@
           db.ref("cityhut/cms/instagram").once("value", instaSnap => {
             if (!instaSnap.exists()) {
               db.ref("cityhut/cms/instagram").set({
-                headline: "@cityhut_pizza on Instagram",
-                followUrl: "https://www.instagram.com/cityhut_pizza/",
+                headline: "@cafepizzahouse on Instagram",
+                followUrl: "https://www.instagram.com/cafepizzahouse/",
                 posts: [
                   { imageUrl: "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?q=80&w=400&auto=format&fit=crop", caption: "Chef tossing fresh pizza dough", emoji: "🍕" },
                   { imageUrl: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=400&auto=format&fit=crop", caption: "Cheese stretch on hot pizza slice", emoji: "🧀" },
@@ -314,7 +314,7 @@
         const instaLinks = document.querySelectorAll('a[href*="instagram.com"]');
         instaLinks.forEach(link => {
           if (link.closest('.bottom-bar')) return; // Ignore the Praxis promotional bottom bar links
-          link.href = insta.followUrl || "https://www.instagram.com/cityhut_pizza/";
+          link.href = insta.followUrl || "https://www.instagram.com/cafepizzahouse/";
         });
         
         // If we are on index.html, update the grid and heading
@@ -390,8 +390,8 @@
     }
 
     // Dynamic Document Title
-    if (document.title.includes("CityHut Pizza")) {
-      document.title = document.title.replace(/CityHut Pizza House|CityHut Pizza/g, activeRestaurantName);
+    if (document.title.includes("Cafe Pizza House")) {
+      document.title = document.title.replace(/Cafe Pizza House|Cafe Pizza House/g, activeRestaurantName);
     }
   }
 
@@ -2242,7 +2242,7 @@
           // Native OS Notification (if active in PWA standalone or browser tab)
           if (typeof Notification !== "undefined" && Notification.permission === 'granted') {
             try {
-              new Notification("CityHut Pizza House 🍕", {
+              new Notification("Cafe Pizza House 🍕", {
                 body: broadcast.message,
                 icon: "/images/icon-192.png",
                 badge: "/images/icon-192.png",

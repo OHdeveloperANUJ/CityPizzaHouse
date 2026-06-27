@@ -1,6 +1,6 @@
 {
-  "name": "CityHut Pizza House",
-  "short_name": "CityHut Pizza",
+  "name": "Cafe Pizza House",
+  "short_name": "Cafe Pizza House",
   "description": "Order tasty pan pizzas, cheese burst pizzas, fries, and cold beverages from CityHut Cafe Pizza House Kawardha.",
   "start_url": "/",
   "display": "standalone",

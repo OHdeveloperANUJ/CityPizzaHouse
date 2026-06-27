@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Order Dashboard — CityHut Pizza House</title>
+  <title>Live Order Dashboard — Cafe Pizza House</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -331,7 +331,7 @@
       const isOwner = currentRole === 'owner';
       document.getElementById('admin-nav').innerHTML = `
         <div class="admin-navbar container">
-          <div class="nav-brand">🍕 CityHut Pizza</div>
+          <div class="nav-brand">🍕 Cafe Pizza House</div>
           <nav>
             <a href="admin-orders" class="nav-link active">📋 Orders</a>
             ${isOwner ? '<a href="admin-cms" class="nav-link">⚙️ Menu & CMS</a>' : ''}
@@ -497,12 +497,12 @@
       }
     };
     let activeWhatsAppNumber = "917880105006";
-    let activeRestaurantName = "CityHut Pizza House";
+    let activeRestaurantName = "Cafe Pizza House";
     let activeBillSettings = {
       gstEnabled: true,
       gstPercentage: 5,
       serviceCharge: 0,
-      headerText: "🍕 CITYHUT PIZZA",
+      headerText: "🍕 CAFE PIZZA HOUSE",
       footerText: "Thank you for ordering!\nPlease visit again! 🙏"
     };
 

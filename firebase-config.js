@@ -19,7 +19,7 @@ const isPlaceholderConfig =
 let db;
 
 if (isPlaceholderConfig) {
-  console.warn("CityHut Pizza: Using LocalStorage Mock Database fallback because Firebase is not configured.");
+  console.warn("Cafe Pizza House: Using LocalStorage Mock Database fallback because Firebase is not configured.");
 
   // Mock Database Ref Class
   class MockDbRef {
@@ -160,7 +160,7 @@ if (isPlaceholderConfig) {
             "cms": {
               "settings": {
                 "whatsappNumber": "917880105006",
-                "restaurantName": "CityHut Pizza House",
+                "restaurantName": "Cafe Pizza House",
                 "openingHours": "11:00 AM – 10:00 PM",
                 "ownerPassword": "owner2025",
                 "waiterPassword": "waiter2025",
@@ -169,7 +169,7 @@ if (isPlaceholderConfig) {
                   "gstEnabled": true,
                   "gstPercentage": 5,
                   "serviceCharge": 0,
-                  "headerText": "🍕 CITYHUT PIZZA",
+                  "headerText": "🍕 CAFE PIZZA HOUSE",
                   "footerText": "Thank you for ordering!\nPlease visit again! 🙏"
                 },
                 "whatsappTemplates": {
@@ -192,8 +192,8 @@ if (isPlaceholderConfig) {
                 "drink": { "id": "drink", "name": "Drinks", "icon": "🍹" }
               },
               "instagram": {
-                "headline": "@cityhut_pizza on Instagram",
-                "followUrl": "https://www.instagram.com/cityhut_pizza/",
+                "headline": "@cafepizzahouse on Instagram",
+                "followUrl": "https://www.instagram.com/cafepizzahouse/",
                 "posts": [
                   { "imageUrl": "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?q=80&w=400&auto=format&fit=crop", "caption": "Chef tossing fresh pizza dough", "emoji": "🍕" },
                   { "imageUrl": "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=400&auto=format&fit=crop", "caption": "Cheese stretch on hot pizza slice", "emoji": "🧀" },
@@ -258,8 +258,8 @@ if (isPlaceholderConfig) {
           }
           if (!dbData.cityhut.cms.instagram) {
             dbData.cityhut.cms.instagram = {
-              headline: "@cityhut_pizza on Instagram",
-              followUrl: "https://www.instagram.com/cityhut_pizza/",
+              headline: "@cafepizzahouse on Instagram",
+              followUrl: "https://www.instagram.com/cafepizzahouse/",
               posts: [
                 { imageUrl: "https://images.unsplash.com/photo-1594007654729-407ededc4963?q=80&w=400&auto=format&fit=crop", caption: "Chef tossing fresh pizza dough", emoji: "🍕" },
                 { imageUrl: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=400&auto=format&fit=crop", caption: "Cheese stretch on hot pizza slice", emoji: "🧀" },

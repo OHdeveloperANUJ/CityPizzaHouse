@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cityhut-pizza-v8';
+const CACHE_NAME = 'cityhut-pizza-v9';
 const ASSETS = [
   '/',
   '/menu',
@@ -46,12 +46,12 @@ self.addEventListener('fetch', (e) => {
 
 // Support Push notifications from FCM/VAPID in the future
 self.addEventListener('push', (e) => {
-  let data = { title: 'CityHut Pizza House 🍕', body: 'New Alert!' };
+  let data = { title: 'Cafe Pizza House 🍕', body: 'New Alert!' };
   if (e.data) {
     try {
       data = e.data.json();
     } catch (err) {
-      data = { title: 'CityHut Pizza House 🍕', body: e.data.text() };
+      data = { title: 'Cafe Pizza House 🍕', body: e.data.text() };
     }
   }
 
