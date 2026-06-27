@@ -114,7 +114,7 @@
               <input type="number" id="price-single" placeholder="Price value" value="99">
             </div>
 
-            <div style="display: flex; gap: 20px; margin: 16px 0;">
+            <div style="display: flex; gap: 20px; margin: 16px 0; flex-wrap: wrap;">
               <label class="login-role-option" style="font-size: 14px;">
                 <input type="checkbox" id="item-veg" checked>
                 <span>Veg Item?</span>
@@ -122,6 +122,10 @@
               <label class="login-role-option" style="font-size: 14px;">
                 <input type="checkbox" id="item-available" checked>
                 <span>Available?</span>
+              </label>
+              <label class="login-role-option" style="font-size: 14px;">
+                <input type="checkbox" id="item-fan-favourite">
+                <span>🔥 Fan Favourite?</span>
               </label>
             </div>
 
@@ -751,7 +755,7 @@
           <td>
             <img src="${escapeHTML(item.imageUrl)}" alt="${escapeHTML(item.name)}" width="50" height="40" style="object-fit: cover; border-radius: 4px;">
           </td>
-          <td><strong>${escapeHTML(item.name)}</strong></td>
+          <td><strong>${escapeHTML(item.name)}</strong>${item.isFanFavourite ? '<br><span style="font-size: 11px; color: var(--accent); font-weight: bold;">⭐ Fan Favourite</span>' : ''}</td>
           <td style="text-transform: capitalize;">${escapeHTML(item.category)}</td>
           <td>${pricesString}</td>
           <td>${item.isVeg ? '🟢 Veg' : '🔴 Non-Veg'}</td>
@@ -781,6 +785,7 @@
       const imageUrl = document.getElementById("item-image").value.trim() || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400';
       const isVeg = document.getElementById("item-veg").checked;
       const available = document.getElementById("item-available").checked;
+      const isFanFavourite = document.getElementById("item-fan-favourite").checked;
 
       const prices = {};
       if (category === 'pizza') {
@@ -798,6 +803,7 @@
         imageUrl,
         isVeg,
         available,
+        isFanFavourite,
         prices
       };
 
@@ -834,6 +840,7 @@
         document.getElementById("item-image").value = item.imageUrl || '';
         document.getElementById("item-veg").checked = item.isVeg === true;
         document.getElementById("item-available").checked = item.available === true;
+        document.getElementById("item-fan-favourite").checked = item.isFanFavourite === true;
 
         if (item.category === 'pizza') {
           document.getElementById("price-small").value = item.prices?.small || 0;

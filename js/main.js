@@ -1874,6 +1874,103 @@
     });
   }
 
+  function renderFanFavourites(items) {
+    const grid = document.getElementById("fan-favourites-grid");
+    if (!grid) return;
+
+    grid.innerHTML = items.map(item => {
+      const prices = item.prices || {};
+
+      let sizeSelectorHtml = "";
+      let initialPrice = 0;
+      let dataAttrs = `data-id="${item.key}" data-name="${escapeHTML(item.name)}" data-category="${item.category}"`;
+
+      if (prices.small || prices.medium || prices.large) {
+        initialPrice = prices.small || 0;
+        sizeSelectorHtml = `
+          <div class="size-selector">
+            <label id="pizza-${item.key}-size">Select Size:</label>
+            <div class="size-select-pills" role="radiogroup" aria-labelledby="pizza-${item.key}-size">
+              <button type="button" class="size-pill active" role="radio" aria-checked="true" data-size="Small" data-price="${prices.small || 0}">S (₹${prices.small || 0})</button>
+              <button type="button" class="size-pill" role="radio" aria-checked="false" data-size="Medium" data-price="${prices.medium || 0}">M (₹${prices.medium || 0})</button>
+              <button type="button" class="size-pill" role="radio" aria-checked="false" data-size="Large" data-price="${prices.large || 0}">L (₹${prices.large || 0})</button>
+            </div>
+          </div>
+        `;
+      } else if (prices.normal || prices.special) {
+        initialPrice = prices.normal || 0;
+        sizeSelectorHtml = `
+          <div class="size-selector">
+            <label id="beverage-${item.key}-size">Select Type:</label>
+            <div class="size-select-pills" role="radiogroup" aria-labelledby="beverage-${item.key}-size">
+              <button type="button" class="size-pill active" role="radio" aria-checked="true" data-size="Normal" data-price="${prices.normal || 0}">Normal (₹${prices.normal || 0})</button>
+              <button type="button" class="size-pill" role="radio" aria-checked="false" data-size="Special" data-price="${prices.special || 0}">Special (₹${prices.special || 0})</button>
+            </div>
+          </div>
+        `;
+      } else {
+        initialPrice = prices.single || prices.regular || 0;
+        dataAttrs += ` data-price="${initialPrice}"`;
+        if (prices.regular) {
+          dataAttrs += ` data-size="Regular"`;
+        }
+      }
+
+      return `
+        <div class="product-card" ${dataAttrs} role="article">
+          <div class="product-img-wrapper">
+            <img class="product-img" src="${escapeHTML(item.imageUrl)}" alt="${escapeHTML(item.name)}" loading="lazy">
+            <div class="product-veg-type" aria-label="Vegetarian option">
+              <span class="${item.isVeg ? 'veg-badge' : 'nonveg-badge'}"></span>
+            </div>
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">${escapeHTML(item.name)}</h3>
+            <p class="product-desc">${escapeHTML(item.description || "")}</p>
+            ${sizeSelectorHtml}
+            <div class="product-meta">
+              <span class="product-price">₹${initialPrice}</span>
+              <div class="qty-counter">
+                <button type="button" class="qty-btn menu-dec-btn" aria-label="Decrease quantity">-</button>
+                <span class="qty-val qty-val-display">0</span>
+                <button type="button" class="qty-btn menu-inc-btn" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button class="btn btn-primary add-to-cart-btn btn-block" style="margin-top: 12px;">Add to Cart</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function initHomePage() {
+    const grid = document.getElementById("fan-favourites-grid");
+    if (!grid) return;
+
+    try {
+      const snap = await db.ref("cityhut/cms/menu").once("value");
+      const menuData = snap.val() || {};
+      
+      const allItems = Object.keys(menuData).map(k => ({ key: k, ...menuData[k] }));
+      
+      let favorites = allItems.filter(item => item.isFanFavourite === true && item.available !== false);
+      
+      if (favorites.length === 0) {
+        const defaultFavKeys = ["cloud-9-pizza", "volcano-pizza", "cold-coffee"];
+        favorites = allItems.filter(item => defaultFavKeys.includes(item.key) && item.available !== false);
+        if (favorites.length === 0) {
+          favorites = allItems.filter(item => item.available !== false).slice(0, 4);
+        }
+      }
+
+      renderFanFavourites(favorites);
+      bindProductCardEvents();
+      syncMenuCardCounters();
+    } catch (err) {
+      console.error("Error loading home page fan favorites:", err);
+    }
+  }
+
   /* ==========================================================================
      APPLICATION INITIATION
      ========================================================================== */
@@ -1892,6 +1989,7 @@
     initCartModeSelector();
     bindProductCardEvents();
     initMenuPage();
+    initHomePage();
     initDineInFlow();
     initContactPage();
   });
