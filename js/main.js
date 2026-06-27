@@ -66,126 +66,102 @@
      1. FIREBASE INITIAL DATABASE SEEDING
      ========================================================================== */
   const defaultMenu = [
-    // === PIZZAS (pizza) ===
-    { name: "Cloud 9 Pizza", category: "pizza", description: "Paneer, Jalapeno, Onion, Capsicum, R.Paprika, Roll Cheese Corner", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&auto=format&fit=crop" },
-    { name: "Volcano Pizza", category: "pizza", description: "Paneer, Jalapeno, Onion, Capsicum, R.Paprika, Volcano Cheese", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=600&auto=format&fit=crop" },
-    { name: "Veggie House Pizza", category: "pizza", description: "Onion, Capsicum, Sweet Corn, P.Tomato, Olive", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?q=80&w=600&auto=format&fit=crop" },
-    { name: "Farmhouse Pizza", category: "pizza", description: "Jalapeno, R.Paprika, Mushroom, Onion, Capsicum, Olive", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?q=80&w=600&auto=format&fit=crop" },
-    { name: "Pery2 Fries Pizza", category: "pizza", description: "Pery Fries, R.Paprika, B.Olive", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Tikka Pizza", category: "pizza", description: "Paneer, Capsicum, Red Paprika", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=600&auto=format&fit=crop" },
-    { name: "Pery Pery Paneer Pizza", category: "pizza", description: "Pery2 Paneer, Onion, Capsicum", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=600&auto=format&fit=crop" },
-    { name: "Butter Paneer Pizza", category: "pizza", description: "Butter Paneer, Onion, Capsicum", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?q=80&w=600&auto=format&fit=crop" },
-    { name: "Pery Pery Mushroom Pizza", category: "pizza", description: "Pery2 Mushroom, Onion, Capsicum", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=600&auto=format&fit=crop" },
-    { name: "Butter Mushroom Pizza", category: "pizza", description: "Butter Mushroom, Onion, Capsicum", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1544982503-9f984c14501a?q=80&w=600&auto=format&fit=crop" },
-    { name: "Chinese Babycorn Pizza", category: "pizza", description: "Chinese Babycorn, Onion, Capsicum", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1594007654729-407ededc4963?q=80&w=600&auto=format&fit=crop" },
-    { name: "Corn Deluxe Pizza", category: "pizza", description: "Crispy Corn, Onion", isVeg: true, available: true, prices: { small: 200, medium: 300, large: 400 }, imageUrl: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=600&auto=format&fit=crop" },
-    
-    { name: "Cheese N Corn Pizza", category: "pizza", description: "Press American Corn, Onion (Optional)", isVeg: true, available: true, prices: { small: 150, medium: 240, large: 310 }, imageUrl: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=600&auto=format&fit=crop" },
-    { name: "Fresh Paneer Pizza", category: "pizza", description: "Paneer, Onion, Capsicum", isVeg: true, available: true, prices: { small: 150, medium: 240, large: 310 }, imageUrl: "https://images.unsplash.com/photo-1555072956-7758afb20e8f?q=80&w=600&auto=format&fit=crop" },
-    { name: "Fresh Mushroom Pizza", category: "pizza", description: "Mushroom, Onion, Capsicum", isVeg: true, available: true, prices: { small: 150, medium: 240, large: 310 }, imageUrl: "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?q=80&w=600&auto=format&fit=crop" },
-    
-    { name: "Plain Cheese Pizza", category: "pizza", description: "Classic melted cheese single size", isVeg: true, available: true, prices: { regular: 90 }, imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&auto=format&fit=crop" },
-    { name: "Onion Capsicum Pizza", category: "pizza", description: "Onion, Capsicum single size", isVeg: true, available: true, prices: { regular: 100 }, imageUrl: "https://images.unsplash.com/photo-1571066811602-71683a3f680d?q=80&w=600&auto=format&fit=crop" },
-    { name: "Tomato Pizza", category: "pizza", description: "Juicy Tomato single size", isVeg: true, available: true, prices: { regular: 100 }, imageUrl: "https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?q=80&w=600&auto=format&fit=crop" },
-    { name: "Achari Do Pyaza Pizza", category: "pizza", description: "Achari Do Pyaza single size", isVeg: true, available: true, prices: { regular: 100 }, imageUrl: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=600&auto=format&fit=crop" },
-
-    // === SNACKS (snakes) ===
-    { name: "Normal Fries", category: "snakes", description: "Classic salted crispy potato fries", isVeg: true, available: true, prices: { single: 90 }, imageUrl: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=600&auto=format&fit=crop" },
-    { name: "Masala Fries", category: "snakes", description: "Spicy masala coated crispy fries", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=600&auto=format&fit=crop" },
-    { name: "Pery Pery Fries", category: "snakes", description: "Spicy Peri-Peri seasoning fries", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1585109649139-366815a0d713?q=80&w=600&auto=format&fit=crop" },
-    { name: "4 Cheese Fries", category: "snakes", description: "Fries loaded with four delicious cheeses", isVeg: true, available: true, prices: { single: 200 }, imageUrl: "https://images.unsplash.com/photo-1576107232684-1279f390859f?q=80&w=600&auto=format&fit=crop" },
-    { name: "Normal Chips", category: "snakes", description: "Crispy potato chips", isVeg: true, available: true, prices: { single: 90 }, imageUrl: "https://images.unsplash.com/photo-1566478989037-eec170784d20?q=80&w=600&auto=format&fit=crop" },
-    { name: "Pery Pery Chips", category: "snakes", description: "Chips with spicy Peri-Peri seasoning", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1613967193442-19cfb7eb0515?q=80&w=600&auto=format&fit=crop" },
-
-    { name: "Plain Cheese Sandwich", category: "snakes", description: "Simple bread and melted cheese", isVeg: true, available: true, prices: { single: 90 }, imageUrl: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=600&auto=format&fit=crop" },
-    { name: "Corn Cheese Sandwich", category: "snakes", description: "Sweet corn and rich melted cheese", isVeg: true, available: true, prices: { single: 90 }, imageUrl: "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?q=80&w=600&auto=format&fit=crop" },
-    { name: "Bombay Masala Sandwich", category: "snakes", description: "Classic spicy potato masala, veggies, herbs", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?q=80&w=600&auto=format&fit=crop" },
-    { name: "Veg Cheese Sandwich", category: "snakes", description: "Fresh veggies and cheese grilled", isVeg: true, available: true, prices: { single: 90 }, imageUrl: "https://images.unsplash.com/photo-1553909489-cd47e0907980?q=80&w=600&auto=format&fit=crop" },
-    { name: "Mexican Sandwich", category: "snakes", description: "Spicy Mexican style beans, jalapenos, cheese", isVeg: true, available: true, prices: { single: 120 }, imageUrl: "https://images.unsplash.com/photo-1540713434306-53f2c211b504?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Cheese Sandwich", category: "snakes", description: "Spiced paneer cubes, veggies, loaded cheese", isVeg: true, available: true, prices: { single: 180 }, imageUrl: "https://images.unsplash.com/photo-1509722747041-616f39b57569?q=80&w=600&auto=format&fit=crop" },
-    { name: "Full Choco Grill Sandwich", category: "snakes", description: "Bread filled with chocolate spread, grilled", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1587049352846-4a222e784d3b?q=80&w=600&auto=format&fit=crop" },
-    { name: "Club Grill Sandwich", category: "snakes", description: "Triple layer sandwich, mixed veggies, cheese", isVeg: true, available: true, prices: { single: 180 }, imageUrl: "https://images.unsplash.com/photo-1554433607-66b5eed9d304?q=80&w=600&auto=format&fit=crop" },
-
-    { name: "Tikki Burger", category: "snakes", description: "Crispy aloo tikki patty with sauces", isVeg: true, available: true, prices: { single: 80 }, imageUrl: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600&auto=format&fit=crop" },
-    { name: "Veg Burger", category: "snakes", description: "Classic mix veg patty, lettuce, tomato", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Burger", category: "snakes", description: "Crispy paneer block patty, spicy mayo", isVeg: true, available: true, prices: { single: 120 }, imageUrl: "https://images.unsplash.com/photo-1547584370-2cc98b8b8dc8?q=80&w=600&auto=format&fit=crop" },
-    { name: "Maharaja Burger", category: "snakes", description: "Double decker veg burger with extra cheese", isVeg: true, available: true, prices: { single: 150 }, imageUrl: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=600&auto=format&fit=crop" },
-    { name: "Italian Veg Burger", category: "snakes", description: "Herbed patty, Italian sauces, mozzarella", isVeg: true, available: true, prices: { single: 150 }, imageUrl: "https://images.unsplash.com/photo-1525059696034-4967a8e1dca2?q=80&w=600&auto=format&fit=crop" },
-    { name: "3 Cheese Burger", category: "snakes", description: "Patty loaded with three different cheeses", isVeg: true, available: true, prices: { single: 200 }, imageUrl: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=600&auto=format&fit=crop" },
-
-    { name: "Choco Lava", category: "snakes", description: "Warm chocolate cake with molten center", isVeg: true, available: true, prices: { single: 50 }, imageUrl: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600&auto=format&fit=crop" },
-    { name: "Choco Volcano", category: "snakes", description: "Huge molten chocolate dessert cake", isVeg: true, available: true, prices: { single: 120 }, imageUrl: "https://images.unsplash.com/photo-1624353322073-b7af1181886e?q=80&w=600&auto=format&fit=crop" },
-
-    { name: "Stuffed Cheese Garlic Bread", category: "snakes", description: "Freshly baked bread stuffed with cheese and corn", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1603046891744-1f76eb10aec1?q=80&w=600&auto=format&fit=crop" },
-    { name: "Cheese Petro", category: "snakes", description: "Crispy baked cheese snacks roll", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Cheese Petro", category: "snakes", description: "Cheese petro with spicy paneer stuffing", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=600&auto=format&fit=crop" },
-    { name: "Veg Cheese Boll", category: "snakes", description: "Fried cheese balls with mixed vegetables", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1548340748-6d2b7d7db87d?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Cheese Boll", category: "snakes", description: "Cheese balls with spiced paneer stuffing", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1607532941433-304659e8198a?q=80&w=600&auto=format&fit=crop" },
-
-    { name: "White Sauce Pasta", category: "snakes", description: "Pasta in creamy herbed white sauce", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1645112411341-6c4fd023714a?q=80&w=600&auto=format&fit=crop" },
-    { name: "Red Sauce Pasta", category: "snakes", description: "Pasta in tangy tomato basil sauce", isVeg: true, available: true, prices: { single: 120 }, imageUrl: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=600&auto=format&fit=crop" },
-
-    // === CHINESE SOUP (snakes) ===
-    { name: "Manchow Soup", category: "snakes", description: "Spicy and sour soup served with fried noodles", isVeg: true, available: true, prices: { single: 80 }, imageUrl: "https://images.unsplash.com/photo-1547592165-e1d17f8e05cc?q=80&w=600&auto=format&fit=crop" },
-    { name: "Tomato Soup", category: "snakes", description: "Creamy tomato soup with herbed croutons", isVeg: true, available: true, prices: { single: 80 }, imageUrl: "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?q=80&w=600&auto=format&fit=crop" },
-    { name: "Lemon Coriander Soup", category: "snakes", description: "Light refreshing soup with lemon and coriander", isVeg: true, available: true, prices: { single: 80 }, imageUrl: "https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?q=80&w=600&auto=format&fit=crop" },
-
-    // === CORN (snakes) ===
-    { name: "Masala Sweet Corn", category: "snakes", description: "Sweet corn tossed with spices and butter", isVeg: true, available: true, prices: { single: 50 }, imageUrl: "https://images.unsplash.com/photo-1529692236671-f1f6e994a52c?q=80&w=600&auto=format&fit=crop" },
-    { name: "Pery Pery Corn", category: "snakes", description: "Sweet corn tossed with Peri-Peri spices", isVeg: true, available: true, prices: { single: 50 }, imageUrl: "https://images.unsplash.com/photo-1551782450-17144efb9c50?q=80&w=600&auto=format&fit=crop" },
-    { name: "Fresh Sweet Corn", category: "snakes", description: "Steamed sweet corn with butter", isVeg: true, available: true, prices: { single: 40 }, imageUrl: "https://images.unsplash.com/photo-1470490314415-775d1f7e108f?q=80&w=600&auto=format&fit=crop" },
-    { name: "Mix Veg N Corn", category: "snakes", description: "Steamed corn mixed with fresh chopped vegetables", isVeg: true, available: true, prices: { single: 60 }, imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop" },
-
-    // === CHINESE CHILLS (chinase) ===
-    { name: "Paneer Chilli", category: "chinase", description: "Stir-fried paneer cubes in spicy soy-chilli sauce", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=600&auto=format&fit=crop" },
-    { name: "Manchurian", category: "chinase", description: "Veg dumplings in savory Manchurian sauce", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?q=80&w=600&auto=format&fit=crop" },
-    { name: "Mushroom Chilli", category: "chinase", description: "Crispy fried mushrooms in chilli garlic sauce", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1508737027454-e6454ef45afd?q=80&w=600&auto=format&fit=crop" },
-    { name: "Babycorn Chilli", category: "chinase", description: "Babycorn in hot spicy Chinese gravy", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?q=80&w=600&auto=format&fit=crop" },
-    { name: "Potato Chilli", category: "chinase", description: "Crispy chilli potatoes in soy sauce", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1585109649139-366815a0d713?q=80&w=600&auto=format&fit=crop" },
-    { name: "Gobhi Chilli", category: "chinase", description: "Crispy fried cauliflower in hot chilli sauce", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop" },
-    { name: "Soya Chilli", category: "chinase", description: "Soya chunks in spicy soy-chilli gravy", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?q=80&w=600&auto=format&fit=crop" },
-
-    // === BASMATI SPECIAL (chinase) ===
-    { name: "Veg Biryani", category: "chinase", description: "Aromatic Basmati rice cooked with mixed veggies (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=600&auto=format&fit=crop" },
-    { name: "Veg Pulao", category: "chinase", description: "Mildly spiced fragrant Basmati rice (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Rice", category: "chinase", description: "Basmati rice cooked with paneer chunks (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=600&auto=format&fit=crop" },
-    { name: "Veg Fried Rice", category: "chinase", description: "Stir-fried Basmati rice with fresh vegetables (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=600&auto=format&fit=crop" },
-    { name: "Schezwan Rice", category: "chinase", description: "Spicy Schezwan sauce stir-fried rice (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?q=80&w=600&auto=format&fit=crop" },
-    { name: "Manchurian Rice", category: "chinase", description: "Basmati fried rice served with Manchurian gravy (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: { single: 180 }, imageUrl: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?q=80&w=600&auto=format&fit=crop" },
-
-    // === PREMIUM NOODLES (chinase) ===
-    { name: "Veg Noodles", category: "chinase", description: "Classic stir-fried Chinese noodles with veggies", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=600&auto=format&fit=crop" },
-    { name: "Hakka Noodles", category: "chinase", description: "Mildly seasoned Hakka style stir-fried noodles", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1612966608967-312ba599102e?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Noodles", category: "chinase", description: "Stir-fried noodles with paneer blocks", isVeg: true, available: true, prices: { single: 200 }, imageUrl: "https://images.unsplash.com/photo-1612966608900-b2d499732d84?q=80&w=600&auto=format&fit=crop" },
-    { name: "Schezwan Noodles", category: "chinase", description: "Spicy Schezwan sauce stir-fried noodles", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1526318896980-cf78c088247c?q=80&w=600&auto=format&fit=crop" },
-    { name: "Singapori Noodles", category: "chinase", description: "Curry seasoned spicy Singapore style noodles", isVeg: true, available: true, prices: { single: 160 }, imageUrl: "https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=600&auto=format&fit=crop" },
-    { name: "Chinese White Noodles", category: "chinase", description: "Noodles stir-fried in light white sauce", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1546549032-9571cd6b27df?q=80&w=600&auto=format&fit=crop" },
-
-    // === SPRING ROLLS (snakes) ===
-    { name: "Veg Spring Roll", category: "snakes", description: "Crispy rolls stuffed with mixed vegetables", isVeg: true, available: true, prices: { single: 140 }, imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Spring Roll", category: "snakes", description: "Crispy rolls stuffed with paneer and veggies", isVeg: true, available: true, prices: { single: 180 }, imageUrl: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=600&auto=format&fit=crop" },
-
-    // === CRISPY SPECIAL (snakes) ===
-    { name: "Corn Crispy", category: "snakes", description: "Crispy fried sweet corn with peppers", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&w=600&auto=format&fit=crop" },
-    { name: "Veg Crispy", category: "snakes", description: "Crispy batter fried assorted vegetables", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1626132647523-66f5bf380027?q=80&w=600&auto=format&fit=crop" },
-    { name: "Paneer Crispy", category: "snakes", description: "Crispy fried batter-coated paneer strips", isVeg: true, available: true, prices: { single: 240 }, imageUrl: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?q=80&w=600&auto=format&fit=crop" },
-    { name: "Mushroom Crispy", category: "snakes", description: "Batter-fried crispy mushrooms", isVeg: true, available: true, prices: { single: 240 }, imageUrl: "https://images.unsplash.com/photo-1568254183919-78a4e43a2877?q=80&w=600&auto=format&fit=crop" },
-
-    // === DRINKS (drink) ===
-    { name: "Cold Coffee", category: "drink", description: "Chilled milk, coffee, sweet creamy froth", isVeg: true, available: true, prices: { normal: 100, special: 120 }, imageUrl: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=600&auto=format&fit=crop" },
-    { name: "Chocolate Milk Shake", category: "drink", description: "Rich chocolate milkshake with syrup", isVeg: true, available: true, prices: { normal: 120, special: 170 }, imageUrl: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?q=80&w=600&auto=format&fit=crop" },
-    { name: "Oreo Milk Shake", category: "drink", description: "Vanilla shake blended with crunchy Oreo cookies", isVeg: true, available: true, prices: { normal: 120, special: 170 }, imageUrl: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=600&auto=format&fit=crop" },
-    { name: "Butterscotch Shake", category: "drink", description: "Butterscotch ice cream shake with caramel crunch", isVeg: true, available: true, prices: { normal: 120, special: 170 }, imageUrl: "https://images.unsplash.com/photo-1553788210-e22070f6120e?q=80&w=600&auto=format&fit=crop" },
-    { name: "Vanilla Milk Shake", category: "drink", description: "Classic creamy vanilla ice cream shake", isVeg: true, available: true, prices: { normal: 90, special: 140 }, imageUrl: "https://images.unsplash.com/photo-1549853796-f18616597c2a?q=80&w=600&auto=format&fit=crop" },
-    { name: "Strawberry Milk Shake", category: "drink", description: "Sweet strawberry ice cream shake", isVeg: true, available: true, prices: { normal: 90, special: 140 }, imageUrl: "https://images.unsplash.com/photo-1586935724902-7c63d536718b?q=80&w=600&auto=format&fit=crop" },
-    { name: "Pista Milk Shake", category: "drink", description: "Pistachio ice cream milkshake", isVeg: true, available: true, prices: { normal: 90, special: 140 }, imageUrl: "https://images.unsplash.com/photo-1563844528129-067e06a638e5?q=80&w=600&auto=format&fit=crop" },
-    { name: "Blue Lagoon Mocktail", category: "drink", description: "Refreshing blue curaçao, soda, lemon", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=600&auto=format&fit=crop" },
-    { name: "Virgin Mojito", category: "drink", description: "Fresh mint, lime slices, crushed ice, soda", isVeg: true, available: true, prices: { single: 100 }, imageUrl: "https://images.unsplash.com/photo-1546171753-97d7676e4602?q=80&w=600&auto=format&fit=crop" },
-    
-    { name: "Hot Coffee", category: "drink", description: "Freshly brewed hot milk coffee", isVeg: true, available: true, prices: { single: 30 }, imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=600&auto=format&fit=crop" },
-    { name: "Hot Tea", category: "drink", description: "Traditional hot Indian milk tea (chai)", isVeg: true, available: true, prices: { single: 30 }, imageUrl: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=600&auto=format&fit=crop" },
-    { name: "Black Coffee", category: "drink", description: "Fresh hot black coffee without milk", isVeg: true, available: true, prices: { single: 25 }, imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop" },
-    { name: "Black/Lemon Tea", category: "drink", description: "Fresh hot black or lemon tea", isVeg: true, available: true, prices: { single: 25 }, imageUrl: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?q=80&w=600&auto=format&fit=crop" }
+    { name: "Cloud 9 Pizza", category: "pizza", description: "Paneer, Jalapeno, Onion, Capsicum, R.Paprika, Roll Cheese Corner", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&auto=format&fit=crop" },
+    { name: "Volcano Pizza", category: "pizza", description: "Paneer, Jalapeno, Onion, Capsicum, R.Paprika, Volcano Cheese", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veggie House Pizza", category: "pizza", description: "Onion, Capsicum, Sweet Corn, P.Tomato, Olive", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?q=80&w=600&auto=format&fit=crop" },
+    { name: "Farmhouse Pizza", category: "pizza", description: "Jalapeno, R.Paprika, Mushroom, Onion, Capsicum, Olive", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1585238342024-78d387f4a707?q=80&w=600&auto=format&fit=crop" },
+    { name: "Pery2 Fries Pizza", category: "pizza", description: "Pery Fries, R.Paprika, B.Olive", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Tikka Pizza", category: "pizza", description: "Paneer, Capsicum, Red Paprika", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=600&auto=format&fit=crop" },
+    { name: "Pery Pery Paneer Pizza", category: "pizza", description: "Pery2 Paneer, Onion, Capsicum", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=600&auto=format&fit=crop" },
+    { name: "Butter Paneer Pizza", category: "pizza", description: "Butter Paneer, Onion, Capsicum", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?q=80&w=600&auto=format&fit=crop" },
+    { name: "Pery Pery Mushroom Pizza", category: "pizza", description: "Pery2 Mushroom, Onion, Capsicum", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=600&auto=format&fit=crop" },
+    { name: "Butter Mushroom Pizza", category: "pizza", description: "Butter Mushroom, Onion, Capsicum", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1544982503-9f984c14501a?q=80&w=600&auto=format&fit=crop" },
+    { name: "Chinese Babycorn Pizza", category: "pizza", description: "Chinese Babycorn, Onion, Capsicum", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1594007654729-407ededc4963?q=80&w=600&auto=format&fit=crop" },
+    { name: "Corn Deluxe Pizza", category: "pizza", description: "Crispy Corn, Onion", isVeg: true, available: true, prices: {'small': 200, 'medium': 300, 'large': 400}, imageUrl: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=600&auto=format&fit=crop" },
+    { name: "Cheese N Corn Pizza", category: "pizza", description: "Press American Corn, Onion (Optional)", isVeg: true, available: true, prices: {'small': 150, 'medium': 240, 'large': 310}, imageUrl: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=600&auto=format&fit=crop" },
+    { name: "Fresh Paneer Pizza", category: "pizza", description: "Paneer, Onion, Capsicum", isVeg: true, available: true, prices: {'small': 150, 'medium': 240, 'large': 310}, imageUrl: "https://images.unsplash.com/photo-1555072956-7758afb20e8f?q=80&w=600&auto=format&fit=crop" },
+    { name: "Fresh Mushroom Pizza", category: "pizza", description: "Mushroom, Onion, Capsicum", isVeg: true, available: true, prices: {'small': 150, 'medium': 240, 'large': 310}, imageUrl: "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?q=80&w=600&auto=format&fit=crop" },
+    { name: "Plain Cheese Pizza", category: "pizza", description: "Classic melted cheese single size", isVeg: true, available: true, prices: {'regular': 90}, imageUrl: "https://images.unsplash.com/photo-1571066811602-71683a3f680d?q=80&w=600&auto=format&fit=crop" },
+    { name: "Onion Capsicum Pizza", category: "pizza", description: "Onion, Capsicum single size", isVeg: true, available: true, prices: {'regular': 100}, imageUrl: "https://images.unsplash.com/photo-1571066811602-71683a3f680d?q=80&w=600&auto=format&fit=crop" },
+    { name: "Tomato Pizza", category: "pizza", description: "Juicy Tomato single size", isVeg: true, available: true, prices: {'regular': 100}, imageUrl: "https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?q=80&w=600&auto=format&fit=crop" },
+    { name: "Achari Do Pyaza Pizza", category: "pizza", description: "Achari Do Pyaza single size", isVeg: true, available: true, prices: {'regular': 100}, imageUrl: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Chilli", category: "chinase", description: "Stir-fried paneer cubes in spicy soy-chilli sauce", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=600&auto=format&fit=crop" },
+    { name: "Manchurian", category: "chinase", description: "Veg dumplings in savory Manchurian sauce", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?q=80&w=600&auto=format&fit=crop" },
+    { name: "Mushroom Chilli", category: "chinase", description: "Crispy fried mushrooms in chilli garlic sauce", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1508737027454-e6454ef45afd?q=80&w=600&auto=format&fit=crop" },
+    { name: "Babycorn Chilli", category: "chinase", description: "Babycorn in hot spicy Chinese gravy", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?q=80&w=600&auto=format&fit=crop" },
+    { name: "Potato Chilli", category: "chinase", description: "Crispy chilli potatoes in soy sauce", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1585109649139-366815a0d713?q=80&w=600&auto=format&fit=crop" },
+    { name: "Gobhi Chilli", category: "chinase", description: "Crispy fried cauliflower in hot chilli sauce", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop" },
+    { name: "Soya Chilli", category: "chinase", description: "Soya chunks in spicy soy-chilli gravy", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Noodles", category: "chinase", description: "Classic stir-fried Chinese noodles with veggies", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=600&auto=format&fit=crop" },
+    { name: "Hakka Noodles", category: "chinase", description: "Mildly seasoned Hakka style stir-fried noodles", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1612966608967-312ba599102e?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Noodles", category: "chinase", description: "Stir-fried noodles with paneer blocks", isVeg: true, available: true, prices: {'single': 200}, imageUrl: "https://images.unsplash.com/photo-1612966608900-b2d499732d84?q=80&w=600&auto=format&fit=crop" },
+    { name: "Schezwan Noodles", category: "chinase", description: "Spicy Schezwan sauce stir-fried noodles", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1526318896980-cf78c088247c?q=80&w=600&auto=format&fit=crop" },
+    { name: "Singapori Noodles", category: "chinase", description: "Curry seasoned spicy Singapore style noodles", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=600&auto=format&fit=crop" },
+    { name: "Chinese White Noodles", category: "chinase", description: "Noodles stir-fried in light white sauce", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1546549032-9571cd6b27df?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Spring Roll", category: "chinase", description: "Crispy rolls stuffed with mixed vegetables", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Spring Roll", category: "chinase", description: "Crispy rolls stuffed with paneer and veggies", isVeg: true, available: true, prices: {'single': 180}, imageUrl: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=600&auto=format&fit=crop" },
+    { name: "Corn Crispy", category: "chinase", description: "Crispy fried sweet corn with peppers", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Crispy", category: "chinase", description: "Crispy batter fried assorted vegetables", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1626132647523-66f5bf380027?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Crispy", category: "chinase", description: "Crispy fried batter-coated paneer strips", isVeg: true, available: true, prices: {'single': 240}, imageUrl: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?q=80&w=600&auto=format&fit=crop" },
+    { name: "Mushroom Crispy", category: "chinase", description: "Batter-fried crispy mushrooms", isVeg: true, available: true, prices: {'single': 240}, imageUrl: "https://images.unsplash.com/photo-1568254183919-78a4e43a2877?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Hara Kabab", category: "chinase", description: "Crispy pan-fried spinach and green peas patties", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1601050690597-df056fb4ce78?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Cutlet", category: "chinase", description: "Golden crispy deep fried mixed vegetable patties", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1541832676-9b763b0239ab?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Cutlet", category: "chinase", description: "Crispy deep fried spiced paneer and potato patties", isVeg: true, available: true, prices: {'single': 180}, imageUrl: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop" },
+    { name: "White Sauce Pasta", category: "chinase", description: "Pasta in creamy herbed white sauce", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1645112411341-6c4fd023714a?q=80&w=600&auto=format&fit=crop" },
+    { name: "Red Sauce Pasta", category: "chinase", description: "Pasta in tangy tomato basil sauce", isVeg: true, available: true, prices: {'single': 120}, imageUrl: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=600&auto=format&fit=crop" },
+    { name: "Manchow Soup", category: "chinase", description: "Spicy and sour soup served with fried noodles", isVeg: true, available: true, prices: {'single': 80}, imageUrl: "https://images.unsplash.com/photo-1547592165-e1d17f8e05cc?q=80&w=600&auto=format&fit=crop" },
+    { name: "Tomato Soup", category: "chinase", description: "Creamy tomato soup with herbed croutons", isVeg: true, available: true, prices: {'single': 80}, imageUrl: "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?q=80&w=600&auto=format&fit=crop" },
+    { name: "Lemon Coriander Soup", category: "chinase", description: "Light refreshing soup with lemon and coriander", isVeg: true, available: true, prices: {'single': 80}, imageUrl: "https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Biryani", category: "chinase", description: "Aromatic Basmati rice cooked with mixed veggies (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Pulao", category: "chinase", description: "Mildly spiced fragrant Basmati rice (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Rice", category: "chinase", description: "Basmati rice cooked with paneer chunks (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Fried Rice", category: "chinase", description: "Stir-fried Basmati rice with fresh vegetables (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=600&auto=format&fit=crop" },
+    { name: "Schezwan Rice", category: "chinase", description: "Spicy Schezwan sauce stir-fried rice (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?q=80&w=600&auto=format&fit=crop" },
+    { name: "Manchurian Rice", category: "chinase", description: "Basmati fried rice served with Manchurian gravy (Incl. Salad, Papad & Raita)", isVeg: true, available: true, prices: {'single': 180}, imageUrl: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?q=80&w=600&auto=format&fit=crop" },
+    { name: "Normal Fries", category: "snakes", description: "Classic salted crispy potato fries", isVeg: true, available: true, prices: {'single': 90}, imageUrl: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=600&auto=format&fit=crop" },
+    { name: "Masala Fries", category: "snakes", description: "Spicy masala coated crispy fries", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?q=80&w=600&auto=format&fit=crop" },
+    { name: "Pery Pery Fries", category: "snakes", description: "Spicy Peri-Peri seasoning fries", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1585109649139-366815a0d713?q=80&w=600&auto=format&fit=crop" },
+    { name: "4 Cheese Fries", category: "snakes", description: "Fries loaded with four delicious cheeses", isVeg: true, available: true, prices: {'single': 200}, imageUrl: "https://images.unsplash.com/photo-1576107232684-1279f390859f?q=80&w=600&auto=format&fit=crop" },
+    { name: "Normal Chips", category: "snakes", description: "Crispy potato chips", isVeg: true, available: true, prices: {'single': 90}, imageUrl: "https://images.unsplash.com/photo-1566478989037-eec170784d20?q=80&w=600&auto=format&fit=crop" },
+    { name: "Pery Pery Chips", category: "snakes", description: "Chips with spicy Peri-Peri seasoning", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1613967193442-19cfb7eb0515?q=80&w=600&auto=format&fit=crop" },
+    { name: "Plain Cheese Sandwich", category: "snakes", description: "Simple bread and melted cheese", isVeg: true, available: true, prices: {'single': 90}, imageUrl: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=600&auto=format&fit=crop" },
+    { name: "Corn Cheese Sandwich", category: "snakes", description: "Sweet corn and rich melted cheese", isVeg: true, available: true, prices: {'single': 90}, imageUrl: "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?q=80&w=600&auto=format&fit=crop" },
+    { name: "Bombay Masala Sandwich", category: "snakes", description: "Classic spicy potato masala, veggies, herbs", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Cheese Sandwich", category: "snakes", description: "Fresh veggies and cheese grilled", isVeg: true, available: true, prices: {'single': 90}, imageUrl: "https://images.unsplash.com/photo-1553909489-cd47e0907980?q=80&w=600&auto=format&fit=crop" },
+    { name: "Mexican Sandwich", category: "snakes", description: "Spicy Mexican style beans, jalapenos, cheese", isVeg: true, available: true, prices: {'single': 120}, imageUrl: "https://images.unsplash.com/photo-1540713434306-53f2c211b504?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Cheese Sandwich", category: "snakes", description: "Spiced paneer cubes, veggies, loaded cheese", isVeg: true, available: true, prices: {'single': 180}, imageUrl: "https://images.unsplash.com/photo-1509722747041-616f39b57569?q=80&w=600&auto=format&fit=crop" },
+    { name: "Full Choco Grill Sandwich", category: "snakes", description: "Bread filled with chocolate spread, grilled", isVeg: true, available: true, prices: {'single': 160}, imageUrl: "https://images.unsplash.com/photo-1587049352846-4a222e784d3b?q=80&w=600&auto=format&fit=crop" },
+    { name: "Club Grill Sandwich", category: "snakes", description: "Triple layer sandwich, mixed veggies, cheese", isVeg: true, available: true, prices: {'single': 180}, imageUrl: "https://images.unsplash.com/photo-1554433607-66b5eed9d304?q=80&w=600&auto=format&fit=crop" },
+    { name: "Tikki Burger", category: "snakes", description: "Crispy aloo tikki patty with sauces", isVeg: true, available: true, prices: {'single': 80}, imageUrl: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Burger", category: "snakes", description: "Classic mix veg patty, lettuce, tomato", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Burger", category: "snakes", description: "Crispy paneer block patty, spicy mayo", isVeg: true, available: true, prices: {'single': 120}, imageUrl: "https://images.unsplash.com/photo-1547584370-2cc98b8b8dc8?q=80&w=600&auto=format&fit=crop" },
+    { name: "Maharaja Burger", category: "snakes", description: "Double decker veg burger with extra cheese", isVeg: true, available: true, prices: {'single': 150}, imageUrl: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=600&auto=format&fit=crop" },
+    { name: "Italian Veg Burger", category: "snakes", description: "Herbed patty, Italian sauces, mozzarella", isVeg: true, available: true, prices: {'single': 150}, imageUrl: "https://images.unsplash.com/photo-1525059696034-4967a8e1dca2?q=80&w=600&auto=format&fit=crop" },
+    { name: "3 Cheese Burger", category: "snakes", description: "Patty loaded with three different cheeses", isVeg: true, available: true, prices: {'single': 200}, imageUrl: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=600&auto=format&fit=crop" },
+    { name: "Stuffed Cheese Garlic Bread", category: "snakes", description: "Freshly baked bread stuffed with cheese and corn", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1603046891744-1f76eb10aec1?q=80&w=600&auto=format&fit=crop" },
+    { name: "Cheese Petro", category: "snakes", description: "Crispy baked cheese snacks roll", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Cheese Petro", category: "snakes", description: "Cheese petro with spicy paneer stuffing", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?q=80&w=600&auto=format&fit=crop" },
+    { name: "Veg Cheese Boll", category: "snakes", description: "Fried cheese balls with mixed vegetables", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1548340748-6d2b7d7db87d?q=80&w=600&auto=format&fit=crop" },
+    { name: "Paneer Cheese Boll", category: "snakes", description: "Cheese balls with spiced paneer stuffing", isVeg: true, available: true, prices: {'single': 140}, imageUrl: "https://images.unsplash.com/photo-1607532941433-304659e8198a?q=80&w=600&auto=format&fit=crop" },
+    { name: "Masala Sweet Corn", category: "snakes", description: "Sweet corn tossed with spices and butter", isVeg: true, available: true, prices: {'single': 50}, imageUrl: "https://images.unsplash.com/photo-1529692236671-f1f6e994a52c?q=80&w=600&auto=format&fit=crop" },
+    { name: "Pery Pery Corn", category: "snakes", description: "Sweet corn tossed with Peri-Peri spices", isVeg: true, available: true, prices: {'single': 50}, imageUrl: "https://images.unsplash.com/photo-1551782450-17144efb9c50?q=80&w=600&auto=format&fit=crop" },
+    { name: "Fresh Sweet Corn", category: "snakes", description: "Steamed sweet corn with butter", isVeg: true, available: true, prices: {'single': 40}, imageUrl: "https://images.unsplash.com/photo-1470490314415-775d1f7e108f?q=80&w=600&auto=format&fit=crop" },
+    { name: "Mix Veg N Corn", category: "snakes", description: "Steamed corn mixed with fresh chopped vegetables", isVeg: true, available: true, prices: {'single': 60}, imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop" },
+    { name: "Choco Lava", category: "snakes", description: "Warm chocolate cake with molten center", isVeg: true, available: true, prices: {'single': 50}, imageUrl: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=600&auto=format&fit=crop" },
+    { name: "Choco Volcano", category: "snakes", description: "Huge molten chocolate dessert cake", isVeg: true, available: true, prices: {'single': 120}, imageUrl: "https://images.unsplash.com/photo-1624353322073-b7af1181886e?q=80&w=600&auto=format&fit=crop" },
+    { name: "Cold Coffee", category: "drink", description: "Chilled milk, coffee, sweet creamy froth", isVeg: true, available: true, prices: {'normal': 100, 'special': 120}, imageUrl: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=600&auto=format&fit=crop" },
+    { name: "Chocolate Milk Shake", category: "drink", description: "Rich chocolate milkshake with syrup", isVeg: true, available: true, prices: {'normal': 120, 'special': 170}, imageUrl: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?q=80&w=600&auto=format&fit=crop" },
+    { name: "Oreo Milk Shake", category: "drink", description: "Vanilla shake blended with crunchy Oreo cookies", isVeg: true, available: true, prices: {'normal': 120, 'special': 170}, imageUrl: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=600&auto=format&fit=crop" },
+    { name: "Butterscotch Shake", category: "drink", description: "Butterscotch ice cream shake with caramel crunch", isVeg: true, available: true, prices: {'normal': 120, 'special': 170}, imageUrl: "https://images.unsplash.com/photo-1553788210-e22070f6120e?q=80&w=600&auto=format&fit=crop" },
+    { name: "Vanilla Milk Shake", category: "drink", description: "Classic creamy vanilla ice cream shake", isVeg: true, available: true, prices: {'normal': 90, 'special': 140}, imageUrl: "https://images.unsplash.com/photo-1549853796-f18616597c2a?q=80&w=600&auto=format&fit=crop" },
+    { name: "Strawberry Milk Shake", category: "drink", description: "Sweet strawberry ice cream shake", isVeg: true, available: true, prices: {'normal': 90, 'special': 140}, imageUrl: "https://images.unsplash.com/photo-1586935724902-7c63d536718b?q=80&w=600&auto=format&fit=crop" },
+    { name: "Pista Milk Shake", category: "drink", description: "Pistachio ice cream milkshake", isVeg: true, available: true, prices: {'normal': 90, 'special': 140}, imageUrl: "https://images.unsplash.com/photo-1563844528129-067e06a638e5?q=80&w=600&auto=format&fit=crop" },
+    { name: "Blue Lagoon Mocktail", category: "drink", description: "Refreshing blue curaçao, soda, lemon", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=600&auto=format&fit=crop" },
+    { name: "Virgin Mojito", category: "drink", description: "Fresh mint, lime slices, crushed ice, soda", isVeg: true, available: true, prices: {'single': 100}, imageUrl: "https://images.unsplash.com/photo-1546171753-97d7676e4602?q=80&w=600&auto=format&fit=crop" },
+    { name: "Hot Coffee", category: "drink", description: "Freshly brewed hot milk coffee", isVeg: true, available: true, prices: {'single': 30}, imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=600&auto=format&fit=crop" },
+    { name: "Hot Tea", category: "drink", description: "Traditional hot Indian milk tea (chai)", isVeg: true, available: true, prices: {'single': 30}, imageUrl: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=600&auto=format&fit=crop" },
+    { name: "Black Coffee", category: "drink", description: "Fresh hot black coffee without milk", isVeg: true, available: true, prices: {'single': 25}, imageUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop" },
+    { name: "Black/Lemon Tea", category: "drink", description: "Fresh hot black or lemon tea", isVeg: true, available: true, prices: {'single': 25}, imageUrl: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?q=80&w=600&auto=format&fit=crop" }
   ];
 
   function seedDatabase() {
@@ -193,10 +169,10 @@
       db.ref("cityhut/cms/menu").once("value", menuSnap => {
         const menuVal = menuSnap.val() || {};
         const menuItemsList = Object.values(menuVal);
-        const hasNewCategories = menuItemsList.length > 0 && menuItemsList.some(item => item.category === "snakes" || item.category === "chinase");
+        const isNewMenuSeeded = menuItemsList.length > 0 && menuItemsList.some(item => item.name === "Achari Do Pyaza Pizza");
 
-        if (!hasNewCategories) {
-          console.log("Old menu or empty database detected. Seeding defaults...");
+        if (!isNewMenuSeeded) {
+          console.log("New menu is not seeded. Seeding defaults...");
           db.ref("cityhut/cms/menu").set(null);
           db.ref("cityhut/cms/categories").set(null);
           db.ref("cityhut/cms/customizations").set(null);
@@ -1372,9 +1348,21 @@
       let tableNo = "";
       let instructions = "None";
 
+      // Phone formatting and validation helper
+      const validateAndFormatPhone = (phoneStr) => {
+        let cleaned = phoneStr.replace(/\D/g, '');
+        if (cleaned.length === 10) {
+          return '91' + cleaned;
+        }
+        if (cleaned.length === 12 && cleaned.startsWith('91')) {
+          return cleaned;
+        }
+        return '';
+      };
+
       if (selectedMode === "delivery") {
         name = document.getElementById("client-name").value.trim();
-        phone = document.getElementById("client-phone-delivery").value.trim();
+        const rawPhone = document.getElementById("client-phone-delivery").value.trim();
         address = document.getElementById("client-address").value.trim();
         instructions = document.getElementById("client-instructions").value.trim() || "None";
 
@@ -1382,10 +1370,16 @@
           document.getElementById("client-name").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
         }
-        if (!phone) {
+        
+        const formattedPhone = validateAndFormatPhone(rawPhone);
+        if (!formattedPhone) {
           document.getElementById("client-phone-delivery").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
+        } else {
+          phone = formattedPhone;
+          document.getElementById("client-phone-delivery").value = "+" + formattedPhone;
         }
+
         if (!address) {
           document.getElementById("client-address").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
@@ -1393,7 +1387,7 @@
       } else {
         // Takeaway or Dine In
         name = document.getElementById("client-name-dt").value.trim();
-        phone = document.getElementById("client-phone-dt").value.trim();
+        const rawPhone = document.getElementById("client-phone-dt").value.trim();
         email = document.getElementById("client-email-dt").value.trim();
         if (selectedMode === "dinein") {
           tableNo = document.getElementById("client-table-dt").value;
@@ -1403,10 +1397,16 @@
           document.getElementById("client-name-dt").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
         }
-        if (!phone) {
+        
+        const formattedPhone = validateAndFormatPhone(rawPhone);
+        if (!formattedPhone) {
           document.getElementById("client-phone-dt").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
+        } else {
+          phone = formattedPhone;
+          document.getElementById("client-phone-dt").value = "+" + formattedPhone;
         }
+
         if (!email) {
           document.getElementById("client-email-dt").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
@@ -1755,9 +1755,16 @@
         
         let price = parseFloat(input.getAttribute('data-price'));
         if (input.value === "Cheese Burst") {
-          if (selectedSizeLabel === "Medium") price = 160;
-          else if (selectedSizeLabel === "Large") price = 200;
-          else price = 100;
+          const isValuePizza = product.prices && product.prices.small === 150;
+          if (isValuePizza) {
+            if (selectedSizeLabel === "Medium") price = 190;
+            else if (selectedSizeLabel === "Large") price = 270;
+            else price = 140;
+          } else {
+            if (selectedSizeLabel === "Medium") price = 160;
+            else if (selectedSizeLabel === "Large") price = 200;
+            else price = 100;
+          }
         }
         priceDiv.textContent = price > 0 ? `+₹${price}` : "Free";
       });
@@ -1766,9 +1773,16 @@
       const activeCrustInput = overlay.querySelector('input[name="cust-crust"]:checked');
       if (activeCrustInput) {
         if (activeCrustInput.value === "Cheese Burst") {
-          if (selectedSizeLabel === "Medium") crustPrice = 160;
-          else if (selectedSizeLabel === "Large") crustPrice = 200;
-          else crustPrice = 100;
+          const isValuePizza = product.prices && product.prices.small === 150;
+          if (isValuePizza) {
+            if (selectedSizeLabel === "Medium") crustPrice = 190;
+            else if (selectedSizeLabel === "Large") crustPrice = 270;
+            else crustPrice = 140;
+          } else {
+            if (selectedSizeLabel === "Medium") crustPrice = 160;
+            else if (selectedSizeLabel === "Large") crustPrice = 200;
+            else crustPrice = 100;
+          }
         } else {
           crustPrice = parseFloat(activeCrustInput.getAttribute("data-price"));
         }
@@ -1854,9 +1868,16 @@
         if (activeCrustInput) {
           crust = activeCrustInput.value;
           if (crust === "Cheese Burst") {
-            if (size === "Medium") crustPrice = 160;
-            else if (size === "Large") crustPrice = 200;
-            else crustPrice = 100;
+            const isValuePizza = activeCustomizerProduct.prices && activeCustomizerProduct.prices.small === 150;
+            if (isValuePizza) {
+              if (size === "Medium") crustPrice = 190;
+              else if (size === "Large") crustPrice = 270;
+              else crustPrice = 140;
+            } else {
+              if (size === "Medium") crustPrice = 160;
+              else if (size === "Large") crustPrice = 200;
+              else crustPrice = 100;
+            }
           } else {
             crustPrice = parseFloat(activeCrustInput.getAttribute("data-price"));
           }
