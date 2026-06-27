@@ -163,15 +163,15 @@
           <label style="font-weight: 600; font-size: 13px; color: var(--dark); margin-bottom: 8px; display: block;">Order Type</label>
           <div class="order-mode-selector">
             <label class="mode-pill active" id="mode-delivery-lbl">
-              <input type="radio" name="order-mode" value="delivery" checked style="display: none;">
+              <input type="radio" name="order-mode" value="delivery" checked aria-label="Delivery" style="display: none;">
               <span>🚚 Delivery</span>
             </label>
             <label class="mode-pill" id="mode-takeaway-lbl">
-              <input type="radio" name="order-mode" value="takeaway" style="display: none;">
+              <input type="radio" name="order-mode" value="takeaway" aria-label="Takeaway" style="display: none;">
               <span>📦 Takeaway</span>
             </label>
             <label class="mode-pill" id="mode-dinein-lbl">
-              <input type="radio" name="order-mode" value="dinein" style="display: none;">
+              <input type="radio" name="order-mode" value="dinein" aria-label="Dine In" style="display: none;">
               <span>🍽️ Dine In</span>
             </label>
           </div>
@@ -181,22 +181,22 @@
         <div id="delivery-fields-group">
           <div class="form-group">
             <label for="client-name">Your Name (required)</label>
-            <input type="text" id="client-name" name="name" placeholder="Enter your full name">
+            <input type="text" id="client-name" name="name" autocomplete="name" placeholder="Enter your full name">
             <span class="form-error" role="alert">Please enter your name.</span>
           </div>
           <div class="form-group">
             <label for="client-phone-delivery">Mobile Number (required)</label>
-            <input type="tel" id="client-phone-delivery" name="phone-delivery" placeholder="Enter 10-digit mobile number">
+            <input type="tel" id="client-phone-delivery" name="phone-delivery" autocomplete="tel" placeholder="Enter 10-digit mobile number">
             <span class="form-error" role="alert">Please enter your mobile number.</span>
           </div>
           <div class="form-group">
             <label for="client-address">Delivery Address (required)</label>
-            <input type="text" id="client-address" name="address" placeholder="Enter delivery address in Kawardha">
+            <input type="text" id="client-address" name="address" autocomplete="street-address" placeholder="Enter delivery address in Kawardha">
             <span class="form-error" role="alert">Please enter your delivery address.</span>
           </div>
           <div class="form-group">
             <label for="client-instructions">Special Instructions (optional)</label>
-            <textarea id="client-instructions" name="instructions" rows="2" placeholder="E.g. No onion/garlic, make it extra spicy, etc."></textarea>
+            <textarea id="client-instructions" name="instructions" autocomplete="off" rows="2" placeholder="E.g. No onion/garlic, make it extra spicy, etc."></textarea>
           </div>
         </div>
 
@@ -204,17 +204,17 @@
         <div id="dinein-takeaway-fields-group" style="display: none;">
           <div class="form-group">
             <label for="client-name-dt">Your Name (required)</label>
-            <input type="text" id="client-name-dt" name="name-dt" placeholder="Enter your full name">
+            <input type="text" id="client-name-dt" name="name-dt" autocomplete="name" placeholder="Enter your full name">
             <span class="form-error" role="alert">Please enter your name.</span>
           </div>
           <div class="form-group">
             <label for="client-phone-dt">Mobile Number (required)</label>
-            <input type="tel" id="client-phone-dt" name="phone-dt" placeholder="Enter 10-digit mobile number">
+            <input type="tel" id="client-phone-dt" name="phone-dt" autocomplete="tel" placeholder="Enter 10-digit mobile number">
             <span class="form-error" role="alert">Please enter your mobile number.</span>
           </div>
           <div class="form-group">
             <label for="client-email-dt">Email Address (required)</label>
-            <input type="email" id="client-email-dt" name="email-dt" placeholder="Enter your email address">
+            <input type="email" id="client-email-dt" name="email-dt" autocomplete="email" placeholder="Enter your email address">
             <span class="form-error" role="alert">Please enter a valid email address.</span>
           </div>
           <div class="form-group" id="table-number-group">
