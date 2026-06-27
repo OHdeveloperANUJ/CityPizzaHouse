@@ -1402,7 +1402,7 @@ h1, h2, h3, h4 {
 /* ===== FOOTER ===== */
 footer {
   background-color: var(--dark);
-  color: var(--surface);
+  color: #ffffff;
   padding: 80px 0 20px;
 }
 
@@ -1429,7 +1429,7 @@ footer {
   opacity: 0.8;
   margin-bottom: 24px;
   max-width: 250px;
-  color: var(--surface);
+  color: #ffffff;
 }
 
 .footer-socials {
@@ -1459,6 +1459,7 @@ footer {
   margin-bottom: 24px;
   position: relative;
   padding-bottom: 8px;
+  color: #ffffff;
 }
 
 .footer-col h3::after {
@@ -1481,6 +1482,7 @@ footer {
 .footer-links a {
   font-size: 14px;
   opacity: 0.8;
+  color: #ffffff;
 }
 
 .footer-links a:hover {
