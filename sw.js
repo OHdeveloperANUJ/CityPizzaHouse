@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cityhut-pizza-v5';
+const CACHE_NAME = 'cityhut-pizza-v6';
 const ASSETS = [
   '/',
   '/menu',

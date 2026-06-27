@@ -799,7 +799,7 @@
           if (grid && grid.children.length === 0) {
             const items = itemsByCategory[catId] || [];
             renderCategoryGrid(catId, items);
-            bindProductCardEvents(); // Re-bind card click event handlers
+            bindProductCardEvents(grid); // Re-bind card click event handlers
             
             // Stagger fade-in + slide-up motion animation
             const cards = grid.querySelectorAll(".product-card");
@@ -939,8 +939,8 @@
     }).join("");
   }
 
-  function bindProductCardEvents() {
-    const cards = document.querySelectorAll(".product-card");
+  function bindProductCardEvents(container = document) {
+    const cards = container.querySelectorAll(".product-card");
     cards.forEach(card => {
       const sizePills = card.querySelectorAll(".size-pill");
       const priceDisplay = card.querySelector(".product-price");
@@ -2070,7 +2070,7 @@
       }
 
       renderFanFavourites(favorites);
-      bindProductCardEvents();
+      bindProductCardEvents(grid);
       syncMenuCardCounters();
     } catch (err) {
       console.error("Error loading home page fan favorites:", err);
@@ -2263,7 +2263,6 @@
     initCustomizerModal();
     initCheckoutForm();
     initCartModeSelector();
-    bindProductCardEvents();
     initMenuPage();
     initHomePage();
     initDineInFlow();

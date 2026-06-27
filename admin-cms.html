@@ -96,9 +96,12 @@
             <!-- Pricing Mode Selector -->
             <div class="form-group">
               <label>Pricing Mode</label>
-              <div style="display: flex; gap: 15px; margin-top: 6px;">
+              <div style="display: flex; gap: 15px; margin-top: 6px; flex-wrap: wrap;">
                 <label style="display: flex; align-items: center; gap: 5px; font-weight: normal; cursor: pointer;">
                   <input type="radio" name="pricing-mode" value="multi" checked> Multiple Sizes (S/M/L)
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal; cursor: pointer;">
+                  <input type="radio" name="pricing-mode" value="double"> Normal / Special
                 </label>
                 <label style="display: flex; align-items: center; gap: 5px; font-weight: normal; cursor: pointer;">
                   <input type="radio" name="pricing-mode" value="single"> Single / Regular Price
@@ -121,6 +124,20 @@
                 <div>
                   <span style="font-size: 11px; color: var(--text-muted);">Large</span>
                   <input type="number" id="price-large" placeholder="L price" value="249" style="margin-top: 4px;">
+                </div>
+              </div>
+            </div>
+
+            <div id="double-price-group" class="form-group" style="display: none;">
+              <label>Prices (₹)</label>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 4px;">
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted);">Normal Price</span>
+                  <input type="number" id="price-normal" placeholder="Normal price" value="100" style="margin-top: 4px;">
+                </div>
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted);">Special Price</span>
+                  <input type="number" id="price-special" placeholder="Special price" value="120" style="margin-top: 4px;">
                 </div>
               </div>
             </div>
@@ -765,6 +782,7 @@
     const categorySelect = document.getElementById("item-category");
     const pizzaPriceGroup = document.getElementById("pizza-price-group");
     const singlePriceGroup = document.getElementById("single-price-group");
+    const doublePriceGroup = document.getElementById("double-price-group");
     const pricingModeRadios = document.querySelectorAll('input[name="pricing-mode"]');
 
     function updatePricingModeInputs() {
@@ -773,9 +791,15 @@
       if (mode === "multi") {
         pizzaPriceGroup.style.display = "block";
         singlePriceGroup.style.display = "none";
+        doublePriceGroup.style.display = "none";
+      } else if (mode === "double") {
+        pizzaPriceGroup.style.display = "none";
+        singlePriceGroup.style.display = "none";
+        doublePriceGroup.style.display = "block";
       } else {
         pizzaPriceGroup.style.display = "none";
         singlePriceGroup.style.display = "block";
+        doublePriceGroup.style.display = "none";
       }
     }
 
@@ -784,7 +808,12 @@
     });
 
     categorySelect.addEventListener("change", () => {
-      const targetMode = categorySelect.value === "pizza" ? "multi" : "single";
+      let targetMode = "single";
+      if (categorySelect.value === "pizza") {
+        targetMode = "multi";
+      } else if (categorySelect.value === "drink") {
+        targetMode = "double";
+      }
       const targetRadio = document.querySelector(`input[name="pricing-mode"][value="${targetMode}"]`);
       if (targetRadio) {
         targetRadio.checked = true;
@@ -815,6 +844,8 @@
         let pricesString = '';
         if (item.prices?.small || item.prices?.medium || item.prices?.large) {
           pricesString = `S: ₹${item.prices.small || 0}<br>M: ₹${item.prices.medium || 0}<br>L: ₹${item.prices.large || 0}`;
+        } else if (item.prices?.normal || item.prices?.special) {
+          pricesString = `Normal: ₹${item.prices.normal || 0}<br>Special: ₹${item.prices.special || 0}`;
         } else {
           const priceVal = item.prices?.single ?? item.prices?.regular ?? 0;
           pricesString = `₹${priceVal}`;
@@ -864,6 +895,9 @@
         prices.small = parseFloat(document.getElementById("price-small").value) || 0;
         prices.medium = parseFloat(document.getElementById("price-medium").value) || 0;
         prices.large = parseFloat(document.getElementById("price-large").value) || 0;
+      } else if (pricingMode === 'double') {
+        prices.normal = parseFloat(document.getElementById("price-normal").value) || 0;
+        prices.special = parseFloat(document.getElementById("price-special").value) || 0;
       } else {
         const val = parseFloat(document.getElementById("price-single").value) || 0;
         if (category === 'pizza') {
@@ -920,7 +954,8 @@
         document.getElementById("item-fan-favourite").checked = item.isFanFavourite === true;
 
         const isMulti = !!(item.prices?.small || item.prices?.medium || item.prices?.large);
-        const targetMode = isMulti ? "multi" : "single";
+        const isDouble = !!(item.prices?.normal || item.prices?.special);
+        const targetMode = isMulti ? "multi" : (isDouble ? "double" : "single");
         const targetRadio = document.querySelector(`input[name="pricing-mode"][value="${targetMode}"]`);
         if (targetRadio) {
           targetRadio.checked = true;
@@ -931,6 +966,9 @@
           document.getElementById("price-small").value = item.prices?.small || 0;
           document.getElementById("price-medium").value = item.prices?.medium || 0;
           document.getElementById("price-large").value = item.prices?.large || 0;
+        } else if (isDouble) {
+          document.getElementById("price-normal").value = item.prices?.normal || 0;
+          document.getElementById("price-special").value = item.prices?.special || 0;
         } else {
           document.getElementById("price-single").value = item.prices?.single || item.prices?.regular || 0;
         }
