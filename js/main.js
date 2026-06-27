@@ -337,6 +337,7 @@
         // Update all instagram links on the page
         const instaLinks = document.querySelectorAll('a[href*="instagram.com"]');
         instaLinks.forEach(link => {
+          if (link.closest('.bottom-bar')) return; // Ignore the Praxis promotional bottom bar links
           link.href = insta.followUrl || "https://www.instagram.com/cityhut_pizza/";
         });
         
