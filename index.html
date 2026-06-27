@@ -105,6 +105,8 @@
     </header>
   </div>
 
+  <main>
+
   <!-- ===== 4. HERO SECTION ===== -->
   <section id="hero-section" class="hero" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop');" aria-label="Introduction banner">
     <div class="container">
@@ -180,9 +182,9 @@
     <div class="section-header">
       <h2 id="craving-heading">What Are You Craving?</h2>
     </div>
-    <div class="categories-grid" id="craving-categories-grid" role="list">
+    <ul class="categories-grid" id="craving-categories-grid" style="list-style: none; padding: 0;">
       <!-- Loaded dynamically -->
-    </div>
+    </ul>
   </section>
 
   <!-- ===== 6. BEST SELLERS ===== -->
@@ -276,6 +278,8 @@
       </div>
     </div>
   </section>
+
+  </main>
 
   <!-- ===== 10. FOOTER ===== -->
   <footer>
@@ -534,10 +538,12 @@
       grid.innerHTML = Object.keys(categories).map(key => {
         const cat = categories[key];
         return `
-          <a href="menu.html#${cat.id}" class="category-card" role="listitem">
-            <span class="category-icon" aria-hidden="true">${escapeHTML(cat.icon)}</span>
-            <span>${escapeHTML(cat.name)}</span>
-          </a>
+          <li>
+            <a href="menu.html#${cat.id}" class="category-card" style="text-decoration: none;">
+              <span class="category-icon" aria-hidden="true">${escapeHTML(cat.icon)}</span>
+              <span>${escapeHTML(cat.name)}</span>
+            </a>
+          </li>
         `;
       }).join('');
     });

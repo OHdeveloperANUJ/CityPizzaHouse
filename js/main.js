@@ -788,7 +788,7 @@
       const sectionsContainer = document.getElementById("menu-sections-container");
       if (sectionsContainer) {
         sectionsContainer.innerHTML = categoriesList.map(cat => `
-          <section id="${cat.id}" class="menu-section" style="margin-bottom: 60px;" aria-labelledby="${cat.id}-heading">
+          <section id="${cat.id}" class="menu-section" role="tabpanel" style="margin-bottom: 60px;" aria-labelledby="${cat.id}-heading">
             <div class="section-header" style="text-align: left; margin-bottom: 30px;">
               <h2 id="${cat.id}-heading" style="font-size: 28px;">${escapeHTML(cat.icon)} ${escapeHTML(cat.name)}</h2>
               <div style="width: 100%; height: 2px; background-color: var(--border); margin-top: 10px;"></div>
