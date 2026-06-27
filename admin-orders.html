@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Order Dashboard — CityHut Pizza House</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+  <style>
+    /* Thermal Receipt Modal Styling */
+    .receipt-slip {
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 20px;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .receipt-header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .receipt-logo {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+    .receipt-divider {
+      border-top: 1px dashed #000;
+      margin: 10px 0;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .receipt-item-row {
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    /* Print Specific Media Query */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #receipt-print-modal, #receipt-print-modal * {
+        visibility: visible !important;
+      }
+      #receipt-print-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        background: #fff;
+        display: block !important;
+      }
+      .print-btn-group {
+        display: none !important;
+      }
+      .modal-header {
+        display: none !important;
+      }
+      .modal-container {
+        border: none !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #fff !important;
+      }
+      .receipt-slip {
+        max-width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 10px !important;
+      }
+    }
+  </style>
+</head>
+<body style="background-color: var(--background); min-height: 100vh;">
+
+  <!-- Role-Aware Top Navigation -->
+  <div id="admin-nav" class="admin-navbar-wrapper"></div>
+
+  <main class="container section-padding" style="padding-top: 40px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h1 style="color: var(--dark); font-size: 28px;">📋 Live Order Dashboard</h1>
+      <button id="enable-notifications" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); font-size: 13px; padding: 6px 12px; min-height: auto;">
+        🔔 Enable Sound & Alerts
+      </button>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-grid" id="stats-container">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-active">0</div>
+        <div class="stat-label">Active Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-done">0</div>
+        <div class="stat-label">Done Today</div>
+      </div>
+      <!-- Owner Stats Container (hidden by default) -->
+      <div class="stat-card owner-only" style="display: none;">
+        <div class="stat-number" id="stat-rev-today">₹0</div>
+        <div class="stat-label">Revenue Today</div>
+      </div>
+      <div class="stat-card owner-only" style="display: none;">
+        <div class="stat-number" id="stat-rev-month">₹0</div>
+        <div class="stat-label">Revenue This Month</div>
+      </div>
+    </div>
+
+    <!-- Active Orders Section -->
+    <div style="margin-bottom: 30px;">
+      <h2 style="color: var(--dark); font-size: 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #2ECC71;"></span>
+        Active Orders
+      </h2>
+      <div class="order-grid" id="active-orders-grid">
+        <!-- Rendered dynamically -->
+      </div>
+      <div id="active-empty-state" style="text-align: center; padding: 40px; color: var(--text-muted); display: none;">
+        <h3>No active orders at the moment. 😴</h3>
+      </div>
+    </div>
+
+    <!-- Completed Orders (Summary) Section -->
+    <div style="margin-top: 50px;">
+      <h2 style="color: var(--dark); font-size: 20px; margin-bottom: 16px;">Recently Completed (Today)</h2>
+      <div class="order-grid" id="completed-orders-grid">
+        <!-- Rendered dynamically -->
+      </div>
+      <div id="completed-empty-state" style="text-align: center; padding: 20px; color: var(--text-muted); display: none;">
+        <p>No orders completed today yet.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== EDIT ORDER MODAL ===== -->
+  <div id="edit-order-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 500px;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px;">
+        <h3 style="margin: 0; color: var(--dark); font-size: 18px;">✏️ Edit Order / Items</h3>
+        <button onclick="closeEditModal()" class="cart-close-btn" style="background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height: 65vh; overflow-y: auto; padding-right: 8px;">
+        <form id="edit-order-form" class="cart-form">
+          <input type="hidden" id="edit-order-id">
+          
+          <!-- Customer Details -->
+          <h4 style="margin: 0 0 12px 0; color: var(--dark); border-bottom: 1px dashed var(--border); padding-bottom: 4px; font-size: 14px;">Customer Details</h4>
+          <div class="form-group">
+            <label for="edit-cust-name">Customer Name</label>
+            <input type="text" id="edit-cust-name" required style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius);">
+          </div>
+          <div class="form-group">
+            <label for="edit-cust-phone">Phone Number</label>
+            <input type="tel" id="edit-cust-phone" required style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius);">
+          </div>
+          <div class="form-group" id="edit-cust-email-group">
+            <label for="edit-cust-email">Email Address</label>
+            <input type="email" id="edit-cust-email" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius);">
+          </div>
+          <div class="form-group" id="edit-cust-table-group">
+            <label for="edit-cust-table">Table</label>
+            <select id="edit-cust-table" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface); font-weight: 600;">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="form-group" id="edit-cust-address-group">
+            <label for="edit-cust-address">Delivery Address</label>
+            <input type="text" id="edit-cust-address" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius);">
+          </div>
+          <div class="form-group">
+            <label for="edit-cust-instructions">Instructions</label>
+            <textarea id="edit-cust-instructions" rows="2" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius); resize: vertical;"></textarea>
+          </div>
+
+          <!-- Items in Order -->
+          <h4 style="margin: 20px 0 12px 0; color: var(--dark); border-bottom: 1px dashed var(--border); padding-bottom: 4px; font-size: 14px;">Items in Order</h4>
+          <div id="edit-order-items-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Add Item Group -->
+          <h4 style="margin: 20px 0 12px 0; color: var(--dark); border-bottom: 1px dashed var(--border); padding-bottom: 4px; font-size: 14px;">➕ Add Item to Order</h4>
+          <div style="background-color: var(--background); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border); margin-bottom: 20px;">
+            <div class="form-group">
+              <label for="add-item-select">Select Item</label>
+              <select id="add-item-select" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface);">
+                <option value="">-- Choose Item --</option>
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+            <div class="form-group" id="add-item-size-group" style="display: none;">
+              <label>Select Size</label>
+              <div class="size-select-pills" id="add-item-size-pills" style="margin-top: 4px; display: flex; gap: 8px;">
+                <button type="button" class="size-pill active" data-size="Small" style="padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px; background-color: var(--surface); cursor: pointer;">Small</button>
+                <button type="button" class="size-pill" data-size="Medium" style="padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px; background-color: var(--surface); cursor: pointer;">Medium</button>
+                <button type="button" class="size-pill" data-size="Large" style="padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px; background-color: var(--surface); cursor: pointer;">Large</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-item-qty">Quantity</label>
+              <input type="number" id="add-item-qty" value="1" min="1" style="width: 80px; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius);">
+            </div>
+            <button type="button" onclick="addItemToEditOrder()" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); color: var(--surface); width: 100%; min-height: auto; padding: 10px;">
+              Add Item
+            </button>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" style="flex-grow: 1;">Save Changes</button>
+            <button type="button" onclick="closeEditModal()" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); color: var(--surface); flex-grow: 1;">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RECEIPT PRINT MODAL ===== -->
+  <div id="receipt-print-modal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 380px; padding: 20px;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px;">
+        <h3 style="margin: 0; color: var(--dark); font-size: 18px;">📄 Customer Bill / Invoice</h3>
+        <button onclick="closeReceiptModal()" class="cart-close-btn" style="background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="thermal-slip-content" class="receipt-slip">
+          <!-- Populated dynamically by openReceiptPrintModal -->
+        </div>
+        
+        <div class="print-btn-group" style="display: flex; gap: 12px; margin-top: 24px;">
+          <button onclick="triggerPrintReceipt()" class="btn btn-primary" style="flex-grow: 1;">🖨️ Print Receipt</button>
+          <button onclick="closeReceiptModal()" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); color: var(--surface); flex-grow: 1;">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Compat Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+    // Access Guard
+    function guardAdmin(requiredRole = null) {
+      const auth = sessionStorage.getItem('adminAuth');
+      const role = sessionStorage.getItem('adminRole');
+
+      if (auth !== 'true') {
+        window.location.href = 'admin-login.html';
+        return null;
+      }
+
+      if (requiredRole && role !== requiredRole) {
+        alert('Access denied. This page is for Owner only.');
+        window.location.href = 'admin-orders.html';
+        return null;
+      }
+
+      return role;
+    }
+
+    const currentRole = guardAdmin();
+
+    function renderAdminNav() {
+      const isOwner = currentRole === 'owner';
+      document.getElementById('admin-nav').innerHTML = `
+        <div class="admin-navbar container">
+          <div class="nav-brand">🍕 CityHut Pizza</div>
+          <nav>
+            <a href="admin-orders.html" class="nav-link active">📋 Orders</a>
+            ${isOwner ? '<a href="admin-cms.html" class="nav-link">⚙️ Menu & CMS</a>' : ''}
+          </nav>
+          <div class="nav-right">
+            <span class="role-badge ${currentRole === 'owner' ? 'owner' : 'waiter'}">
+              ${currentRole === 'owner' ? '👑 Owner' : '👨‍🍳 Waiter'}
+            </span>
+            <button onclick="logout()" class="logout-btn">Logout</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = 'admin-login.html';
+    }
+
+    renderAdminNav();
+
+    // Show Owner-Only Stats Panel
+    if (currentRole === 'owner') {
+      document.querySelectorAll('.owner-only').forEach(el => el.style.display = 'block');
+    }
+
+    // sound synthesizer using Web Audio API
+    let audioCtx = null;
+    function playChime() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        
+        // Dynamic double beep sound
+        const playBeep = (time, freq, duration) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, time);
+          gain.gain.setValueAtTime(0.15, time);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(time);
+          osc.stop(time + duration);
+        };
+        
+        const now = audioCtx.currentTime;
+        playBeep(now, 523.25, 0.2); // C5
+        playBeep(now + 0.15, 659.25, 0.35); // E5
+      } catch (e) {
+        console.error("Audio Synthesis failed:", e);
+      }
+    }
+
+    // Setup Notifications
+    const notifyBtn = document.getElementById('enable-notifications');
+    notifyBtn.addEventListener('click', () => {
+      // Trigger Web Audio initial run
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      playChime();
+
+      // Trigger Browser Notification request
+      if ('Notification' in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            new Notification("Notifications Enabled!", {
+              body: "You will be alerted when new orders arrive.",
+              icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>"
+            });
+            notifyBtn.style.display = 'none';
+          }
+        });
+      }
+    });
+
+    if ('Notification' in window && Notification.permission === 'granted') {
+      notifyBtn.style.display = 'none';
+    }
+
+    function sendSystemNotification(title, text) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, {
+          body: text,
+          icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>"
+        });
+      }
+    }
+
+    // Orders Management State
+    let knownOrderIds = new Set();
+    let isInitialLoad = true;
+    let currentOrdersList = [];
+    let activeWhatsAppNumber = "917880105006";
+    let activeRestaurantName = "CityHut Pizza House";
+    let activeBillSettings = {
+      gstEnabled: true,
+      gstPercentage: 5,
+      serviceCharge: 0,
+      headerText: "🍕 CITYHUT PIZZA",
+      footerText: "Thank you for ordering!\nPlease visit again! 🙏"
+    };
+
+    // Load active settings and billing configurations
+    db.ref('cityhut/cms/settings').on('value', snap => {
+      const settings = snap.val();
+      if (settings) {
+        activeWhatsAppNumber = settings.whatsappNumber || activeWhatsAppNumber;
+        activeRestaurantName = settings.restaurantName || activeRestaurantName;
+        if (settings.bill) {
+          activeBillSettings = { ...activeBillSettings, ...settings.bill };
+        }
+        
+        // Dynamic Brand Name
+        const navBrand = document.querySelector(".nav-brand");
+        if (navBrand) {
+          const emojiSpan = navBrand.querySelector('span[aria-hidden="true"]');
+          const emoji = emojiSpan ? emojiSpan.textContent : "🍕";
+          navBrand.innerHTML = `<span aria-hidden="true">${emoji}</span> ${activeRestaurantName}`;
+        }
+
+        if (currentOrdersList && currentOrdersList.length > 0) {
+          renderDashboard(currentOrdersList);
+        }
+      }
+    });
+
+    // Helper to calculate grand total
+    function calculateOrderGrandTotal(order) {
+      const subtotal = order.items ? Object.values(order.items).reduce((sum, item) => sum + (item.price * item.qty), 0) : 0;
+      let total = subtotal;
+      if (activeBillSettings.gstEnabled) {
+        const gst = Math.round(subtotal * activeBillSettings.gstPercentage) / 100;
+        total += gst;
+      }
+      if (activeBillSettings.serviceCharge > 0) {
+        total += activeBillSettings.serviceCharge;
+      }
+      return total;
+    }
+
+    // Realtime Database listener
+    db.ref('cityhut/orders').on('value', snap => {
+      const ordersData = snap.val() || {};
+      currentOrdersList = Object.keys(ordersData).map(key => ({
+        id: key,
+        ...ordersData[key]
+      }));
+
+      // Sort by createdAt descending
+      currentOrdersList.sort((a, b) => b.createdAt - a.createdAt);
+
+      renderDashboard(currentOrdersList);
+    });
+
+    function renderDashboard(orders) {
+      const activeOrdersGrid = document.getElementById('active-orders-grid');
+      const completedOrdersGrid = document.getElementById('completed-orders-grid');
+
+      // Clear grids
+      activeOrdersGrid.innerHTML = '';
+      completedOrdersGrid.innerHTML = '';
+
+      const startOfToday = new Date().setHours(0,0,0,0);
+      const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime();
+
+      let activeCount = 0;
+      let completedTodayCount = 0;
+      let revenueToday = 0;
+      let revenueMonth = 0;
+
+      let newOrderDetected = false;
+
+      orders.forEach(order => {
+        const subtotal = order.items ? Object.values(order.items).reduce((sum, item) => sum + (item.price * item.qty), 0) : 0;
+        const grandTotal = calculateOrderGrandTotal(order);
+        
+        // Track stats
+        if (order.status !== 'completed') {
+          activeCount++;
+        } else {
+          // Completed
+          if (order.completedAt >= startOfToday) {
+            completedTodayCount++;
+            revenueToday += grandTotal;
+          }
+          if (order.completedAt >= startOfMonth) {
+            revenueMonth += grandTotal;
+          }
+        }
+
+        // Render card
+        const cardHtml = createOrderCard(order, subtotal);
+
+        if (order.status !== 'completed') {
+          activeOrdersGrid.appendChild(cardHtml);
+          
+          // Check if this is a new order
+          if (!isInitialLoad && !knownOrderIds.has(order.id) && order.status === 'active') {
+            newOrderDetected = true;
+            cardHtml.classList.add('new-order-pulse');
+          }
+          knownOrderIds.add(order.id);
+        } else {
+          // Completed - only show if completed today
+          if (order.completedAt >= startOfToday) {
+            completedOrdersGrid.appendChild(cardHtml);
+          }
+        }
+      });
+
+      // Handle alerts if new order is received
+      if (newOrderDetected) {
+        playChime();
+        sendSystemNotification("🍕 New Order Received!", "Check the live order dashboard for details.");
+      }
+
+      isInitialLoad = false;
+
+      // Update counters
+      document.getElementById('stat-active').textContent = activeCount;
+      document.getElementById('stat-done').textContent = completedTodayCount;
+
+      if (currentRole === 'owner') {
+        document.getElementById('stat-rev-today').textContent = `₹${revenueToday.toLocaleString('en-IN')}`;
+        document.getElementById('stat-rev-month').textContent = `₹${revenueMonth.toLocaleString('en-IN')}`;
+      }
+
+      // Empty states display
+      document.getElementById('active-empty-state').style.display = activeOrdersGrid.children.length === 0 ? 'block' : 'none';
+      document.getElementById('completed-empty-state').style.display = completedOrdersGrid.children.length === 0 ? 'block' : 'none';
+    }
+
+    function createOrderCard(order, subtotal) {
+      const card = document.createElement('div');
+      card.className = 'order-card';
+      card.id = `order-${order.id}`;
+
+      const itemsList = order.items ? Object.values(order.items) : [];
+      const itemsHtml = itemsList.map(item => {
+        let custHtml = '';
+        if (item.crust) {
+          custHtml += `<div class="cart-item-size" style="color: var(--primary); font-weight: 600; margin-left: 10px; font-size: 11px;">↳ Crust: ${escapeHTML(item.crust)}</div>`;
+        }
+        if (item.addons) {
+          let addonList = [];
+          if (Array.isArray(item.addons)) {
+            addonList = item.addons;
+          } else if (typeof item.addons === 'object') {
+            addonList = Object.values(item.addons);
+          }
+          if (addonList.length > 0) {
+            const addonNames = addonList.map(a => typeof a === 'string' ? a : a.name).join(", ");
+            custHtml += `<div class="cart-item-size" style="color: #27AE60; font-weight: 600; margin-left: 10px; font-size: 11px;">↳ Addons: ${escapeHTML(addonNames)}</div>`;
+          }
+        }
+        return `
+          <div class="order-item-row-wrapper" style="border-bottom: 1px dashed var(--border); padding: 6px 0;">
+            <div class="order-item-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+              <span class="order-item-name">${escapeHTML(item.name)} ${item.size ? `(${item.size})` : ''} <strong style="color: var(--dark)">x${item.qty}</strong></span>
+              <span class="order-item-price">₹${item.price * item.qty}</span>
+            </div>
+            ${custHtml}
+          </div>
+        `;
+      }).join('');
+
+      const timeString = new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const dateString = new Date(order.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' });
+
+      // Action buttons depending on status
+      let actionButtons = '';
+      if (order.status === 'active') {
+        actionButtons = `<button onclick="updateOrderStatus('${order.id}', 'confirmed')" class="btn btn-primary btn-block">Confirm Order</button>`;
+      } else if (order.status === 'confirmed') {
+        actionButtons = `<button onclick="updateOrderStatus('${order.id}', 'ready')" class="btn btn-whatsapp btn-block" style="background-color: var(--accent);">Mark Ready</button>`;
+      } else if (order.status === 'ready') {
+        actionButtons = `<button onclick="updateOrderStatus('${order.id}', 'completed')" class="btn btn-primary btn-block" style="background-color: #27AE60;">Complete & Close Table</button>`;
+      }
+
+      const isDineIn = order.type === 'dine-in';
+      const orderTypeBadge = isDineIn 
+        ? `<span class="status-badge" style="background-color: #FDEDEC; color: var(--primary);">Dine-In (${escapeHTML(order.tableCode)} Table)</span>`
+        : `<span class="status-badge" style="background-color: #EAF2F8; color: #2980B9;">Takeaway No. ${order.takeawayNum || '#'}</span>`;
+
+      const whatsappButton = !isDineIn && order.phone 
+        ? `<div style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
+            <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; text-align: center;">💬 WhatsApp Status Updates</div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 6px;">
+              <button onclick="sendStatusWhatsApp('${order.id}', 'baking')" class="btn btn-whatsapp" style="font-size: 11px; padding: 6px 8px; min-height: auto; background-color: #E67E22; border-color: #E67E22; color: white;">🔥 Baking</button>
+              <button onclick="sendStatusWhatsApp('${order.id}', 'cooking_done')" class="btn btn-whatsapp" style="font-size: 11px; padding: 6px 8px; min-height: auto; background-color: #3498DB; border-color: #3498DB; color: white;">🍳 Cooked</button>
+              <button onclick="sendStatusWhatsApp('${order.id}', 'on_way')" class="btn btn-whatsapp" style="font-size: 11px; padding: 6px 8px; min-height: auto; background-color: #F1C40F; border-color: #F1C40F; color: var(--dark);">🛵 On Way</button>
+              <button onclick="sendStatusWhatsApp('${order.id}', 'ready')" class="btn btn-whatsapp" style="font-size: 11px; padding: 6px 8px; min-height: auto; background-color: #2ECC71; border-color: #2ECC71; color: white;">📦 Ready</button>
+            </div>
+            <a href="https://wa.me/${order.phone}" target="_blank" class="btn btn-outline btn-block" style="font-size: 11px; padding: 6px; min-height: auto; text-align: center; border-color: var(--border); color: var(--text-muted); display: block; text-decoration: none; background: none;">
+              💬 Custom Chat
+            </a>
+           </div>`
+        : '';
+
+      const editButton = order.status !== 'completed'
+        ? `<button onclick="openEditOrderModal('${order.id}')" class="btn btn-outline btn-block" style="margin-top: 8px; font-size: 13px; padding: 8px 16px; min-height: auto; background-color: var(--dark); border-color: var(--dark); color: var(--surface);">
+            ✏️ Edit Order / Items
+           </button>`
+        : '';
+
+      const printBillButton = `<button onclick="openReceiptPrintModal('${order.id}')" class="btn btn-outline btn-block" style="margin-top: 8px; font-size: 13px; padding: 8px 16px; min-height: auto; background-color: #34495E; border-color: #34495E; color: var(--surface);">
+            📄 Bill / Print
+          </button>`;
+
+      // Calculate totals breakdown for card
+      let grandTotal = subtotal;
+      let breakdownHtml = `
+        <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 2px;">
+          <span>Subtotal:</span>
+          <span>₹${subtotal}</span>
+        </div>
+      `;
+
+      if (activeBillSettings.gstEnabled) {
+        const cgst = Math.round(subtotal * (activeBillSettings.gstPercentage / 2) / 100 * 100) / 100;
+        const sgst = Math.round(subtotal * (activeBillSettings.gstPercentage / 2) / 100 * 100) / 100;
+        grandTotal += cgst + sgst;
+        breakdownHtml += `
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">
+            <span>CGST (${(activeBillSettings.gstPercentage / 2)}%):</span>
+            <span>+₹${cgst.toFixed(2)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">
+            <span>SGST (${(activeBillSettings.gstPercentage / 2)}%):</span>
+            <span>+₹${sgst.toFixed(2)}</span>
+          </div>
+        `;
+      }
+
+      if (activeBillSettings.serviceCharge > 0) {
+        grandTotal += activeBillSettings.serviceCharge;
+        breakdownHtml += `
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
+            <span>Service/Pkg Charge:</span>
+            <span>+₹${activeBillSettings.serviceCharge}</span>
+          </div>
+        `;
+      }
+
+      breakdownHtml += `
+        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; color: var(--primary); border-top: 1px dashed var(--border); padding-top: 4px;">
+          <span>Grand Total:</span>
+          <span>₹${grandTotal.toFixed(2)}</span>
+        </div>
+      `;
+
+      card.innerHTML = `
+        <div class="order-header">
+          <div class="order-title">
+            ${isDineIn ? `${escapeHTML(order.tableCode)} Table` : `Takeaway No. ${order.takeawayNum || '#'}`}
+            <div style="font-size: 11px; font-weight: normal; color: var(--text-muted); margin-top: 2px;">ID: ...${order.id.slice(-6)}</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="order-time">${timeString}</div>
+            <div class="order-time" style="font-size: 10px; margin-top: 2px;">${dateString}</div>
+          </div>
+        </div>
+        <div class="order-body">
+          <div class="customer-details">
+            <div><strong>Customer:</strong> ${escapeHTML(order.customerName)}</div>
+            ${order.phone ? `<div><strong>Phone:</strong> <a href="tel:${order.phone}">${escapeHTML(order.phone)}</a></div>` : ''}
+            ${order.email ? `<div><strong>Email:</strong> ${escapeHTML(order.email)}</div>` : ''}
+            ${order.address ? `<div style="margin-top: 6px;"><strong>Delivery Address:</strong> ${escapeHTML(order.address)}</div>` : ''}
+            ${order.instructions && order.instructions !== 'None' ? `<div style="margin-top: 6px; color: var(--primary); font-size: 12px;"><strong>Instructions:</strong> "${escapeHTML(order.instructions)}"</div>` : ''}
+          </div>
+          
+          <div class="order-items">
+            ${itemsHtml}
+          </div>
+          
+          <div class="order-notes-section">
+            <strong>Waiter Notes:</strong>
+            <div id="note-display-${order.id}" style="margin-top: 4px; font-style: italic; color: var(--text-muted);">
+              ${order.waiterNote ? escapeHTML(order.waiterNote) : 'No notes added.'}
+            </div>
+            <div class="note-input-group">
+              <input type="text" id="note-input-${order.id}" class="note-input" placeholder="Add note...">
+              <button onclick="saveWaiterNote('${order.id}')" class="note-btn">Save</button>
+            </div>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total-bar" style="display: block; width: 100%; text-align: right; line-height: 1.4; margin-bottom: 12px;">
+            ${breakdownHtml}
+          </div>
+          <div class="order-actions">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              ${orderTypeBadge}
+              <span class="status-badge status-${order.status}">${order.status}</span>
+            </div>
+            ${actionButtons}
+            ${editButton}
+            ${printBillButton}
+            ${whatsappButton}
+          </div>
+        </div>
+      `;
+
+      return card;
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      const updateData = { status: newStatus };
+      if (newStatus === 'completed') {
+        updateData.completedAt = Date.now();
+      }
+      try {
+        await db.ref(`cityhut/orders/${orderId}`).update(updateData);
+      } catch (err) {
+        console.error("Error updating order status:", err);
+        alert("Failed to update status. Please try again.");
+      }
+    }
+
+    window.sendStatusWhatsApp = function(orderId, statusType) {
+      const order = currentOrdersList.find(o => o.id === orderId);
+      if (!order) return;
+
+      const customerName = order.customerName || "Customer";
+      const phone = order.phone;
+      if (!phone) return;
+
+      let msg = "";
+      if (statusType === 'baking') {
+        msg = `Hello ${customerName}! 🍕 Your order from ${activeRestaurantName} is now in the oven and baking! It will be ready shortly. 🔥`;
+      } else if (statusType === 'cooking_done') {
+        msg = `Hello ${customerName}! 🍕 Great news! Your order from ${activeRestaurantName} is cooked and hot, fresh out of the oven! 🧑‍🍳`;
+      } else if (statusType === 'on_way') {
+        msg = `Hello ${customerName}! 🛵 Your order from ${activeRestaurantName} is out for delivery and on its way to your address! Our delivery rider will reach you shortly.`;
+      } else if (statusType === 'ready') {
+        msg = `Hello ${customerName}! 📦 Your order from ${activeRestaurantName} is ready and packed! You can pick it up from our counter anytime. Thank you! 🙏`;
+      }
+
+      const encodedMsg = encodeURIComponent(msg);
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodedMsg}`, "_blank");
+    };
+
+    async function saveWaiterNote(orderId) {
+      const input = document.getElementById(`note-input-${orderId}`);
+      const noteText = input.value.trim();
+      
+      try {
+        await db.ref(`cityhut/orders/${orderId}`).update({
+          waiterNote: noteText || null
+        });
+        input.value = '';
+      } catch (err) {
+        console.error("Error saving waiter note:", err);
+        alert("Failed to save note.");
+      }
+    }
+
+    // Order Editor logic
+    let menuItems = {};
+    let currentEditingItems = [];
+    let currentOrderType = "";
+
+    // Sync menu items for the editor dropdown
+    db.ref('cityhut/cms/menu').on('value', snap => {
+      menuItems = snap.val() || {};
+      populateAddItemSelect();
+    });
+
+    function populateAddItemSelect() {
+      const select = document.getElementById("add-item-select");
+      if (!select) return;
+      
+      select.innerHTML = '<option value="">-- Choose Item --</option>';
+      
+      Object.keys(menuItems).forEach(key => {
+        const item = menuItems[key];
+        if (item.available) {
+          const opt = document.createElement("option");
+          opt.value = key;
+          opt.textContent = `${item.name} (${item.category})`;
+          select.appendChild(opt);
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const select = document.getElementById("add-item-select");
+      const sizeGroup = document.getElementById("add-item-size-group");
+      const sizePills = document.querySelectorAll("#add-item-size-pills .size-pill");
+      
+      if (select && sizeGroup) {
+        select.addEventListener("change", () => {
+          const itemKey = select.value;
+          const item = menuItems[itemKey];
+          if (item && item.category === "pizza") {
+            sizeGroup.style.display = "block";
+          } else {
+            sizeGroup.style.display = "none";
+          }
+        });
+      }
+
+      sizePills.forEach(pill => {
+        pill.addEventListener("click", () => {
+          sizePills.forEach(p => p.classList.remove("active"));
+          pill.classList.add("active");
+        });
+      });
+
+      // Form submit listener
+      const editOrderForm = document.getElementById("edit-order-form");
+      if (editOrderForm) {
+        editOrderForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          
+          const orderId = document.getElementById("edit-order-id").value;
+          const name = document.getElementById("edit-cust-name").value.trim();
+          const phone = document.getElementById("edit-cust-phone").value.trim();
+          const email = document.getElementById("edit-cust-email").value.trim();
+          const instructions = document.getElementById("edit-cust-instructions").value.trim() || "None";
+          
+          const updatePayload = {
+            customerName: name,
+            phone: phone,
+            instructions: instructions
+          };
+
+          if (currentOrderType === "dine-in") {
+            const tableSelect = document.getElementById("edit-cust-table");
+            updatePayload.tableCode = tableSelect.value;
+            updatePayload.email = email;
+            updatePayload.customerName = `${tableSelect.value} Table Guest`;
+          } else if (currentOrderType === "takeaway") {
+            updatePayload.email = email;
+          } else {
+            // delivery
+            updatePayload.address = document.getElementById("edit-cust-address").value.trim();
+          }
+
+          const dbItems = {};
+          currentEditingItems.forEach((item, index) => {
+            dbItems[`item_${index}`] = {
+              name: item.name,
+              size: item.size || null,
+              price: item.price,
+              qty: item.qty,
+              crust: item.crust || null,
+              addons: item.addons || null,
+              addedAt: Date.now()
+            };
+          });
+          
+          updatePayload.items = dbItems;
+
+          try {
+            await db.ref(`cityhut/orders/${orderId}`).update(updatePayload);
+            alert("Order details updated successfully!");
+            closeEditModal();
+          } catch (err) {
+            console.error("Error saving changes:", err);
+            alert("Failed to save changes.");
+          }
+        });
+      }
+    });
+
+    async function openEditOrderModal(orderId) {
+      try {
+        const snap = await db.ref(`cityhut/orders/${orderId}`).once('value');
+        const order = snap.val();
+        if (!order) return;
+
+        document.getElementById("edit-order-id").value = orderId;
+        document.getElementById("edit-cust-name").value = order.customerName || "";
+        document.getElementById("edit-cust-phone").value = order.phone || "";
+        document.getElementById("edit-cust-email").value = order.email || "";
+        document.getElementById("edit-cust-instructions").value = order.instructions || "";
+        
+        currentOrderType = order.type;
+
+        const emailGroup = document.getElementById("edit-cust-email-group");
+        const tableGroup = document.getElementById("edit-cust-table-group");
+        const addressGroup = document.getElementById("edit-cust-address-group");
+        
+        if (order.type === "dine-in") {
+          if (emailGroup) emailGroup.style.display = "block";
+          if (tableGroup) tableGroup.style.display = "block";
+          if (addressGroup) addressGroup.style.display = "none";
+          
+          const settingsSnap = await db.ref("cityhut/cms/settings").once("value");
+          const settings = settingsSnap.val() || {};
+          const codes = settings.tableCodes || ["Pizza", "Burger", "Sandwich", "Garlic Bread", "Beverage", "Dessert"];
+          const codesList = Array.isArray(codes) ? codes : Object.values(codes);
+          
+          const tableSelect = document.getElementById("edit-cust-table");
+          if (tableSelect) {
+            tableSelect.innerHTML = codesList.map(code => `<option value="${code}">${code} Table</option>`).join("");
+            tableSelect.value = order.tableCode || "";
+          }
+        } else if (order.type === "takeaway") {
+          if (emailGroup) emailGroup.style.display = "block";
+          if (tableGroup) tableGroup.style.display = "none";
+          if (addressGroup) addressGroup.style.display = "none";
+        } else {
+          // delivery
+          if (emailGroup) emailGroup.style.display = "none";
+          if (tableGroup) tableGroup.style.display = "none";
+          if (addressGroup) addressGroup.style.display = "block";
+          if (addressGroup) {
+            document.getElementById("edit-cust-address").value = order.address || "";
+          }
+        }
+
+        currentEditingItems = [];
+        if (order.items) {
+          Object.keys(order.items).forEach(key => {
+            const item = order.items[key];
+            currentEditingItems.push({
+              key: key,
+              name: item.name,
+              size: item.size || null,
+              price: item.price,
+              qty: item.qty,
+              crust: item.crust || null,
+              addons: item.addons || null
+            });
+          });
+        }
+
+        renderEditModalItems();
+
+        const modal = document.getElementById("edit-order-modal");
+        if (modal) {
+          modal.classList.add("open");
+          document.body.classList.add("no-scroll");
+        }
+      } catch (err) {
+        console.error("Error opening edit modal:", err);
+        alert("Failed to load order data.");
+      }
+    }
+
+    function renderEditModalItems() {
+      const container = document.getElementById("edit-order-items-list");
+      if (!container) return;
+
+      if (currentEditingItems.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px; font-style: italic;">No items in order.</p>';
+        return;
+      }
+
+      container.innerHTML = currentEditingItems.map((item, index) => {
+        const sizeLabel = item.size ? ` (${item.size})` : "";
+        const subtotal = item.price * item.qty;
+        
+        let customizationHtml = "";
+        if (item.crust) {
+          customizationHtml += `<div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 2px;">↳ Crust: ${escapeHTML(item.crust)}</div>`;
+        }
+        if (item.addons) {
+          let addonList = [];
+          if (Array.isArray(item.addons)) {
+            addonList = item.addons;
+          } else if (typeof item.addons === 'object') {
+            addonList = Object.values(item.addons);
+          }
+          if (addonList.length > 0) {
+            const addonNames = addonList.map(a => typeof a === 'string' ? a : a.name).join(", ");
+            customizationHtml += `<div style="font-size: 11px; color: #27AE60; font-weight: 600; margin-top: 2px;">↳ Addons: ${escapeHTML(addonNames)}</div>`;
+          }
+        }
+
+        return `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background-color: var(--background); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 8px;">
+            <div>
+              <div style="font-weight: 600; color: var(--dark); font-size: 14px;">${escapeHTML(item.name)}${sizeLabel}</div>
+              ${customizationHtml}
+              <div style="font-size: 12px; color: var(--text-muted);">₹${item.price} each</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div class="qty-counter" style="margin-bottom: 0; display: flex; align-items: center;">
+                <button type="button" class="qty-btn" onclick="updateEditItemQty(${index}, -1)" style="min-height: auto; width: 28px; height: 28px; padding: 0;">-</button>
+                <span class="qty-val" style="margin: 0 8px;">${item.qty}</span>
+                <button type="button" class="qty-btn" onclick="updateEditItemQty(${index}, 1)" style="min-height: auto; width: 28px; height: 28px; padding: 0;">+</button>
+              </div>
+              <div style="font-weight: 600; font-size: 14px; width: 60px; text-align: right; color: var(--dark);">₹${subtotal}</div>
+              <button type="button" onclick="removeEditItem(${index})" style="background: none; border: none; cursor: pointer; font-size: 16px; margin-left: 8px;" aria-label="Remove item">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateEditItemQty(index, delta) {
+      currentEditingItems[index].qty += delta;
+      if (currentEditingItems[index].qty <= 0) {
+        currentEditingItems.splice(index, 1);
+      }
+      renderEditModalItems();
+    }
+
+    function removeEditItem(index) {
+      currentEditingItems.splice(index, 1);
+      renderEditModalItems();
+    }
+
+    function addItemToEditOrder() {
+      const select = document.getElementById("add-item-select");
+      const qtyInput = document.getElementById("add-item-qty");
+      
+      const itemKey = select.value;
+      if (!itemKey) {
+        alert("Please select an item first.");
+        return;
+      }
+
+      const item = menuItems[itemKey];
+      const qty = parseInt(qtyInput.value) || 1;
+      
+      let size = null;
+      let price = 0;
+      
+      if (item.category === "pizza") {
+        const activePill = document.querySelector("#add-item-size-pills .size-pill.active");
+        size = activePill ? activePill.getAttribute("data-size") : "Small";
+        
+        const prices = item.prices || {};
+        price = prices[size.toLowerCase()] || prices.small || 0;
+      } else {
+        price = item.prices?.single || 0;
+      }
+
+      const existing = currentEditingItems.find(i => 
+      i.name === item.name && 
+      i.size === size && 
+      (i.crust || 'none') === 'none' && 
+      (!i.addons || i.addons.length === 0)
+    );
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        currentEditingItems.push({
+          key: `item_new_${Date.now()}`,
+          name: item.name,
+          size: size,
+          price: price,
+          qty: qty
+        });
+      }
+
+      renderEditModalItems();
+      
+      select.value = "";
+      qtyInput.value = "1";
+      document.getElementById("add-item-size-group").style.display = "none";
+    }
+
+    function closeEditModal() {
+      const modal = document.getElementById("edit-order-modal");
+      if (modal) {
+        modal.classList.remove("open");
+        document.body.classList.remove("no-scroll");
+      }
+    }
+
+    // Receipt Print Logic
+    async function openReceiptPrintModal(orderId) {
+      try {
+        const snap = await db.ref(`cityhut/orders/${orderId}`).once('value');
+        const order = snap.val();
+        if (!order) return;
+
+        const itemsList = order.items ? Object.values(order.items) : [];
+        let subtotal = 0;
+        
+        const itemsHtml = itemsList.map(item => {
+          const itemSub = item.price * item.qty;
+          subtotal += itemSub;
+          const sizeLabel = item.size ? ` (${item.size})` : "";
+          
+          let custHtml = '';
+          if (item.crust) {
+            custHtml += `<div style="font-size: 11px; color: #555; margin-left: 10px;">↳ Crust: ${escapeHTML(item.crust)}</div>`;
+          }
+          if (item.addons) {
+            let addonList = [];
+            if (Array.isArray(item.addons)) {
+              addonList = item.addons;
+            } else if (typeof item.addons === 'object') {
+              addonList = Object.values(item.addons);
+            }
+            if (addonList.length > 0) {
+              const addonNames = addonList.map(a => typeof a === 'string' ? a : a.name).join(", ");
+              custHtml += `<div style="font-size: 11px; color: #555; margin-left: 10px;">↳ Addons: ${escapeHTML(addonNames)}</div>`;
+            }
+          }
+
+          return `
+            <div class="receipt-item-row" style="margin-bottom: 6px;">
+              <div style="font-weight: bold; font-size: 13px;">${escapeHTML(item.name)}${sizeLabel}</div>
+              ${custHtml}
+              <div class="receipt-row" style="font-size: 12px;">
+                <span>  ${item.qty} x ₹${item.price}</span>
+                <span>₹${itemSub}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        let gstHtml = '';
+        let grandTotal = subtotal;
+        if (activeBillSettings.gstEnabled) {
+          const cgst = Math.round(subtotal * (activeBillSettings.gstPercentage / 2) * 100) / 100;
+          const sgst = Math.round(subtotal * (activeBillSettings.gstPercentage / 2) * 100) / 100;
+          grandTotal += cgst + sgst;
+          gstHtml = `
+            <div class="receipt-row" style="font-size: 12px;">
+              <span>CGST (${(activeBillSettings.gstPercentage / 2)}%):</span>
+              <span>₹${cgst.toFixed(2)}</span>
+            </div>
+            <div class="receipt-row" style="font-size: 12px;">
+              <span>SGST (${(activeBillSettings.gstPercentage / 2)}%):</span>
+              <span>₹${sgst.toFixed(2)}</span>
+            </div>
+          `;
+        }
+
+        let serviceChargeHtml = '';
+        if (activeBillSettings.serviceCharge > 0) {
+          grandTotal += activeBillSettings.serviceCharge;
+          serviceChargeHtml = `
+            <div class="receipt-row" style="font-size: 12px;">
+              <span>Service/Pkg Charge:</span>
+              <span>₹${activeBillSettings.serviceCharge}</span>
+            </div>
+          `;
+        }
+
+        const timeStr = new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dateStr = new Date(order.createdAt).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+
+        const isDineIn = order.type === 'dine-in';
+        let typeInfo = '';
+        if (isDineIn) {
+          typeInfo = `${order.tableCode} Table Dine-In`;
+        } else if (order.type === 'takeaway') {
+          typeInfo = `Takeaway No. ${order.takeawayNum || '#'}`;
+        } else {
+          typeInfo = `Delivery Order`;
+        }
+
+        const slipContent = `
+          <div class="receipt-header">
+            <div class="receipt-logo">${escapeHTML(activeBillSettings.headerText)}</div>
+            <div style="font-size: 11px;">Kawardha ki Sabse Tasty Pizza</div>
+            <div style="font-size: 10px; margin-top: 2px;">Lohara Road, Kawardha, CG</div>
+            <div style="font-size: 10px;">Contact: +91 ${escapeHTML(activeWhatsAppNumber)}</div>
+          </div>
+          
+          <div class="receipt-divider"></div>
+          
+          <div class="receipt-row" style="font-size: 11px;">
+            <span>Date: ${dateStr}</span>
+            <span>Time: ${timeStr}</span>
+          </div>
+          <div class="receipt-row" style="font-size: 11px;">
+            <span>Order ID: ...${orderId.slice(-6)}</span>
+            <span>Type: ${order.type.toUpperCase()}</span>
+          </div>
+          <div style="font-size: 12px; font-weight: bold; margin-top: 4px;">
+            ${escapeHTML(typeInfo)}
+          </div>
+          <div style="font-size: 11px; margin-top: 2px;">
+            Customer: ${escapeHTML(order.customerName)}
+          </div>
+          ${order.phone ? `<div style="font-size: 11px;">Phone: ${escapeHTML(order.phone)}</div>` : ''}
+          
+          <div class="receipt-divider"></div>
+          
+          <div style="font-weight: bold; font-size: 11px; margin-bottom: 6px;">ITEMS ORDERED</div>
+          ${itemsHtml}
+          
+          <div class="receipt-divider"></div>
+          
+          <div class="receipt-row" style="font-size: 12px;">
+            <span>Subtotal:</span>
+            <span>₹${subtotal}</span>
+          </div>
+          ${gstHtml}
+          ${serviceChargeHtml}
+          
+          <div class="receipt-divider"></div>
+          
+          <div class="receipt-row" style="font-weight: bold; font-size: 14px;">
+            <span>GRAND TOTAL:</span>
+            <span>₹${grandTotal.toFixed(2)}</span>
+          </div>
+          
+          <div class="receipt-divider"></div>
+          
+          <div style="text-align: center; font-size: 10px; font-style: italic; margin-top: 8px; white-space: pre-line;">
+            ${escapeHTML(activeBillSettings.footerText)}
+          </div>
+        `;
+
+        document.getElementById("thermal-slip-content").innerHTML = slipContent;
+
+        const modal = document.getElementById("receipt-print-modal");
+        if (modal) {
+          modal.classList.add("open");
+          document.body.classList.add("no-scroll");
+        }
+      } catch (err) {
+        console.error("Error generating receipt slip:", err);
+        alert("Failed to build receipt data.");
+      }
+    }
+
+
+    function triggerPrintReceipt() {
+      window.print();
+    }
+
+    function closeReceiptModal() {
+      const modal = document.getElementById("receipt-print-modal");
+      if (modal) {
+        modal.classList.remove("open");
+        document.body.classList.remove("no-scroll");
+      }
+    }
+
+    // HTML escape utility
+    function escapeHTML(str) {
+      if (!str) return "";
+      return str.replace(/[&<>"']/g, function (match) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[match];
+      });
+    }
+  </script>
+</body>
+</html>

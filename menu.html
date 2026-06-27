@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityHut Pizza House Menu | Fast Food & Pizza Delivery in Kawardha</title>
+  <meta name="description" content="Explore the full digital menu of CityHut Pizza House, Kawardha. Order fresh pizzas, burgers, sandwiches, garlic bread, and drinks online for superfast food delivery in Kawardha.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+</head>
+<body>
+
+  <!-- ===== 1. LOADING SCREEN ===== -->
+  <div id="preloader" class="loader-screen" role="status" aria-label="Loading Website">
+    <span class="loader-pizza" aria-hidden="true">🍕</span>
+    <div class="loader-text">CITYHUT PIZZA</div>
+  </div>
+
+  <!-- ===== 2. ANNOUNCEMENT BANNER ===== -->
+  <div id="announcement-banner" class="announcement-banner">
+    <span id="announcement-text">🎉 Free Delivery on orders above ₹199 within Kawardha! Order Now on WhatsApp</span>
+    <button id="dismiss-banner" aria-label="Dismiss banner">&times;</button>
+  </div>
+
+  <!-- ===== 3. STICKY NAVBAR ===== -->
+  <div class="header-wrapper">
+    <header class="navbar container">
+      <a href="index.html" class="logo" aria-label="CityHut Pizza House Home">
+        <span aria-hidden="true">🍕</span> CityHut Pizza
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav-links" id="nav-links" aria-label="Primary navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html" class="active">Menu</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="menu.html" class="btn btn-primary" aria-label="Order food now">Order Now</a>
+      </div>
+      <div class="navbar-overlay" id="navbar-overlay" aria-hidden="true"></div>
+    </header>
+  </div>
+
+  <!-- ===== 4. STICKY CATEGORY FILTER BAR ===== -->
+  <div class="category-filter-wrapper">
+    <div class="category-filter-bar" id="menu-filter-bar" role="tablist" aria-label="Menu categories">
+      <!-- Loaded dynamically -->
+    </div>
+  </div>
+
+  <!-- ===== 5. DIGITAL MENU MAIN ===== -->
+  <main class="container section-padding" style="padding-top: 40px;">
+    <div class="section-header" style="text-align: center; margin-bottom: 40px;">
+      <h1 style="font-size: 32px; font-weight: 800; color: var(--dark); margin-bottom: 12px;">Explore Our Fresh Fast Food Menu in Kawardha</h1>
+      <p style="color: var(--text-muted); max-width: 600px; margin: 10px auto 0; font-size: 15px;">Feast on Kawardha's best pizzas, burgers, sandwiches, garlic bread, and drinks. Place your order online for quick WhatsApp receipt and superfast doorstep delivery.</p>
+    </div>
+    
+    <div id="menu-sections-container">
+      <!-- Dynamic sections will render here -->
+    </div>
+  </main>
+
+  <!-- ===== 6. FOOTER ===== -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo"><span aria-hidden="true">🍕</span> CityHut Pizza</div>
+        <p class="footer-tagline">Freshly prepared, baked to perfection, and delivered piping hot across Kawardha.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/cityhut_pizza/" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Follow us on Instagram">📸</a>
+          <a href="https://wa.me/917880105006" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Contact us on WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="contact.html">Contact & Location</a></li>
+          <li><a href="https://wa.me/917880105006?text=Hello+CityHut+Pizza!" target="_blank" rel="noopener">WhatsApp Chat</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Opening Hours</h3>
+        <ul class="footer-hours-list">
+          <li>Mon – Sun: 11:00 AM – 10:00 PM</li>
+          <li>Open All Days</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact-info">
+          <li>
+            <span>📍</span>
+            <span>Lohara Road, near Saraswati Shishu Mandir, Kawardha, Chhattisgarh</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span><a href="tel:+917880105006">+91 78801 05006</a></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom-bar container">
+      <p>&copy; 2025 CityHut Pizza House. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== 7. FLOATING CART BUTTON ===== -->
+  <button id="cart-toggle" class="floating-cart-btn" aria-label="Open shopping cart">
+    <span>🛒</span>
+    <span class="cart-badge cart-count-badge">0</span>
+  </button>
+
+  <!-- ===== 8. CART SIDEBAR DRAWER ===== -->
+  <div id="cart-overlay" class="cart-overlay" aria-hidden="true"></div>
+  <div id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="cart-header">
+      <h2 id="cart-title">Your Order 🛒</h2>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span id="clear-cart" class="clear-cart-link" role="button">Clear All</span>
+        <button id="cart-close" class="cart-close-btn" aria-label="Close cart">&times;</button>
+      </div>
+    </div>
+    <div class="cart-body">
+      <!-- Empty State -->
+      <div id="cart-empty-state" class="cart-empty">
+        <span class="cart-empty-icon" aria-hidden="true">🍕</span>
+        <p class="cart-empty-text">Your cart is empty. Add some items!</p>
+        <button type="button" id="browse-menu-btn" class="btn btn-primary" style="margin-top: 10px;">Browse Menu</button>
+      </div>
+      <!-- Items Container -->
+      <div id="cart-items"></div>
+      
+      <!-- Checkout Form Fields (Inside scrollable body!) -->
+      <form id="order-form" class="cart-form" style="margin-top: 24px; border-top: 1px dashed var(--border); padding-top: 20px;">
+        <!-- Order Mode Selector -->
+        <div class="form-group">
+          <label style="font-weight: 600; font-size: 13px; color: var(--dark); margin-bottom: 8px; display: block;">Order Type</label>
+          <div class="order-mode-selector">
+            <label class="mode-pill active" id="mode-delivery-lbl">
+              <input type="radio" name="order-mode" value="delivery" checked style="display: none;">
+              <span>🚚 Delivery</span>
+            </label>
+            <label class="mode-pill" id="mode-takeaway-lbl">
+              <input type="radio" name="order-mode" value="takeaway" style="display: none;">
+              <span>📦 Takeaway</span>
+            </label>
+            <label class="mode-pill" id="mode-dinein-lbl">
+              <input type="radio" name="order-mode" value="dinein" style="display: none;">
+              <span>🍽️ Dine In</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Delivery Fields -->
+        <div id="delivery-fields-group">
+          <div class="form-group">
+            <label for="client-name">Your Name (required)</label>
+            <input type="text" id="client-name" name="name" placeholder="Enter your full name">
+            <span class="form-error" role="alert">Please enter your name.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-phone-delivery">Mobile Number (required)</label>
+            <input type="tel" id="client-phone-delivery" name="phone-delivery" placeholder="Enter 10-digit mobile number">
+            <span class="form-error" role="alert">Please enter your mobile number.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-address">Delivery Address (required)</label>
+            <input type="text" id="client-address" name="address" placeholder="Enter delivery address in Kawardha">
+            <span class="form-error" role="alert">Please enter your delivery address.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-instructions">Special Instructions (optional)</label>
+            <textarea id="client-instructions" name="instructions" rows="2" placeholder="E.g. No onion/garlic, make it extra spicy, etc."></textarea>
+          </div>
+        </div>
+
+        <!-- Dine-in / Takeaway Fields -->
+        <div id="dinein-takeaway-fields-group" style="display: none;">
+          <div class="form-group">
+            <label for="client-phone-dt">Mobile Number (required)</label>
+            <input type="tel" id="client-phone-dt" name="phone-dt" placeholder="Enter 10-digit mobile number">
+            <span class="form-error" role="alert">Please enter your mobile number.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-email-dt">Email Address (required)</label>
+            <input type="email" id="client-email-dt" name="email-dt" placeholder="Enter your email address">
+            <span class="form-error" role="alert">Please enter a valid email address.</span>
+          </div>
+          <div class="form-group" id="table-number-group">
+            <label for="client-table-dt">Table Number (required)</label>
+            <select id="client-table-dt" name="table-dt" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface); font-weight: 600;">
+              <!-- Loaded dynamically -->
+            </select>
+            <span class="form-error" role="alert">Please select a table.</span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- Cart Footer (Sticky) -->
+    <div id="cart-checkout-footer" class="cart-footer">
+      <div id="cart-summary-container">
+        <div class="cart-summary-row">
+          <span class="cart-summary-label">Subtotal:</span>
+          <span id="cart-subtotal" class="cart-summary-value">₹0</span>
+        </div>
+      </div>
+      <div class="delivery-note" role="note">
+        <span>🚚</span> Free delivery within Kawardha
+      </div>
+      <button type="submit" id="checkout-btn" form="order-form" class="btn btn-whatsapp btn-block">
+        <span>📱</span> Place Order on WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== 9. STICKY WHATSAPP CHAT BUTTON ===== -->
+  <a href="https://wa.me/917880105006" target="_blank" rel="noopener" class="sticky-whatsapp-chat" aria-label="Chat with us on WhatsApp">
+    <span>💬</span>
+    <span class="chat-tooltip">Chat with us!</span>
+  </a>
+
+  <!-- ===== 10. BACK TO TOP BUTTON ===== -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- ===== PRODUCT CUSTOMIZATION MODAL ===== -->
+  <div id="customize-modal-overlay" class="modal-overlay">
+    <div class="modal-container" style="max-width: 440px; padding: 24px;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 id="customize-title" style="margin: 0; color: var(--dark); font-size: 18px;">🍕 Customize Item</h3>
+        <button id="customize-close" class="cart-close-btn" style="background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height: 60vh; overflow-y: auto; padding-right: 8px;">
+        <!-- Dynamic content injected here -->
+        <div id="customize-content"></div>
+      </div>
+      <div class="modal-footer" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">FINAL PRICE</div>
+          <div id="customize-total-price" style="font-size: 24px; font-weight: 800; color: var(--primary); font-family: var(--font-heading);">₹0</div>
+        </div>
+        <button type="button" id="customize-add-btn" class="btn btn-primary" style="padding: 12px 24px; min-height: auto;">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DINE-IN TABLE SELECTION MODAL ===== -->
+  <div id="table-modal-overlay" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>🍽️ Dine-in Table Setup</h3>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Welcome to CityHut Pizza House! Please select your table code and enter your details to start placing orders.</p>
+        <form id="table-entry-form" class="cart-form" style="margin-bottom: 0;">
+          <div class="form-group">
+            <label for="dinein-table">Select Table</label>
+            <select id="dinein-table" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface); font-weight: 600;">
+              <!-- Loaded dynamically -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="dinein-name">Your Name</label>
+            <input type="text" id="dinein-name" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label for="dinein-phone">Phone Number</label>
+            <input type="tel" id="dinein-phone" required placeholder="Enter 10-digit mobile number">
+          </div>
+          <div class="form-group">
+            <label for="dinein-email">Email Address</label>
+            <input type="email" id="dinein-email" required placeholder="Enter your email address">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Confirm Details & View Menu</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DINE-IN ORDER SUCCESS RECEIPT MODAL ===== -->
+  <div id="success-modal-overlay" class="modal-overlay">
+    <div class="modal-container" style="max-width: 440px;">
+      <div class="modal-body" style="text-align: center; padding: 40px 30px;">
+        <span style="font-size: 64px;">🎉</span>
+        <h2 style="font-family: var(--font-heading); color: var(--dark); font-size: 24px; margin-top: 10px; margin-bottom: 8px;">Order Completed!</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Your table session has been closed. We hope you enjoyed your meal at CityHut Pizza House!</p>
+        
+        <div style="background-color: var(--background); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; text-align: left; font-size: 14px;">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 10px; font-weight: bold; color: var(--dark);">
+            <span>Table session closed</span>
+            <span id="receipt-table-code">T1</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span>Customer Name:</span>
+            <strong id="receipt-customer-name">Rahul</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Order Reference ID:</span>
+            <strong id="receipt-order-id">...T472</strong>
+          </div>
+        </div>
+
+        <button type="button" id="close-success-btn" class="btn btn-primary btn-block">Go back to Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Compat Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+</body>
+</html>

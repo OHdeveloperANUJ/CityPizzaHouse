@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityHut Pizza House | Best Cafe & Restaurant in Kawardha</title>
+  <meta name="description" content="Looking for the best cafe or restaurant in Kawardha? CityHut Pizza House offers fresh, hot, and delicious pizzas, burgers, sandwiches, garlic bread, and drinks for fast delivery in Kawardha. Order on WhatsApp now!">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+  
+  <!-- JSON-LD Local Business SEO Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FoodEstablishment",
+    "name": "CityHut Pizza House",
+    "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop",
+    "@id": "https://cityhutpizza.com/index.html",
+    "url": "https://cityhutpizza.com/index.html",
+    "telephone": "+917880105006",
+    "priceRange": "$$",
+    "servesCuisine": "Pizza, Burgers, Fast Food, Sandwiches, Drinks",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Lohara Road, near Saraswati Shishu Mandir",
+      "addressLocality": "Kawardha",
+      "addressRegion": "Chhattisgarh",
+      "postalCode": "491335",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 22.0125893,
+      "longitude": 81.2335198
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "11:00",
+      "closes": "22:00"
+    },
+    "sameAs": [
+      "https://www.instagram.com/cityhut_pizza/"
+    ]
+  }
+  </script></concept_meta>
+</head>
+<body>
+
+  <!-- ===== 1. LOADING SCREEN ===== -->
+  <div id="preloader" class="loader-screen" role="status" aria-label="Loading Website">
+    <span class="loader-pizza" aria-hidden="true">🍕</span>
+    <div class="loader-text">CITYHUT PIZZA</div>
+  </div>
+
+  <!-- ===== 2. ANNOUNCEMENT BANNER ===== -->
+  <div id="announcement-banner" class="announcement-banner">
+    <span id="announcement-text">🎉 Free Delivery on orders above ₹199 within Kawardha! Order Now on WhatsApp</span>
+    <button id="dismiss-banner" aria-label="Dismiss banner">&times;</button>
+  </div>
+
+  <!-- ===== 3. STICKY NAVBAR ===== -->
+  <div class="header-wrapper">
+    <header class="navbar container">
+      <a href="index.html" class="logo" aria-label="CityHut Pizza House Home">
+        <span aria-hidden="true">🍕</span> CityHut Pizza
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav-links" id="nav-links" aria-label="Primary navigation">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="menu.html" class="btn btn-primary" aria-label="Order food now">Order Now</a>
+      </div>
+      <div class="navbar-overlay" id="navbar-overlay" aria-hidden="true"></div>
+    </header>
+  </div>
+
+  <!-- ===== 4. HERO SECTION ===== -->
+  <section id="hero-section" class="hero" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop');" aria-label="Introduction banner">
+    <div class="container">
+      <div class="hero-content">
+        <h1 id="hero-headline">Kawardha ki Sabse Tasty Pizza 🍕</h1>
+        <p id="hero-description">Fresh dough made daily, real premium mozzarella cheese, and rich homemade sauces — delivered steaming hot straight to your door.</p>
+        <div class="hero-btns">
+          <a href="menu.html" class="btn btn-primary">View Menu</a>
+          <a href="https://wa.me/917880105006?text=Hello+CityHut+Pizza!+I+want+to+place+an+order." target="_blank" rel="noopener" class="btn btn-outline">Order on WhatsApp</a>
+        </div>
+        <div class="trust-badges" id="hero-badges-container">
+          <div class="trust-badge" id="hero-badge1"><span>🚀</span> <span>Fast Delivery</span></div>
+          <div class="trust-badge" id="hero-badge2"><span>🧑‍🍳</span> <span>Freshly Made</span></div>
+          <div class="trust-badge" id="hero-badge3"><span>⭐</span> <span>256+ Happy Customers</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ⭐ LOCAL SEO WELCOME SECTION ===== -->
+  <section class="seo-intro-section" style="padding: 60px 0 20px 0; background-color: var(--surface); text-align: center;">
+    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+      <h2 style="font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 16px;">Welcome to CityHut Pizza House — Best Cafe & Restaurant in Kawardha</h2>
+      <p style="font-size: 16px; line-height: 1.7; color: var(--text-muted); margin: 0;">
+        CityHut Pizza House is the leading <strong>cafe and restaurant in Kawardha, Chhattisgarh</strong>, serving up freshly baked pizzas, delicious burgers, mouthwatering sandwiches, garlic breads, and refreshing beverages. Whether you are searching for the best <strong>cafe in Kawardha</strong> to hang out, looking for a family-friendly <strong>restaurant in Kawardha</strong>, or wanting fast <strong>food delivery in Kawardha</strong> right to your doorstep, we've got you covered. Experience Kawardha's favorite fast-food destination and order today!
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== ⭐ ORDER OPTIONS SECTION ===== -->
+  <section class="order-options">
+    <h2>How would you like to order?</h2>
+    <p class="section-sub">Choose your preferred way to enjoy CityHut Pizza</p>
+
+    <div class="order-cards">
+      <!-- Online Order -->
+      <div class="order-card" onclick="window.location.href='menu.html?mode=takeaway'">
+        <div class="card-icon">🌐</div>
+        <h3>Order Online</h3>
+        <p>Order from anywhere, get it delivered hot to your door</p>
+        <a href="menu.html?mode=takeaway" class="btn-order">Order Now</a>
+      </div>
+
+      <!-- Takeaway -->
+      <div class="order-card" onclick="window.location.href='menu.html?mode=takeaway'">
+        <div class="card-icon">📦</div>
+        <h3>Takeaway</h3>
+        <p>Order ahead, skip the wait, pick up fresh & hot</p>
+        <a href="menu.html?mode=takeaway" class="btn-order">Order Now</a>
+      </div>
+
+      <!-- Dine In -->
+      <div class="order-card featured" onclick="window.location.href='menu.html?mode=dinein'">
+        <div class="card-icon">🍽️</div>
+        <h3>Dine In</h3>
+        <p>Walk in, sit down & order fresh right at your table</p>
+        <a href="menu.html?mode=dinein" class="btn-order">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TODAY'S OFFER BANNER ===== -->
+  <div id="offer-banner" class="container" style="display: none; margin-top: 30px; margin-bottom: -30px;">
+    <div style="background: linear-gradient(135deg, var(--accent) 0%, #D35400 100%); color: white; padding: 24px; border-radius: var(--radius); text-align: center; font-family: var(--font-heading); box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+      <span style="font-size: 28px; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); opacity: 0.15;">🎁</span>
+      <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px;">SPECIAL DEAL FOR YOU! 🔥</h3>
+      <p id="offer-text" style="font-size: 15px; font-weight: 600; opacity: 0.95;"></p>
+    </div>
+  </div>
+
+  <!-- ===== 5. CATEGORIES GRID (QUICK NAV) ===== -->
+  <section class="section-padding container" aria-labelledby="craving-heading">
+    <div class="section-header">
+      <h2 id="craving-heading">What Are You Craving?</h2>
+    </div>
+    <div class="categories-grid" id="craving-categories-grid" role="list">
+      <!-- Loaded dynamically -->
+    </div>
+  </section>
+
+  <!-- ===== 6. BEST SELLERS ===== -->
+  <section class="section-padding" style="background-color: var(--surface);" aria-labelledby="bestsellers-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="bestsellers-heading">Fan Favourites 🔥</h2>
+      </div>
+      <div class="products-grid">
+
+        <!-- Card 1: Veg Margherita Pizza -->
+        <div class="product-card" data-id="veg-margherita" data-name="Veg Margherita" data-category="pizza" role="article">
+          <div class="product-img-wrapper">
+            <img class="product-img" src="https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?q=80&w=600&auto=format&fit=crop" alt="Veg Margherita Pizza" loading="lazy">
+            <div class="product-veg-type" aria-label="Vegetarian option">
+              <span class="veg-badge"></span>
+            </div>
+            <div class="product-badges">
+              <span class="product-badge" style="color: var(--primary);">Best Seller</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">Veg Margherita</h3>
+            <p class="product-desc">Classic tomato sauce, premium mozzarella, fresh veggies</p>
+            <div class="size-selector">
+              <label id="margherita-size-label">Select Size:</label>
+              <div class="size-select-pills" role="radiogroup" aria-labelledby="margherita-size-label">
+                <button type="button" class="size-pill active" role="radio" aria-checked="true" data-size="Small" data-price="149">S (₹149)</button>
+                <button type="button" class="size-pill" role="radio" aria-checked="false" data-size="Medium" data-price="199">M (₹199)</button>
+                <button type="button" class="size-pill" role="radio" aria-checked="false" data-size="Large" data-price="249">L (₹249)</button>
+              </div>
+            </div>
+            <div class="product-meta">
+              <span class="product-price">₹149</span>
+              <div class="qty-counter">
+                <button type="button" class="qty-btn menu-dec-btn" aria-label="Decrease quantity">-</button>
+                <span class="qty-val qty-val-display">0</span>
+                <button type="button" class="qty-btn menu-inc-btn" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button class="btn btn-primary add-to-cart-btn btn-block" style="margin-top: 12px;" aria-label="Add Veg Margherita Pizza to cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <!-- Card 2: Paneer Tikka Pizza -->
+        <div class="product-card" data-id="paneer-tikka-pizza" data-name="Paneer Tikka Pizza" data-category="pizza" role="article">
+          <div class="product-img-wrapper">
+            <img class="product-img" src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?q=80&w=600&auto=format&fit=crop" alt="Paneer Tikka Pizza" loading="lazy">
+            <div class="product-veg-type" aria-label="Vegetarian option">
+              <span class="veg-badge"></span>
+            </div>
+            <div class="product-badges">
+              <span class="product-badge" style="color: var(--primary);">Spicy 🔥</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">Paneer Tikka Pizza</h3>
+            <p class="product-desc">Spicy paneer cubes, crisp capsicum, and onions on a crispy cheese base</p>
+            <div class="size-selector">
+              <label id="paneer-size-label">Select Size:</label>
+              <div class="size-select-pills" role="radiogroup" aria-labelledby="paneer-size-label">
+                <button type="button" class="size-pill active" role="radio" aria-checked="true" data-size="Small" data-price="179">S (₹179)</button>
+                <button type="button" class="size-pill" role="radio" aria-checked="false" data-size="Medium" data-price="229">M (₹229)</button>
+                <button type="button" class="size-pill" role="radio" aria-checked="false" data-size="Large" data-price="289">L (₹289)</button>
+              </div>
+            </div>
+            <div class="product-meta">
+              <span class="product-price">₹179</span>
+              <div class="qty-counter">
+                <button type="button" class="qty-btn menu-dec-btn" aria-label="Decrease quantity">-</button>
+                <span class="qty-val qty-val-display">0</span>
+                <button type="button" class="qty-btn menu-inc-btn" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button class="btn btn-primary add-to-cart-btn btn-block" style="margin-top: 12px;" aria-label="Add Paneer Tikka Pizza to cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Veg Burger -->
+        <div class="product-card" data-id="veg-burger" data-name="Veg Burger" data-price="79" data-category="burgers" role="article">
+          <div class="product-img-wrapper">
+            <img class="product-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600&auto=format&fit=crop" alt="Veg Burger" loading="lazy">
+            <div class="product-veg-type" aria-label="Vegetarian option">
+              <span class="veg-badge"></span>
+            </div>
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">Veg Burger</h3>
+            <p class="product-desc">Crispy veg patty, fresh lettuce, tomato slice, and our secret burger sauce</p>
+            <div class="product-meta">
+              <span class="product-price">₹79</span>
+              <div class="qty-counter">
+                <button type="button" class="qty-btn menu-dec-btn" aria-label="Decrease quantity">-</button>
+                <span class="qty-val qty-val-display">0</span>
+                <button type="button" class="qty-btn menu-inc-btn" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button class="btn btn-primary add-to-cart-btn btn-block" style="margin-top: 12px;" aria-label="Add Veg Burger to cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <!-- Card 4: Garlic Cheese Bread -->
+        <div class="product-card" data-id="garlic-cheese-bread" data-name="Garlic Cheese Bread" data-price="99" data-category="garlic-bread" role="article">
+          <div class="product-img-wrapper">
+            <img class="product-img" src="https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?q=80&w=600&auto=format&fit=crop" alt="Garlic Cheese Bread" loading="lazy">
+            <div class="product-veg-type" aria-label="Vegetarian option">
+              <span class="veg-badge"></span>
+            </div>
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">Garlic Cheese Bread</h3>
+            <p class="product-desc">Toasted artisanal bread, rich garlic butter, and layers of melted mozzarella</p>
+            <div class="product-meta">
+              <span class="product-price">₹99</span>
+              <div class="qty-counter">
+                <button type="button" class="qty-btn menu-dec-btn" aria-label="Decrease quantity">-</button>
+                <span class="qty-val qty-val-display">0</span>
+                <button type="button" class="qty-btn menu-inc-btn" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button class="btn btn-primary add-to-cart-btn btn-block" style="margin-top: 12px;" aria-label="Add Garlic Cheese Bread to cart">Add to Cart</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. WHY CHOOSE US ===== -->
+  <section class="section-padding container" aria-labelledby="why-us-heading">
+    <div class="section-header">
+      <h2 id="why-us-heading">Why Choose Us</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-block">
+        <div class="feature-icon" aria-hidden="true">🍅</div>
+        <h3>Fresh Ingredients</h3>
+        <p>We source local fresh vegetables and use real premium mozzarella every single day. No cheap substitutes, ever.</p>
+      </div>
+      <div class="feature-block">
+        <div class="feature-icon" aria-hidden="true">⚡</div>
+        <h3>Quick Delivery</h3>
+        <p>Get piping hot, freshly-baked pizzas at your doorstep in 30–45 minutes across Kawardha city.</p>
+      </div>
+      <div class="feature-block">
+        <div class="feature-icon" aria-hidden="true">💰</div>
+        <h3>Best Value</h3>
+        <p>Indulge in delicious cafe-quality food starting at just ₹79. Honest pricing with zero hidden charges.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. HOW TO ORDER (3 STEPS) ===== -->
+  <section class="section-padding" style="background-color: var(--surface);" aria-labelledby="how-to-order-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="how-to-order-heading">How to Order</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number" aria-hidden="true">1</div>
+          <h3>Browse Our Menu</h3>
+          <p>Explore our delicious variety of pizzas, burgers, sandwiches, and shakes online.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number" aria-hidden="true">2</div>
+          <h3>Add Items to Cart</h3>
+          <p>Select your favorite items, choose size options, and add them to your interactive digital cart.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number" aria-hidden="true">3</div>
+          <h3>Order on WhatsApp</h3>
+          <p>Submit your delivery details to auto-generate a structured order text. Hit send, and we confirm and deliver!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. INSTAGRAM STRIP ===== -->
+  <section class="instagram-strip" aria-labelledby="insta-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="insta-heading">@cityhut_pizza on Instagram</h2>
+      </div>
+      <div class="instagram-grid">
+        <div class="instagram-box">
+          <img src="https://images.unsplash.com/photo-1594007654729-407ededc4963?q=80&w=400&auto=format&fit=crop" alt="Chef tossing fresh pizza dough" loading="lazy">
+          <div class="instagram-overlay">🍕</div>
+        </div>
+        <div class="instagram-box">
+          <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=400&auto=format&fit=crop" alt="Cheese stretch on hot pizza slice" loading="lazy">
+          <div class="instagram-overlay">🧀</div>
+        </div>
+        <div class="instagram-box">
+          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=400&auto=format&fit=crop" alt="Juicy veg burger with fries" loading="lazy">
+          <div class="instagram-overlay">🍔</div>
+        </div>
+        <div class="instagram-box">
+          <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=400&auto=format&fit=crop" alt="Thick chocolate shake and lemon soda" loading="lazy">
+          <div class="instagram-overlay">☕</div>
+        </div>
+      </div>
+      <div class="instagram-strip-btn">
+        <a href="https://www.instagram.com/cityhut_pizza/" target="_blank" rel="noopener" class="btn btn-outline">Follow Us on Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 10. FOOTER ===== -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo"><span aria-hidden="true">🍕</span> CityHut Pizza</div>
+        <p class="footer-tagline">Freshly prepared, baked to perfection, and delivered piping hot across Kawardha.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/cityhut_pizza/" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Follow us on Instagram">📸</a>
+          <a href="https://wa.me/917880105006" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Contact us on WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="contact.html">Contact & Location</a></li>
+          <li><a href="https://wa.me/917880105006?text=Hello+CityHut+Pizza!" target="_blank" rel="noopener">WhatsApp Chat</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Opening Hours</h3>
+        <ul class="footer-hours-list">
+          <li>Mon – Sun: 11:00 AM – 10:00 PM</li>
+          <li>Open All Days</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul class="footer-contact-info">
+          <li>
+            <span>📍</span>
+            <span>Lohara Road, near Saraswati Shishu Mandir, Kawardha, Chhattisgarh</span>
+          </li>
+          <li>
+            <span>📞</span>
+            <span><a href="tel:+917880105006">+91 78801 05006</a></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom-bar container">
+      <p>&copy; 2025 CityHut Pizza House. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== 11. FLOATING CART BUTTON ===== -->
+  <button id="cart-toggle" class="floating-cart-btn" aria-label="Open shopping cart">
+    <span>🛒</span>
+    <span class="cart-badge cart-count-badge">0</span>
+  </button>
+
+  <!-- ===== 12. CART SIDEBAR DRAWER ===== -->
+  <div id="cart-overlay" class="cart-overlay" aria-hidden="true"></div>
+  <div id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="cart-header">
+      <h2 id="cart-title">Your Order 🛒</h2>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span id="clear-cart" class="clear-cart-link" role="button">Clear All</span>
+        <button id="cart-close" class="cart-close-btn" aria-label="Close cart">&times;</button>
+      </div>
+    </div>
+    <div class="cart-body">
+      <!-- Empty State -->
+      <div id="cityhut_cart_empty" class="cart-empty" style="display: none;">
+        <!-- Filled dynamically by main.js if needed, or structured here -->
+      </div>
+      <div id="cart-empty-state" class="cart-empty">
+        <span class="cart-empty-icon" aria-hidden="true">🍕</span>
+        <p class="cart-empty-text">Your cart is empty. Add some items!</p>
+        <button type="button" id="browse-menu-btn" class="btn btn-primary" style="margin-top: 10px;">Browse Menu</button>
+      </div>
+      <!-- Items Container -->
+      <div id="cart-items"></div>
+    </div>
+    <!-- Cart Footer (Sticky) -->
+    <div id="cart-checkout-footer" class="cart-footer">
+      <div id="cart-summary-container">
+        <div class="cart-summary-row">
+          <span class="cart-summary-label">Subtotal:</span>
+          <span id="cart-subtotal" class="cart-summary-value">₹0</span>
+        </div>
+      </div>
+      <div class="delivery-note" role="note">
+        <span>🚚</span> Free delivery within Kawardha
+      </div>
+      <form id="order-form" class="cart-form">
+        <!-- Order Mode Selector -->
+        <div class="form-group">
+          <label style="font-weight: 600; font-size: 13px; color: var(--dark); margin-bottom: 8px; display: block;">Order Type</label>
+          <div class="order-mode-selector">
+            <label class="mode-pill active" id="mode-delivery-lbl">
+              <input type="radio" name="order-mode" value="delivery" checked style="display: none;">
+              <span>🚚 Delivery</span>
+            </label>
+            <label class="mode-pill" id="mode-takeaway-lbl">
+              <input type="radio" name="order-mode" value="takeaway" style="display: none;">
+              <span>📦 Takeaway</span>
+            </label>
+            <label class="mode-pill" id="mode-dinein-lbl">
+              <input type="radio" name="order-mode" value="dinein" style="display: none;">
+              <span>🍽️ Dine In</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Delivery Fields -->
+        <div id="delivery-fields-group">
+          <div class="form-group">
+            <label for="client-name">Your Name (required)</label>
+            <input type="text" id="client-name" name="name" placeholder="Enter your full name">
+            <span class="form-error" role="alert">Please enter your name.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-phone-delivery">Mobile Number (required)</label>
+            <input type="tel" id="client-phone-delivery" name="phone-delivery" placeholder="Enter 10-digit mobile number">
+            <span class="form-error" role="alert">Please enter your mobile number.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-address">Delivery Address (required)</label>
+            <input type="text" id="client-address" name="address" placeholder="Enter delivery address in Kawardha">
+            <span class="form-error" role="alert">Please enter your delivery address.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-instructions">Special Instructions (optional)</label>
+            <textarea id="client-instructions" name="instructions" rows="2" placeholder="E.g. No onion/garlic, make it extra spicy, etc."></textarea>
+          </div>
+        </div>
+
+        <!-- Dine-in / Takeaway Fields -->
+        <div id="dinein-takeaway-fields-group" style="display: none;">
+          <div class="form-group">
+            <label for="client-phone-dt">Mobile Number (required)</label>
+            <input type="tel" id="client-phone-dt" name="phone-dt" placeholder="Enter 10-digit mobile number">
+            <span class="form-error" role="alert">Please enter your mobile number.</span>
+          </div>
+          <div class="form-group">
+            <label for="client-email-dt">Email Address (required)</label>
+            <input type="email" id="client-email-dt" name="email-dt" placeholder="Enter your email address">
+            <span class="form-error" role="alert">Please enter a valid email address.</span>
+          </div>
+          <div class="form-group" id="table-number-group">
+            <label for="client-table-dt">Table Number (required)</label>
+            <select id="client-table-dt" name="table-dt" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface); font-weight: 600;">
+              <!-- Loaded dynamically -->
+            </select>
+            <span class="form-error" role="alert">Please select a table.</span>
+          </div>
+        </div>
+
+        <button type="submit" id="checkout-btn" class="btn btn-whatsapp btn-block">
+          <span>📱</span> Place Order on WhatsApp
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== 13. STICKY WHATSAPP CHAT BUTTON ===== -->
+  <a href="https://wa.me/917880105006" target="_blank" rel="noopener" class="sticky-whatsapp-chat" aria-label="Chat with us on WhatsApp">
+    <span>💬</span>
+    <span class="chat-tooltip">Chat with us!</span>
+  </a>
+
+  <!-- ===== 14. BACK TO TOP BUTTON ===== -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- Firebase Compat Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    // Dynamic announcement banner listener
+    db.ref('cityhut/cms/announcement').on('value', snap => {
+      const text = snap.val();
+      const banner = document.getElementById('announcement-banner');
+      const textSpan = document.getElementById('announcement-text');
+      
+      if (textSpan) {
+        textSpan.textContent = text || '';
+      }
+      if (banner) {
+        if (!text || sessionStorage.getItem('cityhut_banner_dismissed')) {
+          banner.classList.add('hidden');
+        } else {
+          banner.classList.remove('hidden');
+        }
+      }
+    });
+
+    // Dynamic offer banner listener
+    db.ref('cityhut/cms').on('value', snap => {
+      const cms = snap.val() || {};
+      const offerBanner = document.getElementById('offer-banner');
+      const offerText = document.getElementById('offer-text');
+      
+      if (offerBanner && offerText) {
+        if (cms.offerActive && cms.offer) {
+          offerText.textContent = cms.offer;
+          offerBanner.style.display = 'block';
+        } else {
+          offerBanner.style.display = 'none';
+        }
+      }
+    });
+
+    // Dynamic Hero Listener
+    db.ref('cityhut/cms/hero').on('value', snap => {
+      const hero = snap.val() || {};
+      const heroSection = document.getElementById('hero-section');
+      const headline = document.getElementById('hero-headline');
+      const description = document.getElementById('hero-description');
+      const b1 = document.getElementById('hero-badge1');
+      const b2 = document.getElementById('hero-badge2');
+      const b3 = document.getElementById('hero-badge3');
+
+      if (heroSection && hero.bgImage) {
+        heroSection.style.backgroundImage = `url('${hero.bgImage}')`;
+      }
+      if (headline && hero.headline) headline.textContent = hero.headline;
+      if (description && hero.description) description.textContent = hero.description;
+      
+      if (b1 && hero.badge1) {
+        const parts = splitBadge(hero.badge1);
+        b1.innerHTML = `<span>${parts.icon}</span> <span>${parts.text}</span>`;
+      }
+      if (b2 && hero.badge2) {
+        const parts = splitBadge(hero.badge2);
+        b2.innerHTML = `<span>${parts.icon}</span> <span>${parts.text}</span>`;
+      }
+      if (b3 && hero.badge3) {
+        const parts = splitBadge(hero.badge3);
+        b3.innerHTML = `<span>${parts.icon}</span> <span>${parts.text}</span>`;
+      }
+    });
+
+    function splitBadge(badgeStr) {
+      const matches = badgeStr.match(/^([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])\s*(.*)$/);
+      if (matches) {
+        return { icon: matches[1], text: matches[2] };
+      }
+      return { icon: '', text: badgeStr };
+    }
+
+    // Dynamic Categories Quick Nav Listener
+    db.ref('cityhut/cms/categories').on('value', snap => {
+      const categories = snap.val() || {};
+      const grid = document.getElementById('craving-categories-grid');
+      if (!grid) return;
+
+      grid.innerHTML = Object.keys(categories).map(key => {
+        const cat = categories[key];
+        return `
+          <a href="menu.html#${cat.id}" class="category-card" role="listitem">
+            <span class="category-icon" aria-hidden="true">${escapeHTML(cat.icon)}</span>
+            <span>${escapeHTML(cat.name)}</span>
+          </a>
+        `;
+      }).join('');
+    });
+
+    function escapeHTML(str) {
+      if (!str) return "";
+      return str.replace(/[&<>"']/g, function (match) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[match];
+      });
+    }
+  </script>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+</body>
+</html>

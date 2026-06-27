@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel Login — CityHut Pizza House</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+</head>
+<body class="login-body">
+
+  <div class="login-card">
+    <div class="logo">🍕 CityHut Pizza</div>
+    <h2>Admin Panel Login</h2>
+
+    <form id="login-form">
+      <div class="login-role-selector">
+        <label class="login-role-option">
+          <input type="radio" name="role" value="waiter" checked>
+          <span>👨‍🍳 Waiter</span>
+        </label>
+        <label class="login-role-option">
+          <input type="radio" name="role" value="owner">
+          <span>👑 Owner</span>
+        </label>
+      </div>
+
+      <div class="form-group password-input-wrapper">
+        <label for="admin-password" class="sr-only">Password</label>
+        <input type="password" id="admin-password" placeholder="Enter Admin Password" required style="width: 100%; padding-right: 45px;">
+        <button type="button" id="toggle-password" class="password-toggle-btn" aria-label="Toggle password visibility">👁️</button>
+      </div>
+
+      <div id="login-error" class="login-error-msg" role="alert">Wrong password. Please try again.</div>
+
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+
+    <a href="index.html" class="back-link">← Back to website</a>
+  </div>
+
+  <!-- Firebase Compat Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginForm = document.getElementById("login-form");
+      const passwordInput = document.getElementById("admin-password");
+      const togglePasswordBtn = document.getElementById("toggle-password");
+      const errorMsg = document.getElementById("login-error");
+
+      // Password visibility toggle
+      togglePasswordBtn.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          togglePasswordBtn.textContent = "🙈";
+        } else {
+          passwordInput.type = "password";
+          togglePasswordBtn.textContent = "👁️";
+        }
+      });
+
+      // Login handler
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = "none";
+        
+        const password = passwordInput.value;
+        const role = document.querySelector('input[name="role"]:checked').value;
+
+        try {
+          // Fetch settings from Firebase
+          const snap = await db.ref('cityhut/cms/settings').once('value');
+          const settings = snap.val();
+
+          const ownerPass = settings?.ownerPassword || 'owner2025';
+          const waiterPass = settings?.waiterPassword || 'waiter2025';
+
+          if (role === 'owner' && password === ownerPass) {
+            sessionStorage.setItem('adminRole', 'owner');
+            sessionStorage.setItem('adminAuth', 'true');
+            window.location.href = 'admin-orders.html';
+          } else if (role === 'waiter' && password === waiterPass) {
+            sessionStorage.setItem('adminRole', 'waiter');
+            sessionStorage.setItem('adminAuth', 'true');
+            window.location.href = 'admin-orders.html';
+          } else {
+            errorMsg.textContent = "Wrong password. Please try again.";
+            errorMsg.style.display = "block";
+          }
+        } catch (err) {
+          console.error("Login Error:", err);
+          errorMsg.textContent = "Connection error. Please try again later.";
+          errorMsg.style.display = "block";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
