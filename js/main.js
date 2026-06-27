@@ -1611,7 +1611,10 @@
 
   function getProductPrices(card) {
     const pills = card.querySelectorAll(".size-pill");
-    if (pills.length === 0) return null;
+    if (pills.length === 0) {
+      const pr = parseFloat(card.getAttribute("data-price"));
+      return isNaN(pr) ? null : { regular: pr };
+    }
     const prices = {};
     pills.forEach(p => {
       const sz = p.getAttribute("data-size");
@@ -1640,28 +1643,56 @@
     if (product.prices) {
       const isPizzaSizes = product.prices.small || product.prices.medium || product.prices.large;
       const isShakeSizes = product.prices.normal || product.prices.special;
+      const isSingleSize = product.prices.regular || product.prices.single;
       
-      if (isPizzaSizes || isShakeSizes) {
-        const titleText = isPizzaSizes ? "Select Size" : "Select Type";
+      if (isPizzaSizes || isShakeSizes || isSingleSize) {
+        let titleText = "Select Size";
+        if (isShakeSizes) titleText = "Select Type";
+        else if (isSingleSize) titleText = "Size Option";
+        
         html += `
           <div class="cust-section">
             <div class="cust-section-title">${titleText}</div>
             <div style="display: flex; gap: 8px;">
         `;
         
-        const sizesToCheck = isPizzaSizes ? ["small", "medium", "large"] : ["normal", "special"];
-        sizesToCheck.forEach(sz => {
-          if (product.prices[sz]) {
-            const capSize = sz.charAt(0).toUpperCase() + sz.slice(1);
-            const defaultSize = isPizzaSizes ? "Small" : "Normal";
-            const activeClass = (product.size || defaultSize).toLowerCase() === sz ? "active" : "";
-            html += `
-              <button type="button" class="size-pill cust-size-pill ${activeClass}" data-size="${capSize}" data-price="${product.prices[sz]}" style="flex: 1; padding: 10px 4px; border-radius: var(--radius); font-weight: 600; cursor: pointer; text-align: center;">
-                ${capSize} (₹${product.prices[sz]})
-              </button>
-            `;
-          }
-        });
+        if (isPizzaSizes) {
+          const sizesToCheck = ["small", "medium", "large"];
+          sizesToCheck.forEach(sz => {
+            if (product.prices[sz]) {
+              const capSize = sz.charAt(0).toUpperCase() + sz.slice(1);
+              const defaultSize = "Small";
+              const activeClass = (product.size || defaultSize).toLowerCase() === sz ? "active" : "";
+              html += `
+                <button type="button" class="size-pill cust-size-pill ${activeClass}" data-size="${capSize}" data-price="${product.prices[sz]}" style="flex: 1; padding: 10px 4px; border-radius: var(--radius); font-weight: 600; cursor: pointer; text-align: center;">
+                  ${capSize} (₹${product.prices[sz]})
+                </button>
+              `;
+            }
+          });
+        } else if (isShakeSizes) {
+          const sizesToCheck = ["normal", "special"];
+          sizesToCheck.forEach(sz => {
+            if (product.prices[sz]) {
+              const capSize = sz.charAt(0).toUpperCase() + sz.slice(1);
+              const defaultSize = "Normal";
+              const activeClass = (product.size || defaultSize).toLowerCase() === sz ? "active" : "";
+              html += `
+                <button type="button" class="size-pill cust-size-pill ${activeClass}" data-size="${capSize}" data-price="${product.prices[sz]}" style="flex: 1; padding: 10px 4px; border-radius: var(--radius); font-weight: 600; cursor: pointer; text-align: center;">
+                  ${capSize} (₹${product.prices[sz]})
+                </button>
+              `;
+            }
+          });
+        } else if (isSingleSize) {
+          const sz = product.prices.regular ? "regular" : "single";
+          html += `
+            <button type="button" class="size-pill cust-size-pill active" data-size="Regular" data-price="${product.prices[sz]}" style="flex: 1; padding: 10px 4px; border-radius: var(--radius); font-weight: 600; cursor: pointer; text-align: center; border: 2px solid var(--primary); background: rgba(192, 57, 43, 0.08); color: var(--primary);">
+              Regular Only (₹${product.prices[sz]})
+            </button>
+          `;
+        }
+        
         html += `
             </div>
           </div>
