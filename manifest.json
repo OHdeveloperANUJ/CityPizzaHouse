@@ -2,7 +2,7 @@
   "name": "CityHut Pizza House",
   "short_name": "CityHut Pizza",
   "description": "Order tasty pan pizzas, cheese burst pizzas, fries, and cold beverages from CityHut Cafe Pizza House Kawardha.",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#1A1A2E",
   "theme_color": "#C0392B",
