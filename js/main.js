@@ -1290,25 +1290,12 @@
           });
 
           const orderType = selectedMode; // 'delivery' or 'takeaway'
-          let takeawayNum = null;
+          
+          // Generate unique takeaway number synchronously (avoiding async network delay)
+          const takeawayNum = orderType === "takeaway" ? Math.floor(1000 + Math.random() * 9000) : null;
 
-          if (orderType === "takeaway") {
-            try {
-              const snap = await db.ref("cityhut/orders").once("value");
-              const orders = snap.val() || {};
-              let count = 0;
-              Object.values(orders).forEach(o => {
-                if (o.type === "takeaway") {
-                  count++;
-                }
-              });
-              takeawayNum = count + 1;
-            } catch (e) {
-              takeawayNum = Math.floor(Math.random() * 100) + 1;
-            }
-          }
-
-          await newOrderRef.set({
+          // Asynchronous non-blocking Firebase write
+          db.ref("cityhut/orders/" + newOrderRef.key).set({
             customerName: name || `Takeaway Guest`,
             phone: phone,
             email: email || null,
@@ -1320,7 +1307,7 @@
             status: "active",
             createdAt: Date.now(),
             items: dbItems
-          });
+          }).catch(err => console.error("Firebase log failed:", err));
 
           let totalBreakdownText = `*Subtotal:* ₹${subtotal}`;
           let grandTotal = subtotal;
@@ -1372,10 +1359,11 @@
           clearCart();
           if (cartCloseBtn) cartCloseBtn.click();
 
-          window.open(whatsappUrl, "_blank");
+          // Immediately redirect the browser tab directly to WhatsApp (perfect for mobile web browsers!)
+          window.location.href = whatsappUrl;
         } catch (err) {
-          console.error("Failed to log order:", err);
-          alert("Database connection error. Failed to place order.");
+          console.error("Failed to process order:", err);
+          alert("Error placing order. Please try again.");
         }
       }
     });
