@@ -270,6 +270,14 @@
         el.textContent = activeRestaurantName.toUpperCase();
         return;
       }
+      if (el.classList.contains("logo") && !el.classList.contains("footer-logo")) {
+        el.innerHTML = `<img src="images/logo-rect.jpg" alt="${activeRestaurantName}" style="height: 48px; width: auto; object-fit: contain; vertical-align: middle; max-width: 100%;">`;
+        return;
+      }
+      if (el.classList.contains("footer-logo")) {
+        el.innerHTML = `<img src="images/logo-circle.jpg" alt="${activeRestaurantName}" style="height: 70px; width: 70px; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-bottom: 8px;">`;
+        return;
+      }
       const emojiSpan = el.querySelector('span[aria-hidden="true"]');
       const emoji = emojiSpan ? emojiSpan.textContent : "🍕";
       el.innerHTML = `<span aria-hidden="true">${emoji}</span> ${activeRestaurantName}`;
