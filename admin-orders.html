@@ -722,13 +722,13 @@
 
       let msg = "";
       if (statusType === 'baking') {
-        msg = `Hello ${customerName}! 🍕 Your order from ${activeRestaurantName} is now in the oven and baking! It will be ready shortly. 🔥`;
+        msg = `Hello ${customerName}! \ud83c\udf55 Your order from ${activeRestaurantName} is now in the oven and baking! It will be ready shortly. \ud83d\udd25`;
       } else if (statusType === 'cooking_done') {
-        msg = `Hello ${customerName}! 🍕 Great news! Your order from ${activeRestaurantName} is cooked and hot, fresh out of the oven! 🧑‍🍳`;
+        msg = `Hello ${customerName}! \ud83c\udf55 Great news! Your order from ${activeRestaurantName} is cooked and hot, fresh out of the oven! \ud83e\uddd1\u200d\ud83c\udf73`;
       } else if (statusType === 'on_way') {
-        msg = `Hello ${customerName}! 🛵 Your order from ${activeRestaurantName} is out for delivery and on its way to your address! Our delivery rider will reach you shortly.`;
+        msg = `Hello ${customerName}! \ud83d\udef5 Your order from ${activeRestaurantName} is out for delivery and on its way to your address! Our delivery rider will reach you shortly.`;
       } else if (statusType === 'ready') {
-        msg = `Hello ${customerName}! 📦 Your order from ${activeRestaurantName} is ready and packed! You can pick it up from our counter anytime. Thank you! 🙏`;
+        msg = `Hello ${customerName}! \ud83d\udce6 Your order from ${activeRestaurantName} is ready and packed! You can pick it up from our counter anytime. Thank you! \ud83d\ude4f`;
       }
 
       const encodedMsg = encodeURIComponent(msg);
