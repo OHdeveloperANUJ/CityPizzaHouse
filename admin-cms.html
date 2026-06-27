@@ -93,6 +93,19 @@
               <span id="file-upload-status" style="font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block;"></span>
             </div>
 
+            <!-- Pricing Mode Selector -->
+            <div class="form-group">
+              <label>Pricing Mode</label>
+              <div style="display: flex; gap: 15px; margin-top: 6px;">
+                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal; cursor: pointer;">
+                  <input type="radio" name="pricing-mode" value="multi" checked> Multiple Sizes (S/M/L)
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal; cursor: pointer;">
+                  <input type="radio" name="pricing-mode" value="single"> Single / Regular Price
+                </label>
+              </div>
+            </div>
+
             <!-- Price Options depends on category -->
             <div id="pizza-price-group" class="form-group">
               <label>Prices (₹)</label>
@@ -752,14 +765,30 @@
     const categorySelect = document.getElementById("item-category");
     const pizzaPriceGroup = document.getElementById("pizza-price-group");
     const singlePriceGroup = document.getElementById("single-price-group");
+    const pricingModeRadios = document.querySelectorAll('input[name="pricing-mode"]');
 
-    categorySelect.addEventListener("change", () => {
-      if (categorySelect.value === "pizza") {
+    function updatePricingModeInputs() {
+      const activeModeRadio = document.querySelector('input[name="pricing-mode"]:checked');
+      const mode = activeModeRadio ? activeModeRadio.value : "multi";
+      if (mode === "multi") {
         pizzaPriceGroup.style.display = "block";
         singlePriceGroup.style.display = "none";
       } else {
         pizzaPriceGroup.style.display = "none";
         singlePriceGroup.style.display = "block";
+      }
+    }
+
+    pricingModeRadios.forEach(radio => {
+      radio.addEventListener("change", updatePricingModeInputs);
+    });
+
+    categorySelect.addEventListener("change", () => {
+      const targetMode = categorySelect.value === "pizza" ? "multi" : "single";
+      const targetRadio = document.querySelector(`input[name="pricing-mode"][value="${targetMode}"]`);
+      if (targetRadio) {
+        targetRadio.checked = true;
+        updatePricingModeInputs();
       }
     });
 
@@ -784,10 +813,11 @@
       Object.keys(menuData).forEach(key => {
         const item = menuData[key];
         let pricesString = '';
-        if (item.category === 'pizza') {
-          pricesString = `S: ₹${item.prices?.small || 0}<br>M: ₹${item.prices?.medium || 0}<br>L: ₹${item.prices?.large || 0}`;
+        if (item.prices?.small || item.prices?.medium || item.prices?.large) {
+          pricesString = `S: ₹${item.prices.small || 0}<br>M: ₹${item.prices.medium || 0}<br>L: ₹${item.prices.large || 0}`;
         } else {
-          pricesString = `₹${item.prices?.single || 0}`;
+          const priceVal = item.prices?.single ?? item.prices?.regular ?? 0;
+          pricesString = `₹${priceVal}`;
         }
 
         const tr = document.createElement('tr');
@@ -828,12 +858,19 @@
       const isFanFavourite = document.getElementById("item-fan-favourite").checked;
 
       const prices = {};
-      if (category === 'pizza') {
+      const pricingModeRadio = document.querySelector('input[name="pricing-mode"]:checked');
+      const pricingMode = pricingModeRadio ? pricingModeRadio.value : "multi";
+      if (pricingMode === 'multi') {
         prices.small = parseFloat(document.getElementById("price-small").value) || 0;
         prices.medium = parseFloat(document.getElementById("price-medium").value) || 0;
         prices.large = parseFloat(document.getElementById("price-large").value) || 0;
       } else {
-        prices.single = parseFloat(document.getElementById("price-single").value) || 0;
+        const val = parseFloat(document.getElementById("price-single").value) || 0;
+        if (category === 'pizza') {
+          prices.regular = val;
+        } else {
+          prices.single = val;
+        }
       }
 
       const itemPayload = {
@@ -882,12 +919,20 @@
         document.getElementById("item-available").checked = item.available === true;
         document.getElementById("item-fan-favourite").checked = item.isFanFavourite === true;
 
-        if (item.category === 'pizza') {
+        const isMulti = !!(item.prices?.small || item.prices?.medium || item.prices?.large);
+        const targetMode = isMulti ? "multi" : "single";
+        const targetRadio = document.querySelector(`input[name="pricing-mode"][value="${targetMode}"]`);
+        if (targetRadio) {
+          targetRadio.checked = true;
+          updatePricingModeInputs();
+        }
+
+        if (isMulti) {
           document.getElementById("price-small").value = item.prices?.small || 0;
           document.getElementById("price-medium").value = item.prices?.medium || 0;
           document.getElementById("price-large").value = item.prices?.large || 0;
         } else {
-          document.getElementById("price-single").value = item.prices?.single || 0;
+          document.getElementById("price-single").value = item.prices?.single || item.prices?.regular || 0;
         }
 
         submitItemBtn.textContent = "Update Item";
