@@ -2049,6 +2049,153 @@
   }
 
   /* ==========================================================================
+     19. PWAs, NOTIFICATIONS & BROADCASTS
+     ========================================================================== */
+  function initPwaAndBroadcasts() {
+    // 1. Register Service Worker for PWA / Homescreen Icon
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered successfully!', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+
+    // 2. Request Notification Permission and show a premium floating permission prompter
+    const checkNotificationPermission = () => {
+      if (typeof Notification === "undefined") return;
+      
+      // If default, show a floating bar after 5 seconds to invite them to enable notifications
+      if (Notification.permission === "default") {
+        setTimeout(() => {
+          if (document.getElementById("pwa-notif-bar")) return;
+
+          const bar = document.createElement("div");
+          bar.id = "pwa-notif-bar";
+          bar.style.cssText = `
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow-md);
+            z-index: 10000;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          `;
+          bar.innerHTML = `
+            <div style="font-size: 13px; font-weight: 500; color: var(--dark); line-height: 1.4;">
+              🔔 <strong>Enable Alerts</strong><br>
+              Receive special deals, discounts, and real-time updates directly on your screen!
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+              <button id="pwa-notif-dismiss" class="btn btn-outline" style="font-size: 11px; padding: 6px 12px; min-height: auto; border-color: var(--border); color: var(--text-muted); background: none;">Later</button>
+              <button id="pwa-notif-allow" class="btn btn-primary" style="font-size: 11px; padding: 6px 12px; min-height: auto;">Allow Alerts</button>
+            </div>
+          `;
+          document.body.appendChild(bar);
+
+          document.getElementById("pwa-notif-dismiss").addEventListener("click", () => {
+            bar.style.opacity = "0";
+            bar.style.transform = "translateY(20px)";
+            bar.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+            setTimeout(() => bar.remove(), 400);
+          });
+
+          document.getElementById("pwa-notif-allow").addEventListener("click", () => {
+            Notification.requestPermission().then(permission => {
+              bar.style.opacity = "0";
+              bar.style.transform = "translateY(20px)";
+              bar.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+              setTimeout(() => bar.remove(), 400);
+              if (permission === 'granted') {
+                new Notification("Notifications Enabled! 🎉", {
+                  body: "Thank you! You will now receive broadcasts and special deals.",
+                  icon: "/images/icon-192.png"
+                });
+              }
+            });
+          });
+        }, 5000);
+      }
+    };
+
+    checkNotificationPermission();
+
+    // 3. Listen to Realtime broadcasts from firebase
+    if (typeof db !== "undefined") {
+      const now = Date.now();
+      db.ref("cityhut/broadcasts").limitToLast(1).on("child_added", snap => {
+        const broadcast = snap.val();
+        if (!broadcast) return;
+
+        // Skip historic announcements loaded during initial sync
+        const lastSeen = localStorage.getItem("cityhut_last_seen_broadcast");
+        if (broadcast.timestamp > now && broadcast.timestamp !== parseInt(lastSeen || 0)) {
+          localStorage.setItem("cityhut_last_seen_broadcast", broadcast.timestamp);
+
+          // Native OS Notification (if active in PWA standalone or browser tab)
+          if (typeof Notification !== "undefined" && Notification.permission === 'granted') {
+            try {
+              new Notification("CityHut Pizza House 🍕", {
+                body: broadcast.message,
+                icon: "/images/icon-192.png",
+                badge: "/images/icon-192.png",
+                tag: "broadcast-" + snap.key,
+                requireInteraction: true
+              });
+            } catch (err) {
+              console.error("Native push failed, falling back to toast:", err);
+            }
+          }
+
+          // In-App Toast Notification
+          showInAppBroadcastToast(broadcast.message);
+        }
+      });
+    }
+  }
+
+  function showInAppBroadcastToast(message) {
+    // Remove existing if any
+    const oldToast = document.querySelector(".broadcast-toast");
+    if (oldToast) oldToast.remove();
+
+    const toast = document.createElement("div");
+    toast.className = "broadcast-toast";
+    toast.innerHTML = `
+      <div class="toast-icon">📢</div>
+      <div class="toast-body">
+        <div class="toast-title">Special Announcement</div>
+        <div class="toast-text">${escapeHTML(message)}</div>
+      </div>
+      <button class="toast-close-btn" aria-label="Close message">&times;</button>
+    `;
+    document.body.appendChild(toast);
+
+    // Trigger animation
+    setTimeout(() => toast.classList.add("visible"), 100);
+
+    const closeBtn = toast.querySelector(".toast-close-btn");
+    closeBtn.addEventListener("click", () => {
+      toast.classList.remove("visible");
+      setTimeout(() => toast.remove(), 400);
+    });
+
+    // Auto dismiss after 10s
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.classList.remove("visible");
+        setTimeout(() => toast.remove(), 400);
+      }
+    }, 10000);
+  }
+
+  /* ==========================================================================
      APPLICATION INITIATION
      ========================================================================== */
   document.addEventListener("DOMContentLoaded", () => {
@@ -2070,5 +2217,6 @@
     initDineInFlow();
     initContactPage();
     initScrollAnimations();
+    initPwaAndBroadcasts();
   });
 })();

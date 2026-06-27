@@ -33,6 +33,7 @@
       <button class="cms-tab-btn" data-tab="tab-customization">🎨 Page Customization</button>
       <button class="cms-tab-btn" data-tab="tab-settings">⚙️ Settings & Passwords</button>
       <button class="cms-tab-btn" data-tab="tab-analytics">📊 Sales & Analytics</button>
+      <button class="cms-tab-btn" data-tab="tab-broadcast">📢 Customer Broadcasts</button>
     </div>
 
     <!-- TAB 1: Menu Items -->
@@ -619,6 +620,43 @@
         <button onclick="exportSalesReport()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; min-height: auto; padding: 12px 24px;">
           📥 Export Sales Report (CSV)
         </button>
+      </div>
+    </div>
+
+    <!-- TAB 5: Customer Broadcasts -->
+    <div id="tab-broadcast" class="cms-tab-panel">
+      <div class="panel-grid" style="grid-template-columns: 1fr;">
+        <div class="contact-form-panel">
+          <h3>📢 Send Customer Notifications & Broadcasts</h3>
+          <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+            Write a message below to broadcast to all customers who have the website open or added to their homescreens. They will receive a native browser notification and an in-app toast alert immediately.
+          </p>
+          <form id="broadcast-message-form">
+            <div class="form-group">
+              <label for="broadcast-msg-text">Notification Message</label>
+              <textarea id="broadcast-msg-text" rows="4" placeholder="Enter message here... e.g., Special Offer! Buy 1 Get 1 Free on all Medium Pizzas today! 🍕" required style="width: 100%; padding: 12px; border-radius: var(--radius); border: 1.5px solid var(--border); background-color: var(--surface); color: var(--dark); font-family: inherit; font-size: 14px;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="min-height: auto; padding: 12px 24px;">🚀 Send Broadcast Message</button>
+          </form>
+
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border);">
+
+          <h3>Recent Broadcast History</h3>
+          <div class="cms-table-wrapper" style="margin-top: 16px;">
+            <table class="cms-table">
+              <thead>
+                <tr>
+                  <th>Time Sent</th>
+                  <th>Message</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="broadcast-history-body">
+                <tr><td colspan="3" style="text-align: center; color: var(--text-muted);">Loading broadcast history...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -1871,6 +1909,72 @@
       renderCategoriesTable();
       populateCustCategorySelect();
     });
+
+    // ===== CUSTOMER BROADCASTS LOGIC =====
+    const broadcastForm = document.getElementById("broadcast-message-form");
+    const broadcastText = document.getElementById("broadcast-msg-text");
+    const broadcastHistoryBody = document.getElementById("broadcast-history-body");
+
+    if (broadcastForm) {
+      broadcastForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const message = broadcastText.value.trim();
+        if (!message) return;
+
+        try {
+          await db.ref("cityhut/broadcasts").push({
+            message: message,
+            timestamp: Date.now()
+          });
+          broadcastText.value = "";
+          alert("Announcement broadcasted successfully to all online customers!");
+        } catch (err) {
+          console.error("Error sending broadcast:", err);
+          alert("Failed to send broadcast.");
+        }
+      });
+    }
+
+    // Sync broadcast history
+    db.ref("cityhut/broadcasts").on("value", snap => {
+      const data = snap.val() || {};
+      if (!broadcastHistoryBody) return;
+
+      const keys = Object.keys(data).reverse(); // show newest first
+      if (keys.length === 0) {
+        broadcastHistoryBody.innerHTML = `
+          <tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No broadcasts sent yet.</td></tr>
+        `;
+        return;
+      }
+
+      broadcastHistoryBody.innerHTML = keys.map(key => {
+        const item = data[key];
+        const dateStr = new Date(item.timestamp).toLocaleString();
+        return `
+          <tr>
+            <td style="font-weight: 600; white-space: nowrap; padding: 12px 8px;">${dateStr}</td>
+            <td style="padding: 12px 8px;">${escapeHTML(item.message)}</td>
+            <td style="padding: 12px 8px;">
+              <button onclick="deleteBroadcast('${key}')" class="btn btn-outline" style="background-color: var(--primary); border-color: var(--primary); color: white; padding: 6px 12px; font-size: 11px; min-height: auto;">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    });
+
+    window.deleteBroadcast = async function(key) {
+      if (confirm("Are you sure you want to delete this announcement? It will stop triggering for newly loaded client sessions.")) {
+        try {
+          await db.ref(`cityhut/broadcasts/${key}`).remove();
+        } catch (err) {
+          console.error("Error deleting broadcast:", err);
+          alert("Failed to delete broadcast.");
+        }
+      }
+    };
 
     // HTML escape utility
     function escapeHTML(str) {
