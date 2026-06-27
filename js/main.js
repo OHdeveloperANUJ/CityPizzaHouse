@@ -256,11 +256,11 @@
 
   function updateSettingsUI() {
     // Dynamic WhatsApp URLs
-    const waLinks = document.querySelectorAll('a[href*="wa.me"]');
+    const waLinks = document.querySelectorAll('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
     waLinks.forEach(link => {
       const url = new URL(link.href);
       const textParam = url.searchParams.get("text") || "";
-      link.href = `https://wa.me/${activeWhatsAppNumber}${textParam ? `?text=${encodeURIComponent(textParam)}` : ""}`;
+      link.href = `https://api.whatsapp.com/send?phone=${activeWhatsAppNumber}${textParam ? `&text=${encodeURIComponent(textParam)}` : ""}`;
     });
 
     // Dynamic Brand Name/Logos
@@ -1367,7 +1367,7 @@
             .replace(/{instructions}/g, instructions || "None");
 
           const encodedMsg = encodeURIComponent(message);
-          const whatsappUrl = `https://wa.me/${activeWhatsAppNumber}?text=${encodedMsg}`;
+          const whatsappUrl = `https://api.whatsapp.com/send?phone=${activeWhatsAppNumber}&text=${encodedMsg}`;
 
           clearCart();
           if (cartCloseBtn) cartCloseBtn.click();
@@ -1414,7 +1414,7 @@
 
       const formattedMsg = `Hello ${activeRestaurantName}! I'm ${name} (${phone}). ${message}`;
       const encodedMsg = encodeURIComponent(formattedMsg);
-      const whatsappUrl = `https://wa.me/${activeWhatsAppNumber}?text=${encodedMsg}`;
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${activeWhatsAppNumber}&text=${encodedMsg}`;
 
       window.open(whatsappUrl, "_blank");
     });
