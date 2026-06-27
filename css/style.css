@@ -1521,8 +1521,16 @@ footer {
 .bottom-bar {
   text-align: center;
   padding-top: 30px;
-  font-size: 13px;
-  opacity: 0.6;
+  font-size: 15px;
+  opacity: 0.95;
+  font-weight: 500;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+.bottom-bar a {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 /* ===== 404 PAGE ===== */

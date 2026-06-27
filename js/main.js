@@ -249,7 +249,7 @@
           db.ref("cityhut/cms/settings").once("value", settingsSnap => {
             if (!settingsSnap.exists()) {
               db.ref("cityhut/cms/settings").set({
-                whatsappNumber: "918817287066",
+                whatsappNumber: "917880105006",
                 restaurantName: "CityHut Pizza House",
                 openingHours: "11:00 AM – 10:00 PM",
                 ownerPassword: "owner2025",
@@ -392,6 +392,7 @@
     // Dynamic Tel links
     const telLinks = document.querySelectorAll('a[href*="tel:"]');
     telLinks.forEach(link => {
+      if (link.closest('.bottom-bar')) return; // Ignore the Praxis promotional bottom bar links
       link.href = `tel:+${activeWhatsAppNumber}`;
       if (link.textContent.includes("+91") || link.textContent.trim().startsWith("78801")) {
         link.textContent = `+${activeWhatsAppNumber.slice(0, 2)} ${activeWhatsAppNumber.slice(2, 7)} ${activeWhatsAppNumber.slice(7)}`;
