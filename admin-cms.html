@@ -274,6 +274,10 @@
               <button type="submit" id="submit-crust-btn" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); padding: 0 16px; min-height: auto;">+ Add</button>
               <button type="button" id="cancel-crust-btn" class="btn btn-outline" style="background-color: var(--text-muted); border-color: var(--text-muted); color: #fff; padding: 0 12px; min-height: auto; display: none;">Cancel</button>
             </form>
+            <div id="crust-items-checklist-container" style="margin-top: 12px; display: none;">
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">Apply to Specific Pizzas:</span>
+              <div id="crust-items-checklist" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface); max-height: 150px; overflow-y: auto;"></div>
+            </div>
           </div>
 
           <!-- Addons Manager -->
@@ -299,6 +303,10 @@
               <button type="submit" id="submit-addon-btn" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); padding: 0 16px; min-height: auto;">+ Add</button>
               <button type="button" id="cancel-addon-btn" class="btn btn-outline" style="background-color: var(--text-muted); border-color: var(--text-muted); color: #fff; padding: 0 12px; min-height: auto; display: none;">Cancel</button>
             </form>
+            <div id="addon-items-checklist-container" style="margin-top: 12px; display: none;">
+              <span style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">Apply to Specific Items:</span>
+              <div id="addon-items-checklist" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius); background-color: var(--surface); max-height: 150px; overflow-y: auto;"></div>
+            </div>
           </div>
         </div>
 
@@ -907,9 +915,13 @@
     const submitItemBtn = document.getElementById("submit-item-btn");
     const cancelEditBtn = document.getElementById("cancel-edit-btn");
 
+    let globalMenuData = {};
     db.ref('cityhut/cms/menu').on('value', snap => {
-      const menuData = snap.val() || {};
-      renderMenuTable(menuData);
+      globalMenuData = snap.val() || {};
+      renderMenuTable(globalMenuData);
+      if (typeof updateCustomizationChecklists === 'function') {
+        updateCustomizationChecklists();
+      }
     });
 
     function renderMenuTable(menuData) {
@@ -1965,6 +1977,7 @@
           crustsWrapper.style.display = 'none';
         }
         loadCategoryCustomizations(catId);
+        updateCustomizationChecklists();
       });
     }
 
@@ -1973,6 +1986,69 @@
         currentCustomizations = snap.val() || {};
         renderCustomizations(catId);
       });
+    }
+
+    window.updateCustomizationChecklists = function(editingCrustName = null, editingAddonName = null) {
+      if (!custCategorySelect) return;
+      const catId = custCategorySelect.value;
+      if (!globalMenuData) return;
+
+      const categoryItems = Object.keys(globalMenuData).map(k => ({
+        key: k,
+        ...globalMenuData[k]
+      })).filter(item => item.category === catId);
+
+      // 1. Crusts Checklist (Pizza only)
+      const crustChecklist = document.getElementById("crust-items-checklist");
+      const crustContainer = document.getElementById("crust-items-checklist-container");
+      if (crustChecklist && crustContainer) {
+        if (catId === 'pizza' && categoryItems.length > 0) {
+          crustContainer.style.display = "block";
+          crustChecklist.innerHTML = categoryItems.map(item => {
+            let checked = "checked";
+            if (editingCrustName) {
+              if (item.availableCrusts && Array.isArray(item.availableCrusts)) {
+                checked = item.availableCrusts.includes(editingCrustName) ? "checked" : "";
+              }
+            }
+            return `
+              <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; font-size: 13px; margin: 2px 0;">
+                <input type="checkbox" name="crust-target-item" value="${item.key}" ${checked}>
+                <span>${escapeHTML(item.name)}</span>
+              </label>
+            `;
+          }).join("");
+        } else {
+          crustContainer.style.display = "none";
+          crustChecklist.innerHTML = "";
+        }
+      }
+
+      // 2. Addons Checklist
+      const addonChecklist = document.getElementById("addon-items-checklist");
+      const addonContainer = document.getElementById("addon-items-checklist-container");
+      if (addonChecklist && addonContainer) {
+        if (categoryItems.length > 0) {
+          addonContainer.style.display = "block";
+          addonChecklist.innerHTML = categoryItems.map(item => {
+            let checked = "checked";
+            if (editingAddonName) {
+              if (item.availableAddons && Array.isArray(item.availableAddons)) {
+                checked = item.availableAddons.includes(editingAddonName) ? "checked" : "";
+              }
+            }
+            return `
+              <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; font-size: 13px; margin: 2px 0;">
+                <input type="checkbox" name="addon-target-item" value="${item.key}" ${checked}>
+                <span>${escapeHTML(item.name)}</span>
+              </label>
+            `;
+          }).join("");
+        } else {
+          addonContainer.style.display = "none";
+          addonChecklist.innerHTML = "";
+        }
+      }
     }
 
     function renderCustomizations(catId) {
@@ -2026,6 +2102,7 @@
       document.getElementById("new-crust-price").value = price;
       if (submitCrustBtn) submitCrustBtn.textContent = "Update";
       if (cancelCrustBtn) cancelCrustBtn.style.display = "inline-block";
+      updateCustomizationChecklists(name);
     };
 
     if (cancelCrustBtn) {
@@ -2034,6 +2111,7 @@
         addCrustForm.reset();
         if (submitCrustBtn) submitCrustBtn.textContent = "+ Add";
         cancelCrustBtn.style.display = "none";
+        updateCustomizationChecklists();
       });
     }
 
@@ -2043,6 +2121,7 @@
       document.getElementById("new-addon-price").value = price;
       if (submitAddonBtn) submitAddonBtn.textContent = "Update";
       if (cancelAddonBtn) cancelAddonBtn.style.display = "inline-block";
+      updateCustomizationChecklists(null, name);
     };
 
     if (cancelAddonBtn) {
@@ -2051,7 +2130,57 @@
         addAddonForm.reset();
         if (submitAddonBtn) submitAddonBtn.textContent = "+ Add";
         cancelAddonBtn.style.display = "none";
+        updateCustomizationChecklists();
       });
+    }
+
+    async function applyCustomizationToItems(catId, type, oldName, newName, checkedItemKeys, updatedCustomizationsList) {
+      const isCrust = type === 'crust';
+      const dbField = isCrust ? 'availableCrusts' : 'availableAddons';
+      const allNames = updatedCustomizationsList.map(x => x.name);
+
+      const updates = {};
+      Object.keys(globalMenuData).forEach(itemKey => {
+        const item = globalMenuData[itemKey];
+        if (item.category !== catId) return;
+
+        let currentList = item[dbField];
+        const isChecked = checkedItemKeys.includes(itemKey);
+
+        if (isChecked) {
+          if (currentList && Array.isArray(currentList)) {
+            // Replace old name if renamed
+            if (oldName && newName && oldName !== newName) {
+              currentList = currentList.map(n => n === oldName ? newName : n);
+            }
+            // Add new name if not present
+            if (newName && !currentList.includes(newName)) {
+              currentList.push(newName);
+            }
+          } else {
+            // If previously null (meaning all allowed), it remains null
+            currentList = null;
+          }
+          
+          if (currentList && currentList.length >= allNames.length) {
+            currentList = null;
+          }
+          updates[`cityhut/cms/menu/${itemKey}/${dbField}`] = currentList;
+        } else {
+          if (!currentList) {
+            // Previously null (all allowed). Now since this one is excluded,
+            // we must populate it with all OTHER active option names.
+            currentList = allNames.filter(n => n !== newName && n !== oldName);
+          } else if (Array.isArray(currentList)) {
+            currentList = currentList.filter(n => n !== newName && n !== oldName);
+          }
+          updates[`cityhut/cms/menu/${itemKey}/${dbField}`] = currentList.length > 0 ? currentList : ["__NONE__"];
+        }
+      });
+
+      if (Object.keys(updates).length > 0) {
+        await db.ref().update(updates);
+      }
     }
 
     // Add forms
@@ -2065,8 +2194,16 @@
         
         if (!name) return;
 
+        // Get target items checked keys
+        const checkedItemKeys = [];
+        document.querySelectorAll('input[name="crust-target-item"]:checked').forEach(chk => {
+          checkedItemKeys.push(chk.value);
+        });
+
         const crusts = currentCustomizations.crusts || [];
+        let oldName = null;
         if (editingCrustIndex !== null) {
+          oldName = crusts[editingCrustIndex].name;
           crusts[editingCrustIndex] = { name, price };
         } else {
           crusts.push({ name, price });
@@ -2074,10 +2211,13 @@
 
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/crusts`).set(crusts);
+          await applyCustomizationToItems(catId, 'crust', oldName, name, checkedItemKeys, crusts);
           addCrustForm.reset();
           editingCrustIndex = null;
           if (submitCrustBtn) submitCrustBtn.textContent = "+ Add";
           if (cancelCrustBtn) cancelCrustBtn.style.display = "none";
+          updateCustomizationChecklists();
+          alert("Crust options updated successfully across products!");
         } catch (err) {
           alert("Failed to save crust.");
         }
@@ -2094,8 +2234,16 @@
         
         if (!name) return;
 
+        // Get target items checked keys
+        const checkedItemKeys = [];
+        document.querySelectorAll('input[name="addon-target-item"]:checked').forEach(chk => {
+          checkedItemKeys.push(chk.value);
+        });
+
         const addons = currentCustomizations.addons || [];
+        let oldName = null;
         if (editingAddonIndex !== null) {
+          oldName = addons[editingAddonIndex].name;
           addons[editingAddonIndex] = { name, price };
         } else {
           addons.push({ name, price });
@@ -2103,10 +2251,13 @@
 
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/addons`).set(addons);
+          await applyCustomizationToItems(catId, 'addon', oldName, name, checkedItemKeys, addons);
           addAddonForm.reset();
           editingAddonIndex = null;
           if (submitAddonBtn) submitAddonBtn.textContent = "+ Add";
           if (cancelAddonBtn) cancelAddonBtn.style.display = "none";
+          updateCustomizationChecklists();
+          alert("Add-on/topping options updated successfully across products!");
         } catch (err) {
           alert("Failed to save add-on.");
         }
@@ -2116,12 +2267,16 @@
     window.deleteCrust = async function(idx) {
       const catId = custCategorySelect.value;
       const crusts = currentCustomizations.crusts || [];
-      if (confirm(`Delete crust "${crusts[idx].name}"?`)) {
+      const deletedName = crusts[idx].name;
+      if (confirm(`Delete crust "${deletedName}"?`)) {
         crusts.splice(idx, 1);
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/crusts`).set(crusts);
+          await applyCustomizationToItems(catId, 'crust', deletedName, null, [], crusts);
           if (editingCrustIndex === idx) {
             if (cancelCrustBtn) cancelCrustBtn.click();
+          } else {
+            updateCustomizationChecklists();
           }
         } catch (e) {
           alert("Failed to delete crust.");
@@ -2132,12 +2287,16 @@
     window.deleteAddon = async function(idx) {
       const catId = custCategorySelect.value;
       const addons = currentCustomizations.addons || [];
-      if (confirm(`Delete add-on/topping "${addons[idx].name}"?`)) {
+      const deletedName = addons[idx].name;
+      if (confirm(`Delete add-on/topping "${deletedName}"?`)) {
         addons.splice(idx, 1);
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/addons`).set(addons);
+          await applyCustomizationToItems(catId, 'addon', deletedName, null, [], addons);
           if (editingAddonIndex === idx) {
             if (cancelAddonBtn) cancelAddonBtn.click();
+          } else {
+            updateCustomizationChecklists();
           }
         } catch (e) {
           alert("Failed to delete add-on.");
