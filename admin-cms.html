@@ -271,7 +271,8 @@
             <form id="add-crust-form" style="display: flex; gap: 8px;">
               <input type="text" id="new-crust-name" required placeholder="e.g. Cheese Burst" style="padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); flex-grow: 1;">
               <input type="number" id="new-crust-price" required placeholder="Price" style="padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); width: 80px;">
-              <button type="submit" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); padding: 0 16px; min-height: auto;">+ Add</button>
+              <button type="submit" id="submit-crust-btn" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); padding: 0 16px; min-height: auto;">+ Add</button>
+              <button type="button" id="cancel-crust-btn" class="btn btn-outline" style="background-color: var(--text-muted); border-color: var(--text-muted); color: #fff; padding: 0 12px; min-height: auto; display: none;">Cancel</button>
             </form>
           </div>
 
@@ -295,7 +296,8 @@
             <form id="add-addon-form" style="display: flex; gap: 8px;">
               <input type="text" id="new-addon-name" required placeholder="e.g. Extra Cheese" style="padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); flex-grow: 1;">
               <input type="number" id="new-addon-price" required placeholder="Price" style="padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); width: 80px;">
-              <button type="submit" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); padding: 0 16px; min-height: auto;">+ Add</button>
+              <button type="submit" id="submit-addon-btn" class="btn btn-outline" style="background-color: var(--dark); border-color: var(--dark); padding: 0 16px; min-height: auto;">+ Add</button>
+              <button type="button" id="cancel-addon-btn" class="btn btn-outline" style="background-color: var(--text-muted); border-color: var(--text-muted); color: #fff; padding: 0 12px; min-height: auto; display: none;">Cancel</button>
             </form>
           </div>
         </div>
@@ -1983,7 +1985,10 @@
           tr.innerHTML = `
             <td><strong>${escapeHTML(c.name)}</strong></td>
             <td>₹${c.price}</td>
-            <td><button type="button" class="btn-small btn-delete" onclick="deleteCrust(${idx})">Delete</button></td>
+            <td>
+              <button type="button" class="btn-small btn-edit" style="margin-right: 5px;" onclick="editCrust(${idx}, '${escapeHTML(c.name).replace(/'/g, "\\'")}', ${c.price})">Edit</button>
+              <button type="button" class="btn-small btn-delete" onclick="deleteCrust(${idx})">Delete</button>
+            </td>
           `;
           crustsTableBody.appendChild(tr);
         });
@@ -1997,9 +2002,55 @@
         tr.innerHTML = `
           <td><strong>${escapeHTML(a.name)}</strong></td>
           <td>₹${a.price}</td>
-          <td><button type="button" class="btn-small btn-delete" onclick="deleteAddon(${idx})">Delete</button></td>
+          <td>
+            <button type="button" class="btn-small btn-edit" style="margin-right: 5px;" onclick="editAddon(${idx}, '${escapeHTML(a.name).replace(/'/g, "\\'")}', ${a.price})">Edit</button>
+            <button type="button" class="btn-small btn-delete" onclick="deleteAddon(${idx})">Delete</button>
+          </td>
         `;
         addonsTableBody.appendChild(tr);
+      });
+    }
+
+    // Editing state variables
+    let editingCrustIndex = null;
+    let editingAddonIndex = null;
+
+    const cancelCrustBtn = document.getElementById("cancel-crust-btn");
+    const submitCrustBtn = document.getElementById("submit-crust-btn");
+    const cancelAddonBtn = document.getElementById("cancel-addon-btn");
+    const submitAddonBtn = document.getElementById("submit-addon-btn");
+
+    window.editCrust = function(idx, name, price) {
+      editingCrustIndex = idx;
+      document.getElementById("new-crust-name").value = name;
+      document.getElementById("new-crust-price").value = price;
+      if (submitCrustBtn) submitCrustBtn.textContent = "Update";
+      if (cancelCrustBtn) cancelCrustBtn.style.display = "inline-block";
+    };
+
+    if (cancelCrustBtn) {
+      cancelCrustBtn.addEventListener("click", () => {
+        editingCrustIndex = null;
+        addCrustForm.reset();
+        if (submitCrustBtn) submitCrustBtn.textContent = "+ Add";
+        cancelCrustBtn.style.display = "none";
+      });
+    }
+
+    window.editAddon = function(idx, name, price) {
+      editingAddonIndex = idx;
+      document.getElementById("new-addon-name").value = name;
+      document.getElementById("new-addon-price").value = price;
+      if (submitAddonBtn) submitAddonBtn.textContent = "Update";
+      if (cancelAddonBtn) cancelAddonBtn.style.display = "inline-block";
+    };
+
+    if (cancelAddonBtn) {
+      cancelAddonBtn.addEventListener("click", () => {
+        editingAddonIndex = null;
+        addAddonForm.reset();
+        if (submitAddonBtn) submitAddonBtn.textContent = "+ Add";
+        cancelAddonBtn.style.display = "none";
       });
     }
 
@@ -2015,13 +2066,20 @@
         if (!name) return;
 
         const crusts = currentCustomizations.crusts || [];
-        crusts.push({ name, price });
+        if (editingCrustIndex !== null) {
+          crusts[editingCrustIndex] = { name, price };
+        } else {
+          crusts.push({ name, price });
+        }
 
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/crusts`).set(crusts);
           addCrustForm.reset();
+          editingCrustIndex = null;
+          if (submitCrustBtn) submitCrustBtn.textContent = "+ Add";
+          if (cancelCrustBtn) cancelCrustBtn.style.display = "none";
         } catch (err) {
-          alert("Failed to add crust.");
+          alert("Failed to save crust.");
         }
       });
     }
@@ -2037,13 +2095,20 @@
         if (!name) return;
 
         const addons = currentCustomizations.addons || [];
-        addons.push({ name, price });
+        if (editingAddonIndex !== null) {
+          addons[editingAddonIndex] = { name, price };
+        } else {
+          addons.push({ name, price });
+        }
 
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/addons`).set(addons);
           addAddonForm.reset();
+          editingAddonIndex = null;
+          if (submitAddonBtn) submitAddonBtn.textContent = "+ Add";
+          if (cancelAddonBtn) cancelAddonBtn.style.display = "none";
         } catch (err) {
-          alert("Failed to add add-on.");
+          alert("Failed to save add-on.");
         }
       });
     }
@@ -2055,6 +2120,9 @@
         crusts.splice(idx, 1);
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/crusts`).set(crusts);
+          if (editingCrustIndex === idx) {
+            if (cancelCrustBtn) cancelCrustBtn.click();
+          }
         } catch (e) {
           alert("Failed to delete crust.");
         }
@@ -2068,6 +2136,9 @@
         addons.splice(idx, 1);
         try {
           await db.ref(`cityhut/cms/customizations/${catId}/addons`).set(addons);
+          if (editingAddonIndex === idx) {
+            if (cancelAddonBtn) cancelAddonBtn.click();
+          }
         } catch (e) {
           alert("Failed to delete add-on.");
         }
