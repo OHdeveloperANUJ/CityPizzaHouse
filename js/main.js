@@ -900,6 +900,12 @@
       let sizeSelectorHtml = "";
       let initialPrice = 0;
       let dataAttrs = `data-id="${item.key}" data-name="${escapeHTML(item.name)}" data-category="${item.category}"`;
+      if (item.availableCrusts) {
+        dataAttrs += ` data-available-crusts="${escapeHTML(JSON.stringify(item.availableCrusts))}"`;
+      }
+      if (item.availableAddons) {
+        dataAttrs += ` data-available-addons="${escapeHTML(JSON.stringify(item.availableAddons))}"`;
+      }
 
       if (prices.small || prices.medium || prices.large) {
         initialPrice = prices.small || 0;
@@ -995,13 +1001,20 @@
 
           if (customizationOptions[category]) {
             const prices = getProductPrices(card);
+            const availableCrustsStr = card.getAttribute("data-available-crusts");
+            const availableCrusts = availableCrustsStr ? JSON.parse(availableCrustsStr) : null;
+            const availableAddonsStr = card.getAttribute("data-available-addons");
+            const availableAddons = availableAddonsStr ? JSON.parse(availableAddonsStr) : null;
+
             openCustomizeModal({
               id: id,
               name: name,
               size: size,
               price: price,
               prices: prices,
-              category: category
+              category: category,
+              availableCrusts: availableCrusts,
+              availableAddons: availableAddons
             });
             return;
           }
@@ -1722,56 +1735,70 @@
 
     // 2. Crust Selection
     if (product.category === "pizza" && config.crusts) {
-      html += `
-        <div class="cust-section">
-          <div class="cust-section-title">Select Crust</div>
-          <div class="cust-options-list">
-      `;
+      let crustsToRender = config.crusts;
+      if (product.availableCrusts && Array.isArray(product.availableCrusts)) {
+        crustsToRender = config.crusts.filter(c => product.availableCrusts.includes(c.name));
+      }
       
-      config.crusts.forEach((crust, idx) => {
-        const activeClass = idx === 0 ? "active" : "";
-        const checkedAttr = idx === 0 ? "checked" : "";
+      if (crustsToRender.length > 0) {
         html += `
-          <label class="cust-option-card cust-crust-card ${activeClass}">
-            <div class="cust-option-left">
-              <input type="radio" name="cust-crust" value="${crust.name}" data-price="${crust.price}" ${checkedAttr} class="cust-option-input">
-              <span>${crust.name}</span>
-            </div>
-            <div class="cust-option-price">${crust.price > 0 ? `+₹${crust.price}` : "Free"}</div>
-          </label>
+          <div class="cust-section">
+            <div class="cust-section-title">Select Crust</div>
+            <div class="cust-options-list">
         `;
-      });
-      
-      html += `
+        
+        crustsToRender.forEach((crust, idx) => {
+          const activeClass = idx === 0 ? "active" : "";
+          const checkedAttr = idx === 0 ? "checked" : "";
+          html += `
+            <label class="cust-option-card cust-crust-card ${activeClass}">
+              <div class="cust-option-left">
+                <input type="radio" name="cust-crust" value="${crust.name}" data-price="${crust.price}" ${checkedAttr} class="cust-option-input">
+                <span>${crust.name}</span>
+              </div>
+              <div class="cust-option-price">${crust.price > 0 ? `+₹${crust.price}` : "Free"}</div>
+            </label>
+          `;
+        });
+        
+        html += `
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
     }
 
     // 3. Toppings / Addons Selection
     if (config.addons && config.addons.length > 0) {
-      html += `
-        <div class="cust-section">
-          <div class="cust-section-title">${product.category === "pizza" ? "Extra Toppings" : "Add-ons"}</div>
-          <div class="cust-options-list">
-      `;
+      let addonsToRender = config.addons;
+      if (product.availableAddons && Array.isArray(product.availableAddons)) {
+        addonsToRender = config.addons.filter(a => product.availableAddons.includes(a.name));
+      }
       
-      config.addons.forEach(addon => {
+      if (addonsToRender.length > 0) {
         html += `
-          <label class="cust-option-card cust-addon-card">
-            <div class="cust-option-left">
-              <input type="checkbox" name="cust-addon" value="${addon.name}" data-price="${addon.price}" class="cust-option-input">
-              <span>${addon.name}</span>
-            </div>
-            <div class="cust-option-price">+₹${addon.price}</div>
-          </label>
+          <div class="cust-section">
+            <div class="cust-section-title">${product.category === "pizza" ? "Extra Toppings" : "Add-ons"}</div>
+            <div class="cust-options-list">
         `;
-      });
-      
-      html += `
+        
+        addonsToRender.forEach(addon => {
+          html += `
+            <label class="cust-option-card cust-addon-card">
+              <div class="cust-option-left">
+                <input type="checkbox" name="cust-addon" value="${addon.name}" data-price="${addon.price}" class="cust-option-input">
+                <span>${addon.name}</span>
+              </div>
+              <div class="cust-option-price">+₹${addon.price}</div>
+            </label>
+          `;
+        });
+        
+        html += `
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
     }
 
     content.innerHTML = html;
@@ -2010,6 +2037,12 @@
       let sizeSelectorHtml = "";
       let initialPrice = 0;
       let dataAttrs = `data-id="${item.key}" data-name="${escapeHTML(item.name)}" data-category="${item.category}"`;
+      if (item.availableCrusts) {
+        dataAttrs += ` data-available-crusts="${escapeHTML(JSON.stringify(item.availableCrusts))}"`;
+      }
+      if (item.availableAddons) {
+        dataAttrs += ` data-available-addons="${escapeHTML(JSON.stringify(item.availableAddons))}"`;
+      }
 
       if (prices.small || prices.medium || prices.large) {
         initialPrice = prices.small || 0;
