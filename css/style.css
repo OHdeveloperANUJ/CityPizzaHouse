@@ -2476,3 +2476,224 @@ input:checked + .toggle-slider:before {
 }
 
 
+/* ===== DARK MODE OVERRIDES ===== */
+body.dark-mode {
+  --background: #0D0D12;
+  --surface: #181822;
+  --dark: #FFFFFF;
+  --text: #F0F0F5;
+  --text-muted: #9AA0B0;
+  --border: #252535;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Specific component fixes for dark mode */
+body.dark-mode .header-wrapper {
+  background-color: rgba(24, 24, 34, 0.95);
+  border-bottom-color: var(--border);
+}
+body.dark-mode .category-filter-wrapper {
+  background-color: rgba(24, 24, 34, 0.95);
+  border-bottom-color: var(--border);
+}
+body.dark-mode .product-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+body.dark-mode .product-card:hover {
+  box-shadow: var(--shadow-md);
+}
+body.dark-mode .size-pill {
+  background-color: #252535;
+  color: var(--text);
+  border-color: #252535;
+}
+body.dark-mode .size-pill.active {
+  background-color: var(--primary);
+  color: var(--surface);
+  border-color: var(--primary);
+}
+body.dark-mode .cust-option-card {
+  background-color: #12121A;
+  border-color: var(--border);
+}
+body.dark-mode .cust-option-card.active {
+  background-color: var(--surface);
+  border-color: var(--primary);
+}
+body.dark-mode .cart-drawer {
+  background-color: var(--surface);
+  border-left-color: var(--border);
+  color: var(--text);
+}
+body.dark-mode .cart-header,
+body.dark-mode .cart-footer {
+  border-color: var(--border);
+}
+body.dark-mode .cart-item {
+  border-bottom-color: var(--border);
+}
+body.dark-mode .cart-form-group input,
+body.dark-mode .cart-form-group select,
+body.dark-mode .cart-form-group textarea {
+  background-color: #12121A;
+  border-color: var(--border);
+  color: var(--text);
+}
+body.dark-mode .cart-form-group input:focus,
+body.dark-mode .cart-form-group select:focus,
+body.dark-mode .cart-form-group textarea:focus {
+  border-color: var(--accent);
+}
+body.dark-mode .modal-container {
+  background-color: var(--surface);
+  color: var(--text);
+}
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: var(--border);
+}
+body.dark-mode footer {
+  background-color: #07070A;
+  border-top-color: var(--border);
+}
+body.dark-mode .footer-social-btn {
+  background-color: #181822;
+  color: var(--text);
+}
+body.dark-mode .footer-social-btn:hover {
+  background-color: var(--primary);
+  color: #fff;
+}
+body.dark-mode .contact-card {
+  background-color: var(--surface);
+  border-color: var(--border);
+}
+body.dark-mode .contact-form-group input,
+body.dark-mode .contact-form-group textarea {
+  background-color: #12121A;
+  border-color: var(--border);
+  color: var(--text);
+}
+body.dark-mode .order-card {
+  background-color: var(--surface);
+  border-color: var(--border);
+}
+body.dark-mode .order-card:hover {
+  box-shadow: var(--shadow-md);
+}
+body.dark-mode .announcement-banner {
+  background-color: #22222E;
+  color: var(--text);
+}
+
+/* Theme Toggle Button Styling */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: #F3ECE3;
+  color: var(--dark);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 18px;
+  margin-left: 12px;
+}
+.theme-toggle-btn:hover {
+  background-color: #E7DEC0;
+  transform: scale(1.05);
+}
+body.dark-mode .theme-toggle-btn {
+  background-color: #252535;
+  color: #ffffff;
+}
+body.dark-mode .theme-toggle-btn:hover {
+  background-color: #35354A;
+}
+
+/* Specific Admin Panel Dark Mode Overrides */
+body.dark-mode .admin-navbar-wrapper {
+  background-color: var(--surface);
+  border-bottom-color: var(--border);
+}
+body.dark-mode .admin-navbar .nav-link {
+  color: var(--text-muted);
+}
+body.dark-mode .admin-navbar .nav-link:hover,
+body.dark-mode .admin-navbar .nav-link.active {
+  color: var(--primary);
+  background-color: #252535;
+}
+body.dark-mode .logout-btn {
+  background-color: #252535;
+  color: #ffffff;
+}
+body.dark-mode .logout-btn:hover {
+  background-color: var(--primary);
+}
+body.dark-mode .dashboard-stats,
+body.dark-mode .stat-card,
+body.dark-mode .order-list-section,
+body.dark-mode .orders-grid,
+body.dark-mode .cms-tabs-nav,
+body.dark-mode .cms-tab-content,
+body.dark-mode .cms-card,
+body.dark-mode .item-card,
+body.dark-mode .login-card {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+body.dark-mode .stat-card h3,
+body.dark-mode .stat-card p,
+body.dark-mode .order-card h3,
+body.dark-mode .order-card p,
+body.dark-mode .item-card h4,
+body.dark-mode .item-card p,
+body.dark-mode .login-card h2,
+body.dark-mode .login-card p {
+  color: var(--text);
+}
+body.dark-mode table,
+body.dark-mode th,
+body.dark-mode td {
+  border-color: var(--border);
+  color: var(--text);
+}
+body.dark-mode th {
+  background-color: #252535;
+}
+body.dark-mode tr:hover {
+  background-color: #1a1a26;
+}
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #12121A !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+body.dark-mode .login-role-selector label span {
+  color: var(--text-muted);
+}
+body.dark-mode .login-role-selector input:checked + span {
+  color: var(--primary);
+}
+body.dark-mode .role-badge.owner {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+body.dark-mode .role-badge.waiter {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+
+
+

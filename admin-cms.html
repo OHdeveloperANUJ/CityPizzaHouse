@@ -13,6 +13,11 @@
   <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
 </head>
 <body style="background-color: var(--background); min-height: 100vh;">
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
 
   <!-- Role-Aware Top Navigation -->
   <div id="admin-nav" class="admin-navbar-wrapper"></div>
@@ -647,8 +652,9 @@
             <a href="admin-orders.html" class="nav-link">📋 Orders</a>
             <a href="admin-cms.html" class="nav-link active">⚙️ Menu & CMS</a>
           </nav>
-          <div class="nav-right">
+          <div class="nav-right" style="display: flex; align-items: center; gap: 12px;">
             <span class="role-badge owner">👑 Owner</span>
+            <button type="button" class="theme-toggle-btn" aria-label="Toggle dark mode" id="theme-toggle" style="margin: 0;">🌙</button>
             <button onclick="logout()" class="logout-btn">Logout</button>
           </div>
         </div>
@@ -660,7 +666,27 @@
       window.location.href = 'admin-login.html';
     }
 
+    function initThemeToggle() {
+      const toggleBtn = document.getElementById("theme-toggle");
+      if (!toggleBtn) return;
+
+      const updateToggleIcon = () => {
+        const isDark = document.body.classList.contains("dark-mode");
+        toggleBtn.textContent = isDark ? "☀️" : "🌙";
+      };
+
+      updateToggleIcon();
+
+      toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const isDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        updateToggleIcon();
+      });
+    }
+
     renderAdminNav();
+    initThemeToggle();
 
     // Tabs logic
     const tabButtons = document.querySelectorAll(".cms-tab-btn");

@@ -59,6 +59,11 @@
   </script></concept_meta>
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
 
   <!-- ===== 1. LOADING SCREEN ===== -->
   <div id="preloader" class="loader-screen" role="status" aria-label="Loading Website">
@@ -90,8 +95,9 @@
           <li><a href="contact.html" class="active">Contact</a></li>
         </ul>
       </nav>
-      <div class="nav-actions">
+      <div class="nav-actions" style="display: flex; align-items: center;">
         <a href="menu.html" class="btn btn-primary" aria-label="Order food now">Order Now</a>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle dark mode" id="theme-toggle">🌙</button>
       </div>
       <div class="navbar-overlay" id="navbar-overlay" aria-hidden="true"></div>
     </header>

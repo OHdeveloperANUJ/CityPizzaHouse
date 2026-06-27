@@ -93,6 +93,11 @@
   </style>
 </head>
 <body style="background-color: var(--background); min-height: 100vh;">
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
 
   <!-- Role-Aware Top Navigation -->
   <div id="admin-nav" class="admin-navbar-wrapper"></div>
@@ -290,10 +295,11 @@
             <a href="admin-orders.html" class="nav-link active">📋 Orders</a>
             ${isOwner ? '<a href="admin-cms.html" class="nav-link">⚙️ Menu & CMS</a>' : ''}
           </nav>
-          <div class="nav-right">
+          <div class="nav-right" style="display: flex; align-items: center; gap: 12px;">
             <span class="role-badge ${currentRole === 'owner' ? 'owner' : 'waiter'}">
               ${currentRole === 'owner' ? '👑 Owner' : '👨‍🍳 Waiter'}
             </span>
+            <button type="button" class="theme-toggle-btn" aria-label="Toggle dark mode" id="theme-toggle" style="margin: 0;">🌙</button>
             <button onclick="logout()" class="logout-btn">Logout</button>
           </div>
         </div>
@@ -305,7 +311,27 @@
       window.location.href = 'admin-login.html';
     }
 
+    function initThemeToggle() {
+      const toggleBtn = document.getElementById("theme-toggle");
+      if (!toggleBtn) return;
+
+      const updateToggleIcon = () => {
+        const isDark = document.body.classList.contains("dark-mode");
+        toggleBtn.textContent = isDark ? "☀️" : "🌙";
+      };
+
+      updateToggleIcon();
+
+      toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const isDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        updateToggleIcon();
+      });
+    }
+
     renderAdminNav();
+    initThemeToggle();
 
     // Show Owner-Only Stats Panel
     if (currentRole === 'owner') {
