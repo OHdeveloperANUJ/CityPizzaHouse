@@ -312,13 +312,13 @@
       const role = sessionStorage.getItem('adminRole');
 
       if (auth !== 'true') {
-        window.location.href = 'admin-login.html';
+        window.location.href = 'admin-login';
         return null;
       }
 
       if (requiredRole && role !== requiredRole) {
         alert('Access denied. This page is for Owner only.');
-        window.location.href = 'admin-orders.html';
+        window.location.href = 'admin-orders';
         return null;
       }
 
@@ -333,8 +333,8 @@
         <div class="admin-navbar container">
           <div class="nav-brand">🍕 CityHut Pizza</div>
           <nav>
-            <a href="admin-orders.html" class="nav-link active">📋 Orders</a>
-            ${isOwner ? '<a href="admin-cms.html" class="nav-link">⚙️ Menu & CMS</a>' : ''}
+            <a href="admin-orders" class="nav-link active">📋 Orders</a>
+            ${isOwner ? '<a href="admin-cms" class="nav-link">⚙️ Menu & CMS</a>' : ''}
           </nav>
           <div class="nav-right" style="display: flex; align-items: center; gap: 12px;">
             <span class="role-badge ${currentRole === 'owner' ? 'owner' : 'waiter'}">
@@ -349,7 +349,7 @@
 
     function logout() {
       sessionStorage.clear();
-      window.location.href = 'admin-login.html';
+      window.location.href = 'admin-login';
     }
 
     function initThemeToggle() {

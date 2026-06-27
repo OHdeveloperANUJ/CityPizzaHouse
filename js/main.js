@@ -715,7 +715,7 @@
     if (browseMenuBtn) {
       browseMenuBtn.addEventListener("click", () => {
         closeDrawer();
-        window.location.href = "menu.html";
+        window.location.href = "menu";
       });
     }
   }
@@ -1223,7 +1223,7 @@
             sessionStorage.removeItem("cityhut_dinein_name");
             sessionStorage.removeItem("cityhut_dinein_phone");
             sessionStorage.removeItem("cityhut_dinein_email");
-            window.location.href = "index.html";
+            window.location.href = "index";
           });
         }
       }
