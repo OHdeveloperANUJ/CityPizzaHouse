@@ -99,95 +99,100 @@
   ];
 
   function seedDatabase() {
-    if (typeof db !== "undefined" && !localStorage.getItem("menuSeeded")) {
-      defaultMenu.forEach(item => {
-        db.ref("cityhut/cms/menu").push(item);
-      });
-      db.ref("cityhut/cms/settings").set({
-        whatsappNumber: "917880105006",
-        restaurantName: "CityHut Pizza House",
-        openingHours: "11:00 AM – 10:00 PM",
-        ownerPassword: "owner2025",
-        waiterPassword: "waiter2025",
-        tableCodes: ["Pizza", "Burger", "Sandwich", "Garlic Bread", "Beverage", "Dessert"],
-        bill: {
-          gstEnabled: true,
-          gstPercentage: 5,
-          serviceCharge: 0,
-          headerText: "🍕 CITYHUT PIZZA",
-          footerText: "Thank you for ordering!\nPlease visit again! 🙏"
-        },
-        whatsappTemplates: {
-          delivery: "Hello {restaurantName}! 🍕\n\n*New Delivery Order*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Name: {customerName}\n- Phone: {customerPhone}\n- Address: {customerAddress}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏",
-          takeaway: "Hello {restaurantName}! 🍕\n\n*New Takeaway Order #{takeawayNum}*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Phone: {customerPhone}\n- Email: {customerEmail}\n- Takeaway No: {takeawayNum}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏"
+    if (typeof db !== "undefined") {
+      db.ref("cityhut/cms/categories").once("value", snap => {
+        if (!snap.exists()) {
+          console.log("Realtime Database empty. Seeding defaults...");
+          defaultMenu.forEach(item => {
+            db.ref("cityhut/cms/menu").push(item);
+          });
+          db.ref("cityhut/cms/settings").set({
+            whatsappNumber: "917880105006",
+            restaurantName: "CityHut Pizza House",
+            openingHours: "11:00 AM – 10:00 PM",
+            ownerPassword: "owner2025",
+            waiterPassword: "waiter2025",
+            tableCodes: ["Pizza", "Burger", "Sandwich", "Garlic Bread", "Beverage", "Dessert"],
+            bill: {
+              gstEnabled: true,
+              gstPercentage: 5,
+              serviceCharge: 0,
+              headerText: "🍕 CITYHUT PIZZA",
+              footerText: "Thank you for ordering!\nPlease visit again! 🙏"
+            },
+            whatsappTemplates: {
+              delivery: "Hello {restaurantName}! 🍕\n\n*New Delivery Order*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Name: {customerName}\n- Phone: {customerPhone}\n- Address: {customerAddress}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏",
+              takeaway: "Hello {restaurantName}! 🍕\n\n*New Takeaway Order #{takeawayNum}*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Phone: {customerPhone}\n- Email: {customerEmail}\n- Takeaway No: {takeawayNum}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏"
+            }
+          });
+          db.ref("cityhut/cms/hero").set({
+            headline: "Kawardha ki Sabse Tasty Pizza 🍕",
+            description: "Fresh dough made daily, real premium mozzarella cheese, and rich homemade sauces — delivered steaming hot straight to your door.",
+            bgImage: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop",
+            badge1: "🚀 Fast Delivery",
+            badge2: "🧑‍🍳 Freshly Made",
+            badge3: "⭐ 256+ Happy Customers"
+          });
+          db.ref("cityhut/cms/categories").set({
+            pizza: { id: "pizza", name: "Pizza", icon: "🍕" },
+            burger: { id: "burger", name: "Burgers", icon: "🍔" },
+            sandwich: { id: "sandwich", name: "Sandwiches", icon: "🥪" },
+            "garlic-bread": { id: "garlic-bread", name: "Garlic Bread", icon: "🧄" },
+            beverage: { id: "beverage", name: "Beverages", icon: "☕" }
+          });
+          db.ref("cityhut/cms/instagram").set({
+            headline: "@cityhut_pizza on Instagram",
+            followUrl: "https://www.instagram.com/cityhut_pizza/",
+            posts: [
+              { imageUrl: "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?q=80&w=400&auto=format&fit=crop", caption: "Chef tossing fresh pizza dough", emoji: "🍕" },
+              { imageUrl: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=400&auto=format&fit=crop", caption: "Cheese stretch on hot pizza slice", emoji: "🧀" },
+              { imageUrl: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=400&auto=format&fit=crop", caption: "Juicy veg burger with fries", emoji: "🍔" },
+              { imageUrl: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=400&auto=format&fit=crop", caption: "Thick chocolate shake and lemon soda", emoji: "☕" }
+            ]
+          });
+          db.ref("cityhut/cms/customizations").set({
+            pizza: {
+              crusts: [
+                { name: "Classic Hand Tossed", price: 0 },
+                { name: "Wheat Thin Crust", price: 30 },
+                { name: "Fresh Pan Pizza", price: 40 },
+                { name: "Cheese Burst", price: 60 }
+              ],
+              addons: [
+                { name: "Extra Cheese", price: 40 },
+                { name: "Extra Paneer", price: 50 },
+                { name: "Golden Corn", price: 30 },
+                { name: "Fresh Mushroom", price: 30 },
+                { name: "Capsicum & Onion", price: 25 }
+              ]
+            },
+            burger: {
+              addons: [
+                { name: "Extra Cheese Slice", price: 15 },
+                { name: "Double Patty", price: 35 }
+              ]
+            },
+            sandwich: {
+              addons: [
+                { name: "Extra Cheese", price: 20 },
+                { name: "Extra Paneer", price: 30 }
+              ]
+            },
+            "garlic-bread": {
+              addons: [
+                { name: "Extra Cheese", price: 30 }
+              ]
+            },
+            beverage: {
+              addons: [
+                { name: "Ice Cream Scoop", price: 20 },
+                { name: "Whipped Cream", price: 15 }
+              ]
+            }
+          });
+          localStorage.setItem("menuSeeded", "true");
         }
       });
-      db.ref("cityhut/cms/hero").set({
-        headline: "Kawardha ki Sabse Tasty Pizza 🍕",
-        description: "Fresh dough made daily, real premium mozzarella cheese, and rich homemade sauces — delivered steaming hot straight to your door.",
-        bgImage: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop",
-        badge1: "🚀 Fast Delivery",
-        badge2: "🧑‍🍳 Freshly Made",
-        badge3: "⭐ 256+ Happy Customers"
-      });
-      db.ref("cityhut/cms/categories").set({
-        pizza: { id: "pizza", name: "Pizza", icon: "🍕" },
-        burger: { id: "burger", name: "Burgers", icon: "🍔" },
-        sandwich: { id: "sandwich", name: "Sandwiches", icon: "🥪" },
-        "garlic-bread": { id: "garlic-bread", name: "Garlic Bread", icon: "🧄" },
-        beverage: { id: "beverage", name: "Beverages", icon: "☕" }
-      });
-      db.ref("cityhut/cms/instagram").set({
-        headline: "@cityhut_pizza on Instagram",
-        followUrl: "https://www.instagram.com/cityhut_pizza/",
-        posts: [
-          { imageUrl: "https://images.unsplash.com/photo-1594007654729-407ededc4963?q=80&w=400&auto=format&fit=crop", caption: "Chef tossing fresh pizza dough", emoji: "🍕" },
-          { imageUrl: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=400&auto=format&fit=crop", caption: "Cheese stretch on hot pizza slice", emoji: "🧀" },
-          { imageUrl: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=400&auto=format&fit=crop", caption: "Juicy veg burger with fries", emoji: "🍔" },
-          { imageUrl: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=400&auto=format&fit=crop", caption: "Thick chocolate shake and lemon soda", emoji: "☕" }
-        ]
-      });
-      db.ref("cityhut/cms/customizations").set({
-        pizza: {
-          crusts: [
-            { name: "Classic Hand Tossed", price: 0 },
-            { name: "Wheat Thin Crust", price: 30 },
-            { name: "Fresh Pan Pizza", price: 40 },
-            { name: "Cheese Burst", price: 60 }
-          ],
-          addons: [
-            { name: "Extra Cheese", price: 40 },
-            { name: "Extra Paneer", price: 50 },
-            { name: "Golden Corn", price: 30 },
-            { name: "Fresh Mushroom", price: 30 },
-            { name: "Capsicum & Onion", price: 25 }
-          ]
-        },
-        burger: {
-          addons: [
-            { name: "Extra Cheese Slice", price: 15 },
-            { name: "Double Patty", price: 35 }
-          ]
-        },
-        sandwich: {
-          addons: [
-            { name: "Extra Cheese", price: 20 },
-            { name: "Extra Paneer", price: 30 }
-          ]
-        },
-        "garlic-bread": {
-          addons: [
-            { name: "Extra Cheese", price: 30 }
-          ]
-        },
-        beverage: {
-          addons: [
-            { name: "Ice Cream Scoop", price: 20 },
-            { name: "Whipped Cream", price: 15 }
-          ]
-        }
-      });
-      localStorage.setItem("menuSeeded", "true");
     }
   }
 
