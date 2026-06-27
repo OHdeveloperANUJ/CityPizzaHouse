@@ -1643,7 +1643,7 @@
     if (product.prices) {
       const isPizzaSizes = product.prices.small || product.prices.medium || product.prices.large;
       const isShakeSizes = product.prices.normal || product.prices.special;
-      const isSingleSize = product.prices.regular || product.prices.single;
+      const isSingleSize = (product.prices.regular || product.prices.single) && product.category === "pizza";
       
       if (isPizzaSizes || isShakeSizes || isSingleSize) {
         let titleText = "Select Size";
