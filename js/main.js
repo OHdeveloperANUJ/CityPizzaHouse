@@ -723,9 +723,151 @@
   /* ==========================================================================
      9. DYNAMIC MENU LOGIC (FIREBASE SYNC)
      ========================================================================== */
+  function renderMenuStructureAndItems(categoriesList, menuData) {
+    // Render category filter bar
+    const filterBar = document.getElementById("menu-filter-bar");
+    if (filterBar) {
+      filterBar.innerHTML = categoriesList.map((cat, index) => {
+        const activeClass = index === 0 ? "active" : "";
+        const selected = index === 0 ? "true" : "false";
+        return `
+          <a href="#${cat.id}" class="filter-pill ${activeClass}" role="tab" aria-selected="${selected}" aria-controls="${cat.id}">
+            ${escapeHTML(cat.icon)} ${escapeHTML(cat.name)}
+          </a>
+        `;
+      }).join("");
+    }
+
+    // Render section containers
+    const sectionsContainer = document.getElementById("menu-sections-container");
+    if (sectionsContainer) {
+      sectionsContainer.innerHTML = categoriesList.map(cat => `
+        <section id="${cat.id}" class="menu-section" role="tabpanel" style="margin-bottom: 60px;" aria-labelledby="${cat.id}-heading">
+          <div class="section-header" style="text-align: left; margin-bottom: 30px;">
+            <h2 id="${cat.id}-heading" style="font-size: 28px;">${escapeHTML(cat.icon)} ${escapeHTML(cat.name)}</h2>
+            <div style="width: 100%; height: 2px; background-color: var(--border); margin-top: 10px;"></div>
+          </div>
+          <div class="products-grid"></div>
+        </section>
+      `).join("");
+    }
+
+    // Group items by category key
+    const itemsByCategory = {};
+    categoriesList.forEach(cat => {
+      itemsByCategory[cat.id] = [];
+    });
+
+    Object.keys(menuData).forEach(key => {
+      const item = menuData[key];
+      if (!item) return;
+      item.key = key;
+
+      // Normalize category key
+      let cat = item.category;
+      if (cat === "beverages") cat = "beverage";
+      if (cat === "burgers") cat = "burger";
+      if (cat === "sandwiches") cat = "sandwich";
+
+      if (itemsByCategory[cat]) {
+        itemsByCategory[cat].push(item);
+      } else {
+        if (!itemsByCategory[item.category]) {
+          itemsByCategory[item.category] = [];
+        }
+        itemsByCategory[item.category].push(item);
+      }
+    });
+
+    // Helper to render a category section with animations
+    const triggerRenderCategory = (catId) => {
+      const section = document.getElementById(catId);
+      if (!section) return;
+      const grid = section.querySelector(".products-grid");
+      if (grid && grid.children.length === 0) {
+        const items = itemsByCategory[catId] || [];
+        renderCategoryGrid(catId, items);
+        bindProductCardEvents(grid); // Re-bind card click event handlers
+        
+        // Stagger fade-in + slide-up motion animation
+        const cards = grid.querySelectorAll(".product-card");
+        cards.forEach((card, idx) => {
+          card.style.opacity = "0";
+          card.style.transform = "translateY(25px)";
+          card.style.transition = "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+          setTimeout(() => {
+            card.style.opacity = "1";
+            card.style.transform = "translateY(0)";
+          }, idx * 45);
+        });
+      }
+    };
+
+    // Lazy load categories using IntersectionObserver
+    if ('IntersectionObserver' in window) {
+      const observerOptions = {
+        rootMargin: "250px 0px 250px 0px", // pre-render 250px before entering viewport
+        threshold: 0.01
+      };
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const catId = entry.target.id;
+            triggerRenderCategory(catId);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      categoriesList.forEach(cat => {
+        const sec = document.getElementById(cat.id);
+        if (sec) observer.observe(sec);
+      });
+    } else {
+      // Fallback: render all immediately
+      categoriesList.forEach(cat => {
+        renderCategoryGrid(cat.id, itemsByCategory[cat.id] || []);
+      });
+      bindProductCardEvents();
+    }
+
+    // Handle immediate rendering when filter pill is clicked
+    if (filterBar) {
+      filterBar.addEventListener("click", (e) => {
+        const pill = e.target.closest(".filter-pill");
+        if (pill) {
+          const href = pill.getAttribute("href");
+          if (href && href.startsWith("#")) {
+            const catId = href.substring(1);
+            triggerRenderCategory(catId);
+          }
+        }
+      });
+    }
+
+    initCategoryFilterScrolling();
+    syncMenuCardCounters();
+  }
+
   function loadDynamicMenu() {
     if (typeof db === "undefined") return;
 
+    // 1. Try loading instantly from localStorage cache
+    const cachedCategories = localStorage.getItem("cityhut_cached_categories");
+    const cachedMenu = localStorage.getItem("cityhut_cached_menu");
+    if (cachedCategories && cachedMenu) {
+      try {
+        const categoriesList = JSON.parse(cachedCategories);
+        const menuData = JSON.parse(cachedMenu);
+        renderMenuStructureAndItems(categoriesList, menuData);
+        console.log("Menu rendered instantly from localStorage cache!");
+      } catch (err) {
+        console.error("Error parsing menu cache:", err);
+      }
+    }
+
+    // 2. Fetch fresh data from Firebase in background
     db.ref("cityhut/cms/categories").on("value", categoriesSnap => {
       const categoriesData = categoriesSnap.val() || {};
       const categoriesList = Object.keys(categoriesData).map(k => ({
@@ -733,134 +875,12 @@
         ...categoriesData[k]
       }));
 
-      // Render category filter bar
-      const filterBar = document.getElementById("menu-filter-bar");
-      if (filterBar) {
-        filterBar.innerHTML = categoriesList.map((cat, index) => {
-          const activeClass = index === 0 ? "active" : "";
-          const selected = index === 0 ? "true" : "false";
-          return `
-            <a href="#${cat.id}" class="filter-pill ${activeClass}" role="tab" aria-selected="${selected}" aria-controls="${cat.id}">
-              ${escapeHTML(cat.icon)} ${escapeHTML(cat.name)}
-            </a>
-          `;
-        }).join("");
-      }
+      localStorage.setItem("cityhut_cached_categories", JSON.stringify(categoriesList));
 
-      // Render section containers
-      const sectionsContainer = document.getElementById("menu-sections-container");
-      if (sectionsContainer) {
-        sectionsContainer.innerHTML = categoriesList.map(cat => `
-          <section id="${cat.id}" class="menu-section" role="tabpanel" style="margin-bottom: 60px;" aria-labelledby="${cat.id}-heading">
-            <div class="section-header" style="text-align: left; margin-bottom: 30px;">
-              <h2 id="${cat.id}-heading" style="font-size: 28px;">${escapeHTML(cat.icon)} ${escapeHTML(cat.name)}</h2>
-              <div style="width: 100%; height: 2px; background-color: var(--border); margin-top: 10px;"></div>
-            </div>
-            <div class="products-grid"></div>
-          </section>
-        `).join("");
-      }
-
-      // Load and render menu items
       db.ref("cityhut/cms/menu").once("value", menuSnap => {
         const menuData = menuSnap.val() || {};
-        
-        // Group items by category key
-        const itemsByCategory = {};
-        categoriesList.forEach(cat => {
-          itemsByCategory[cat.id] = [];
-        });
-
-        Object.keys(menuData).forEach(key => {
-          const item = menuData[key];
-          item.key = key;
-
-          // Normalize category key
-          let cat = item.category;
-          if (cat === "beverages") cat = "beverage";
-          if (cat === "burgers") cat = "burger";
-          if (cat === "sandwiches") cat = "sandwich";
-
-          if (itemsByCategory[cat]) {
-            itemsByCategory[cat].push(item);
-          } else {
-            if (!itemsByCategory[item.category]) {
-              itemsByCategory[item.category] = [];
-            }
-            itemsByCategory[item.category].push(item);
-          }
-        });
-
-        // Helper to render a category section with animations
-        const triggerRenderCategory = (catId) => {
-          const section = document.getElementById(catId);
-          if (!section) return;
-          const grid = section.querySelector(".products-grid");
-          if (grid && grid.children.length === 0) {
-            const items = itemsByCategory[catId] || [];
-            renderCategoryGrid(catId, items);
-            bindProductCardEvents(grid); // Re-bind card click event handlers
-            
-            // Stagger fade-in + slide-up motion animation
-            const cards = grid.querySelectorAll(".product-card");
-            cards.forEach((card, idx) => {
-              card.style.opacity = "0";
-              card.style.transform = "translateY(25px)";
-              card.style.transition = "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
-              setTimeout(() => {
-                card.style.opacity = "1";
-                card.style.transform = "translateY(0)";
-              }, idx * 45);
-            });
-          }
-        };
-
-        // Lazy load categories using IntersectionObserver
-        if ('IntersectionObserver' in window) {
-          const observerOptions = {
-            rootMargin: "250px 0px 250px 0px", // pre-render 250px before entering viewport
-            threshold: 0.01
-          };
-
-          const observer = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                const catId = entry.target.id;
-                triggerRenderCategory(catId);
-                obs.unobserve(entry.target);
-              }
-            });
-          }, observerOptions);
-
-          categoriesList.forEach(cat => {
-            const sec = document.getElementById(cat.id);
-            if (sec) observer.observe(sec);
-          });
-        } else {
-          // Fallback: render all immediately
-          categoriesList.forEach(cat => {
-            renderCategoryGrid(cat.id, itemsByCategory[cat.id] || []);
-          });
-          bindProductCardEvents();
-        }
-
-        // Handle immediate rendering when filter pill is clicked
-        const filterBar = document.getElementById("menu-filter-bar");
-        if (filterBar) {
-          // Since they are rendered as <a> filter-pills in loadDynamicMenu
-          filterBar.addEventListener("click", (e) => {
-            const pill = e.target.closest(".filter-pill");
-            if (pill) {
-              const href = pill.getAttribute("href");
-              if (href && href.startsWith("#")) {
-                const catId = href.substring(1);
-                triggerRenderCategory(catId);
-              }
-            }
-          });
-        }
-
-        initCategoryFilterScrolling();
+        localStorage.setItem("cityhut_cached_menu", JSON.stringify(menuData));
+        renderMenuStructureAndItems(categoriesList, menuData);
       });
     });
   }
@@ -2053,12 +2073,8 @@
     const grid = document.getElementById("fan-favourites-grid");
     if (!grid) return;
 
-    try {
-      const snap = await db.ref("cityhut/cms/menu").once("value");
-      const menuData = snap.val() || {};
-      
+    const renderFavs = (menuData) => {
       const allItems = Object.keys(menuData).map(k => ({ key: k, ...menuData[k] }));
-      
       let favorites = allItems.filter(item => item.isFanFavourite === true && item.available !== false);
       
       if (favorites.length === 0) {
@@ -2072,6 +2088,26 @@
       renderFanFavourites(favorites);
       bindProductCardEvents(grid);
       syncMenuCardCounters();
+    };
+
+    // 1. Try rendering instantly from localStorage cache
+    const cachedMenu = localStorage.getItem("cityhut_cached_menu");
+    if (cachedMenu) {
+      try {
+        const menuData = JSON.parse(cachedMenu);
+        renderFavs(menuData);
+        console.log("Homepage favorites rendered instantly from cache!");
+      } catch (err) {
+        console.error("Error parsing homepage menu cache:", err);
+      }
+    }
+
+    // 2. Fetch fresh data from Firebase in background
+    try {
+      const snap = await db.ref("cityhut/cms/menu").once("value");
+      const menuData = snap.val() || {};
+      localStorage.setItem("cityhut_cached_menu", JSON.stringify(menuData));
+      renderFavs(menuData);
     } catch (err) {
       console.error("Error loading home page fan favorites:", err);
     }
