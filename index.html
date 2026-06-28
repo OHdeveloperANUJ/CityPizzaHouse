@@ -477,6 +477,27 @@
   <!-- ===== 14. BACK TO TOP BUTTON ===== -->
   <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
 
+  <!-- ===== PRODUCT CUSTOMIZATION MODAL ===== -->
+  <div id="customize-modal-overlay" class="modal-overlay">
+    <div class="modal-container" style="max-width: 440px; padding: 24px;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 id="customize-title" style="margin: 0; color: var(--dark); font-size: 18px;">🍕 Customize Item</h3>
+        <button id="customize-close" class="cart-close-btn" style="background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height: 60vh; overflow-y: auto; padding-right: 8px;">
+        <!-- Dynamic content injected here -->
+        <div id="customize-content"></div>
+      </div>
+      <div class="modal-footer" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-size: 11px; color: var(--text-muted); font-weight: 600;">FINAL PRICE</div>
+          <div id="customize-total-price" style="font-size: 24px; font-weight: 800; color: var(--primary); font-family: var(--font-heading);">₹0</div>
+        </div>
+        <button type="button" id="customize-add-btn" class="btn btn-primary" style="padding: 12px 24px; min-height: auto;">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase Compat Scripts -->
   <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
