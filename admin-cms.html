@@ -2447,7 +2447,7 @@
       }
     };
 
-            window.generateTableQR = function(type) {
+                window.generateTableQR = function(type) {
       const select = document.getElementById("qr-table-select");
       let tableCode = select ? select.value : "T1";
       let qrData = "";
@@ -2461,7 +2461,6 @@
         titleText = `TABLE ${tableCode}`;
       }
       
-      // Request dark color QR from api.qrserver.com to make it look premium
       const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&color=111111&data=${encodeURIComponent(qrData)}`;
       
       const printWindow = window.open("", "_blank");
@@ -2573,15 +2572,22 @@
                 color: #95a5a6;
                 border-top: 1px dashed #bdc3c7;
                 padding-top: 8px;
-                width: 75%;
+                width: 80%;
                 font-weight: 600;
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
+                line-height: 1.4;
               }
-              .footer-credits a {
+              .footer-credits .wovrix-brand {
                 color: #111;
-                text-decoration: none;
                 font-weight: 800;
+              }
+              .footer-credits .wovrix-email {
+                font-size: 6.5px;
+                color: #7f8c8d;
+                text-transform: none;
+                display: block;
+                margin-top: 2px;
               }
               @media print {
                 body {
@@ -2612,7 +2618,8 @@
                 </div>
                 
                 <div class="footer-credits">
-                  App designed by <a href="mailto:wovrixofficial@gmail.com">Wovrix</a>
+                  App designed by <span class="wovrix-brand">WOVRIX</span>
+                  <span class="wovrix-email">wovrixofficial@gmail.com</span>
                 </div>
               </div>
             </div>
@@ -2750,17 +2757,25 @@
               padding-left: 20px;
             }
             .footer-credits {
-              font-size: 9px;
+              font-size: 10px;
               color: #7f8c8d;
-              letter-spacing: 1px;
-              text-transform: uppercase;
+              letter-spacing: 0.5px;
               border-top: 1px solid rgba(255,255,255,0.08);
-              padding-top: 20px;
+              padding-top: 16px;
+              line-height: 1.5;
             }
-            .footer-credits a {
+            .footer-credits .wovrix-highlight {
               color: #d4af37;
-              text-decoration: none;
-              font-weight: 600;
+              font-weight: 800;
+              letter-spacing: 1.5px;
+            }
+            .footer-credits .wovrix-pitch {
+              font-size: 8.5px;
+              color: #a4b0be;
+              text-transform: none;
+              display: block;
+              margin-top: 4px;
+              font-weight: 300;
             }
             @media print {
               body {
@@ -2799,7 +2814,8 @@
               </ol>
               
               <div class="footer-credits">
-                Crafted with pride by <a href="mailto:wovrixofficial@gmail.com">Wovrix</a>
+                ⚡ Powered by <span class="wovrix-highlight">WOVRIX</span>
+                <span class="wovrix-pitch">Want a custom digital menu app for your restaurant?<br>contact: wovrixofficial@gmail.com</span>
               </div>
             </div>
           </div>
