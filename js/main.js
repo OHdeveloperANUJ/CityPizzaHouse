@@ -24,8 +24,8 @@
   let activeScrollHandler = null;
 
   let activeWhatsAppTemplates = {
-    delivery: "Hello {restaurantName}! 🍕\n\n*New Delivery Order*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Name: {customerName}\n- Phone: {customerPhone}\n- Address: {customerAddress}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏",
-    takeaway: "Hello {restaurantName}! 🍕\n\n*New Takeaway Order #{takeawayNum}*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Phone: {customerPhone}\n- Email: {customerEmail}\n- Takeaway No: {takeawayNum}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏"
+    delivery: "Hello {restaurantName}! 🍕\n\n*New Delivery Order*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Name: {customerName}\n- Phone: {customerPhone}\n- Address: {customerAddress}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏\n\n_Order processed via Wovrix Digital Menu_",
+    takeaway: "Hello {restaurantName}! 🍕\n\n*New Takeaway Order #{takeawayNum}*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Phone: {customerPhone}\n- Email: {customerEmail}\n- Takeaway No: {takeawayNum}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏\n\n_Order processed via Wovrix Digital Menu_"
   };
 
   // Global State
@@ -240,8 +240,8 @@
                   footerText: "Thank you for ordering!\nPlease visit again! 🙏"
                 },
                 whatsappTemplates: {
-                  delivery: "Hello {restaurantName}! 🍕\n\n*New Delivery Order*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Name: {customerName}\n- Phone: {customerPhone}\n- Address: {customerAddress}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏",
-                  takeaway: "Hello {restaurantName}! 🍕\n\n*New Takeaway Order #{takeawayNum}*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Phone: {customerPhone}\n- Email: {customerEmail}\n- Takeaway No: {takeawayNum}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏"
+                  delivery: "Hello {restaurantName}! 🍕\n\n*New Delivery Order*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Name: {customerName}\n- Phone: {customerPhone}\n- Address: {customerAddress}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏\n\n_Order processed via Wovrix Digital Menu_",
+                  takeaway: "Hello {restaurantName}! 🍕\n\n*New Takeaway Order #{takeawayNum}*\n\n*Items Ordered:*\n{itemsList}\n\n{totalBreakdown}\n\n*Customer Details:*\n- Phone: {customerPhone}\n- Email: {customerEmail}\n- Takeaway No: {takeawayNum}\n\n*Special Instructions:*\n{instructions}\n\nThank you! 🙏\n\n_Order processed via Wovrix Digital Menu_"
                 }
               });
             }
