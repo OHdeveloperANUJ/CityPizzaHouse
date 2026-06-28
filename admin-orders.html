@@ -53,27 +53,18 @@
 
     /* Print Specific Media Query */
     @media print {
-      body * {
-        visibility: hidden !important;
-      }
-      #receipt-print-modal, #receipt-print-modal * {
-        visibility: visible !important;
-      }
-      #receipt-print-modal {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        box-shadow: none;
-        background: #fff;
-        display: block !important;
-      }
-      .print-btn-group {
+      body > *:not(#receipt-print-modal) {
         display: none !important;
       }
-      .modal-header {
+      #receipt-print-modal {
+        display: block !important;
+        position: static !important;
+        background: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .print-btn-group, .modal-header {
         display: none !important;
       }
       .modal-container {
@@ -89,7 +80,20 @@
         max-width: 100% !important;
         border: none !important;
         box-shadow: none !important;
-        padding: 10px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      @page {
+        size: auto;
+        margin: 0mm !important;
+      }
+      html, body {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
       }
     }
     
