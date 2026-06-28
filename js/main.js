@@ -313,7 +313,7 @@
         // Update all instagram links on the page
         const instaLinks = document.querySelectorAll('a[href*="instagram.com"]');
         instaLinks.forEach(link => {
-          if (link.closest('.bottom-bar')) return; // Ignore the Praxis promotional bottom bar links
+          if (link.closest('.bottom-bar')) return; // Ignore the Wovrix promotional bottom bar links
           link.href = insta.followUrl || "https://www.instagram.com/cafepizzahouse/";
         });
         
@@ -369,7 +369,7 @@
     // Dynamic Tel links
     const telLinks = document.querySelectorAll('a[href*="tel:"]');
     telLinks.forEach(link => {
-      if (link.closest('.bottom-bar')) return; // Ignore the Praxis promotional bottom bar links
+      if (link.closest('.bottom-bar')) return; // Ignore the Wovrix promotional bottom bar links
       link.href = `tel:+${activeWhatsAppNumber}`;
       if (link.textContent.includes("+91") || link.textContent.trim().startsWith("78801")) {
         link.textContent = `+${activeWhatsAppNumber.slice(0, 2)} ${activeWhatsAppNumber.slice(2, 7)} ${activeWhatsAppNumber.slice(7)}`;
