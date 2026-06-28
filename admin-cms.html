@@ -602,9 +602,10 @@
                 <!-- Loaded dynamically from activeTableCodes -->
               </select>
             </div>
-            <div style="display: flex; gap: 10px;">
-              <button onclick="generateTableQR('table')" class="btn btn-primary" style="flex-grow: 1; font-size: 13px; padding: 10px 16px; min-height: auto; font-weight: 600;">✨ Print Table Standee</button>
-              <button onclick="generateTableQR('website')" class="btn btn-outline" style="flex-grow: 1; font-size: 13px; padding: 10px 16px; min-height: auto; font-weight: 600; background-color: var(--dark); border-color: var(--dark); color: var(--surface);">🌐 Print Website QR</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+              <button onclick="generateTableQR('table')" class="btn btn-primary" style="font-size: 12px; padding: 8px 12px; min-height: auto; font-weight: 600;">🍽️ Print Table Standee</button>
+              <button onclick="generateTableQR('website')" class="btn btn-outline" style="font-size: 12px; padding: 8px 12px; min-height: auto; font-weight: 600; background-color: var(--dark); border-color: var(--dark); color: var(--surface);">🌐 Print Website QR</button>
+              <button onclick="generateTableQR('sticker')" class="btn btn-outline" style="grid-column: span 2; font-size: 12px; padding: 10px 12px; min-height: auto; font-weight: 600; border-color: #27ae60; color: #27ae60; background-color: transparent;">📦 Print Pizza Box / Pack Sticker</button>
             </div>
           </div>
         </div>
@@ -2451,7 +2452,7 @@
       let qrData = "";
       let titleText = "";
       
-      if (type === "website") {
+      if (type === "website" || type === "sticker") {
         qrData = "https://www.cafepizzahouse.co.in/";
         titleText = "WEBSITE";
       } else {
@@ -2464,6 +2465,144 @@
       const printWindow = window.open("", "_blank");
       if (!printWindow) {
         alert("Pop-up blocker is enabled! Please allow popups to view and print the QR code.");
+        return;
+      }
+
+      if (type === "sticker") {
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Print Pizza Box Sticker - Cafe Pizza House</title>
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
+              
+              body {
+                font-family: 'Outfit', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f6fa;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+              }
+              .sticker-cut-guide {
+                width: 320px;
+                height: 320px;
+                border: 2px dashed #bdc3c7;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+                box-sizing: border-box;
+                background-color: #fff;
+              }
+              .sticker-body {
+                width: 100%;
+                height: 100%;
+                border: 3px solid #c0392b;
+                border-radius: 50%;
+                background-color: #fff;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+                box-sizing: border-box;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+              }
+              .sticker-logo {
+                font-size: 20px;
+                font-weight: 800;
+                color: #c0392b;
+                margin-top: 10px;
+                margin-bottom: 2px;
+              }
+              .sticker-tagline {
+                font-size: 10px;
+                font-weight: 600;
+                color: #7f8c8d;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                margin-bottom: 12px;
+              }
+              .qr-wrapper {
+                border: 2px solid #f1f2f6;
+                border-radius: 12px;
+                padding: 6px;
+                background-color: #fff;
+                margin-bottom: 10px;
+              }
+              .qr-image {
+                display: block;
+                width: 120px;
+                height: 120px;
+              }
+              .order-now-call {
+                font-size: 11px;
+                color: #27ae60;
+                font-weight: 800;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                margin-bottom: 12px;
+              }
+              .footer-credits {
+                font-size: 8px;
+                color: #95a5a6;
+                border-top: 1px dashed #bdc3c7;
+                padding-top: 8px;
+                width: 80%;
+                font-weight: 600;
+              }
+              .footer-credits a {
+                color: #c0392b;
+                text-decoration: none;
+              }
+              @media print {
+                body {
+                  background-color: #fff;
+                }
+                .sticker-cut-guide {
+                  box-shadow: none;
+                  border: 2px dashed #bdc3c7;
+                  page-break-inside: avoid;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="sticker-cut-guide">
+              <div class="sticker-body">
+                <div class="sticker-logo">🍕 Cafe Pizza House</div>
+                <div class="sticker-tagline">Freshly Prepared & Delivered Hot</div>
+                
+                <div class="qr-wrapper">
+                  <img class="qr-image" src="${qrImageUrl}" alt="QR Code">
+                </div>
+                
+                <div class="order-now-call">Scan to Order Online!</div>
+                
+                <div class="footer-credits">
+                  App designed by <a href="mailto:wovrixofficial@gmail.com">Wovrix</a>
+                </div>
+              </div>
+            </div>
+            
+            <script>
+              window.onload = function() {
+                setTimeout(function() {
+                  window.print();
+                }, 500);
+              }
+            <\/script>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
         return;
       }
       
