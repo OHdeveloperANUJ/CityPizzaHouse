@@ -58,6 +58,7 @@
   <!-- Firebase Compat Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="/api/config"></script>
   <script src="firebase-config.js"></script>
   
   <script>
@@ -86,6 +87,12 @@
         const password = passwordInput.value;
         const role = document.querySelector('input[name="role"]:checked').value;
 
+        // Add loading state
+        const submitBtn = loginForm.querySelector("button[type='submit']");
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Logging in...";
+
         try {
           // Fetch settings from Firebase
           const snap = await db.ref('cityhut/cms/settings').once('value');
@@ -105,11 +112,17 @@
           } else {
             errorMsg.textContent = "Wrong password. Please try again.";
             errorMsg.style.display = "block";
+            // Reset button
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
           }
         } catch (err) {
           console.error("Login Error:", err);
           errorMsg.textContent = "Connection error. Please try again later.";
           errorMsg.style.display = "block";
+          // Reset button
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
         }
       });
     });

@@ -604,8 +604,9 @@
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
               <button onclick="generateTableQR('table')" class="btn btn-primary" style="font-size: 12px; padding: 8px 12px; min-height: auto; font-weight: 600;">🍽️ Print Table Standee</button>
-              <button onclick="generateTableQR('website')" class="btn btn-outline" style="font-size: 12px; padding: 8px 12px; min-height: auto; font-weight: 600; background-color: var(--dark); border-color: var(--dark); color: var(--surface);">🌐 Print Website QR</button>
-              <button onclick="generateTableQR('sticker')" class="btn btn-outline" style="grid-column: span 2; font-size: 12px; padding: 10px 12px; min-height: auto; font-weight: 600; border-color: #27ae60; color: #27ae60; background-color: transparent;">📦 Print Pizza Box / Pack Sticker</button>
+              <button onclick="generateTableQR('website')" class="btn btn-outline" style="font-size: 12px; padding: 8px 12px; min-height: auto; font-weight: 600; background-color: var(--dark); border-color: var(--dark); color: var(--surface);">🌐 Print Website Standee</button>
+              <button onclick="generateTableQR('tablesticker')" class="btn btn-outline" style="font-size: 12px; padding: 8px 12px; min-height: auto; font-weight: 600; border-color: #e67e22; color: #e67e22; background-color: transparent;">🍽️ Print Circle Table Sticker</button>
+              <button onclick="generateTableQR('sticker')" class="btn btn-outline" style="font-size: 12px; padding: 8px 12px; min-height: auto; font-weight: 600; border-color: #27ae60; color: #27ae60; background-color: transparent;">📦 Print Pizza Box Sticker</button>
             </div>
           </div>
         </div>
@@ -2446,7 +2447,7 @@
       }
     };
 
-    window.generateTableQR = function(type) {
+        window.generateTableQR = function(type) {
       const select = document.getElementById("qr-table-select");
       let tableCode = select ? select.value : "T1";
       let qrData = "";
@@ -2468,12 +2469,12 @@
         return;
       }
 
-      if (type === "sticker") {
+      if (type === "sticker" || type === "tablesticker") {
         printWindow.document.write(`
           <!DOCTYPE html>
           <html>
           <head>
-            <title>Print Pizza Box Sticker - Cafe Pizza House</title>
+            <title>Print Sticker - Cafe Pizza House</title>
             <style>
               @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
               
@@ -2550,6 +2551,17 @@
                 text-transform: uppercase;
                 margin-bottom: 12px;
               }
+              .table-badge-circle {
+                display: inline-block;
+                background-color: #c0392b;
+                color: #fff;
+                font-size: 11px;
+                font-weight: 800;
+                padding: 4px 12px;
+                border-radius: 20px;
+                margin-bottom: 10px;
+                letter-spacing: 0.5px;
+              }
               .footer-credits {
                 font-size: 8px;
                 color: #95a5a6;
@@ -2578,13 +2590,13 @@
             <div class="sticker-cut-guide">
               <div class="sticker-body">
                 <div class="sticker-logo">🍕 Cafe Pizza House</div>
-                <div class="sticker-tagline">Freshly Prepared & Delivered Hot</div>
+                <div class="sticker-tagline">${type === "tablesticker" ? "Scan to Order Dine-In" : "Freshly Prepared & Delivered Hot"}</div>
                 
                 <div class="qr-wrapper">
                   <img class="qr-image" src="${qrImageUrl}" alt="QR Code">
                 </div>
                 
-                <div class="order-now-call">Scan to Order Online!</div>
+                ${type === "tablesticker" ? `<div class="table-badge-circle">${titleText}</div>` : `<div class="order-now-call">Scan to Order Online!</div>`}
                 
                 <div class="footer-credits">
                   App designed by <a href="mailto:wovrixofficial@gmail.com">Wovrix</a>
