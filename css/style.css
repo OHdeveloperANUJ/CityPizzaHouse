@@ -1620,7 +1620,23 @@ footer {
   }
   
   /* Navigation */
+  .logo {
+    order: 1;
+    max-width: 50%;
+  }
+  .logo img {
+    height: 38px !important;
+  }
+  .nav-actions {
+    order: 2;
+    margin-left: auto !important;
+    margin-right: 15px !important;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+  }
   .hamburger {
+    order: 3;
     display: flex;
   }
   

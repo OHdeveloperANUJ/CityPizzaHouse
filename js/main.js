@@ -356,11 +356,21 @@
         return;
       }
       if (el.classList.contains("logo") && !el.classList.contains("footer-logo")) {
-        el.innerHTML = `<img src="images/logo-rect.jpg" alt="${activeRestaurantName}" style="height: 48px; width: auto; object-fit: contain; vertical-align: middle; max-width: 100%;">`;
+        const img = el.querySelector("img");
+        if (!img) {
+          el.innerHTML = `<img src="images/logo-rect.jpg" alt="${activeRestaurantName}" style="height: 48px; width: auto; object-fit: contain; vertical-align: middle; max-width: 100%;">`;
+        } else {
+          img.alt = activeRestaurantName;
+        }
         return;
       }
       if (el.classList.contains("footer-logo")) {
-        el.innerHTML = `<img src="images/logo-circle.jpg" alt="${activeRestaurantName}" style="height: 70px; width: 70px; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-bottom: 8px;">`;
+        const img = el.querySelector("img");
+        if (!img) {
+          el.innerHTML = `<img src="images/logo-circle.jpg" alt="${activeRestaurantName}" style="height: 70px; width: 70px; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-bottom: 8px;">`;
+        } else {
+          img.alt = activeRestaurantName;
+        }
         return;
       }
       const emojiSpan = el.querySelector('span[aria-hidden="true"]');
