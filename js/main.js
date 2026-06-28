@@ -2474,6 +2474,108 @@
         }
       });
     }
+
+    // 4. Custom PWA Installation Prompt (Once per day)
+    let deferredPrompt = null;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      deferredPrompt = e;
+      
+      // Delay check slightly to let page finish rendering smoothly
+      setTimeout(() => {
+        checkInstallPrompt();
+      }, 3000);
+    });
+
+    function checkInstallPrompt() {
+      // Don't prompt if already inside standalone PWA
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      if (isPWA) return;
+      
+      if (!deferredPrompt) return;
+      
+      // Check last prompt date from localStorage
+      const lastPrompt = localStorage.getItem("cityhut_last_install_prompt");
+      if (lastPrompt) {
+        const diff = Date.now() - parseInt(lastPrompt);
+        const oneDayMs = 24 * 60 * 60 * 1000;
+        if (diff < oneDayMs) {
+          // Prompted within last 24 hours, skip
+          return;
+        }
+      }
+      
+      // Display the custom modal
+      showCustomInstallModal();
+    }
+
+    function showCustomInstallModal() {
+      if (document.getElementById("pwa-install-modal")) return;
+      
+      const modal = document.createElement("div");
+      modal.id = "pwa-install-modal";
+      modal.style.position = "fixed";
+      modal.style.inset = "0";
+      modal.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+      modal.style.backdropFilter = "blur(8px)";
+      modal.style.display = "flex";
+      modal.style.justifyContent = "center";
+      modal.style.alignItems = "center";
+      modal.style.zIndex = "10000";
+      modal.style.opacity = "0";
+      modal.style.transition = "opacity 0.3s ease";
+      
+      modal.innerHTML = `
+        <div style="background-color: var(--surface); border: 2px solid var(--border); border-radius: 24px; width: 340px; padding: 24px; text-align: center; box-shadow: var(--shadow-lg); transform: scale(0.9); transition: transform 0.3s ease; font-family: 'Inter', sans-serif; box-sizing: border-box;">
+          <div style="margin-bottom: 16px;">
+            <img src="images/logo-circle.jpg" alt="Logo" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: inline-block;">
+          </div>
+          <h3 style="font-size: 20px; font-weight: 800; color: var(--dark); margin: 0 0 8px 0; font-family: 'Poppins', sans-serif;">Install CityHut App!</h3>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin: 0 0 24px 0;">Get a faster ordering experience, real-time status updates, and easy one-tap access straight from your home screen.</p>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button id="pwa-btn-install" style="background-color: var(--primary); color: #fff; border: none; border-radius: 12px; padding: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background-color 0.2s;">✨ Install App</button>
+            <button id="pwa-btn-later" style="background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 12px; padding: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background-color 0.2s;">Maybe Later</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Trigger animation
+      setTimeout(() => {
+        modal.style.opacity = "1";
+        modal.children[0].style.transform = "scale(1)";
+      }, 50);
+      
+      const btnInstall = document.getElementById("pwa-btn-install");
+      const btnLater = document.getElementById("pwa-btn-later");
+      
+      btnInstall.addEventListener("click", async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(\`User response to PWA prompt: \${outcome}\`);
+          deferredPrompt = null;
+        }
+        closeModal();
+      });
+      
+      btnLater.addEventListener("click", () => {
+        localStorage.setItem("cityhut_last_install_prompt", Date.now().toString());
+        closeModal();
+      });
+      
+      function closeModal() {
+        modal.style.opacity = "0";
+        modal.children[0].style.transform = "scale(0.9)";
+        setTimeout(() => {
+          modal.remove();
+        }, 300);
+      }
+    }
   }
 
   function showInAppBroadcastToast(message) {
