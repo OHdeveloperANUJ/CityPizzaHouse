@@ -2557,7 +2557,7 @@
         if (deferredPrompt) {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
-          console.log(\`User response to PWA prompt: \${outcome}\`);
+          console.log("User response to PWA prompt: " + outcome);
           deferredPrompt = null;
         }
         closeModal();
