@@ -1,10 +1,10 @@
-const CACHE_NAME = 'cityhut-pizza-v23';
+const CACHE_NAME = 'cityhut-pizza-v24';
 const ASSETS = [
   '/',
   '/menu',
   '/contact',
-  '/css/style.css',
-  '/js/main.js',
+  '/css/style.css?v=24',
+  '/js/main.js?v=24',
   '/firebase-config.js',
   '/manifest.json',
   '/images/icon-192.png',
