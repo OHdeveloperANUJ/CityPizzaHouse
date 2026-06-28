@@ -2447,7 +2447,7 @@
       }
     };
 
-        window.generateTableQR = function(type) {
+            window.generateTableQR = function(type) {
       const select = document.getElementById("qr-table-select");
       let tableCode = select ? select.value : "T1";
       let qrData = "";
@@ -2461,7 +2461,8 @@
         titleText = `TABLE ${tableCode}`;
       }
       
-      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=${encodeURIComponent(qrData)}`;
+      // Request dark color QR from api.qrserver.com to make it look premium
+      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&color=111111&data=${encodeURIComponent(qrData)}`;
       
       const printWindow = window.open("", "_blank");
       if (!printWindow) {
@@ -2476,7 +2477,7 @@
           <head>
             <title>Print Sticker - Cafe Pizza House</title>
             <style>
-              @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
+              @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap');
               
               body {
                 font-family: 'Outfit', sans-serif;
@@ -2489,9 +2490,9 @@
                 min-height: 100vh;
               }
               .sticker-cut-guide {
-                width: 320px;
-                height: 320px;
-                border: 2px dashed #bdc3c7;
+                width: 330px;
+                height: 330px;
+                border: 2px dotted #d4af37;
                 border-radius: 50%;
                 display: flex;
                 justify-content: center;
@@ -2503,76 +2504,84 @@
               .sticker-body {
                 width: 100%;
                 height: 100%;
-                border: 3px solid #c0392b;
+                border: 3px solid #111;
                 border-radius: 50%;
-                background-color: #fff;
+                background: radial-gradient(circle, #ffffff 60%, #fcfbf8 100%);
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                padding: 20px;
+                padding: 24px;
                 box-sizing: border-box;
                 text-align: center;
                 position: relative;
-                overflow: hidden;
+                box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+              }
+              .sticker-body::before {
+                content: '';
+                position: absolute;
+                inset: 6px;
+                border: 1px solid #d4af37;
+                border-radius: 50%;
+                pointer-events: none;
               }
               .sticker-logo {
+                font-family: 'Playfair Display', serif;
                 font-size: 20px;
                 font-weight: 800;
-                color: #c0392b;
+                color: #111;
                 margin-top: 10px;
                 margin-bottom: 2px;
+                letter-spacing: 0.5px;
               }
               .sticker-tagline {
-                font-size: 10px;
+                font-size: 9px;
                 font-weight: 600;
                 color: #7f8c8d;
                 text-transform: uppercase;
-                letter-spacing: 0.8px;
+                letter-spacing: 1px;
                 margin-bottom: 12px;
               }
               .qr-wrapper {
-                border: 2px solid #f1f2f6;
-                border-radius: 12px;
-                padding: 6px;
+                border: 2px solid #111;
+                border-radius: 16px;
+                padding: 8px;
                 background-color: #fff;
-                margin-bottom: 10px;
+                margin-bottom: 12px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.08);
               }
               .qr-image {
                 display: block;
-                width: 120px;
-                height: 120px;
+                width: 110px;
+                height: 110px;
               }
-              .order-now-call {
-                font-size: 11px;
-                color: #27ae60;
+              .sticker-btn-badge {
+                display: inline-block;
+                background-color: #111;
+                color: #fff;
+                font-size: 10px;
                 font-weight: 800;
-                letter-spacing: 0.5px;
+                padding: 5px 16px;
+                border-radius: 20px;
+                letter-spacing: 1px;
                 text-transform: uppercase;
                 margin-bottom: 12px;
-              }
-              .table-badge-circle {
-                display: inline-block;
-                background-color: #c0392b;
-                color: #fff;
-                font-size: 11px;
-                font-weight: 800;
-                padding: 4px 12px;
-                border-radius: 20px;
-                margin-bottom: 10px;
-                letter-spacing: 0.5px;
+                border: 1px solid #d4af37;
               }
               .footer-credits {
-                font-size: 8px;
+                font-size: 7.5px;
                 color: #95a5a6;
                 border-top: 1px dashed #bdc3c7;
                 padding-top: 8px;
-                width: 80%;
+                width: 75%;
                 font-weight: 600;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
               }
               .footer-credits a {
-                color: #c0392b;
+                color: #111;
                 text-decoration: none;
+                font-weight: 800;
               }
               @media print {
                 body {
@@ -2580,8 +2589,10 @@
                 }
                 .sticker-cut-guide {
                   box-shadow: none;
-                  border: 2px dashed #bdc3c7;
+                  border: 2px dotted #d4af37;
                   page-break-inside: avoid;
+                  -webkit-print-color-adjust: exact;
+                  print-color-adjust: exact;
                 }
               }
             </style>
@@ -2596,7 +2607,9 @@
                   <img class="qr-image" src="${qrImageUrl}" alt="QR Code">
                 </div>
                 
-                ${type === "tablesticker" ? `<div class="table-badge-circle">${titleText}</div>` : `<div class="order-now-call">Scan to Order Online!</div>`}
+                <div>
+                  <span class="sticker-btn-badge">${type === "tablesticker" ? titleText : "Scan & Order"}</span>
+                </div>
                 
                 <div class="footer-credits">
                   App designed by <a href="mailto:wovrixofficial@gmail.com">Wovrix</a>
@@ -2624,112 +2637,170 @@
         <head>
           <title>Print QR Code - ${titleText}</title>
           <style>
-            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap');
             
             body {
               font-family: 'Outfit', sans-serif;
               margin: 0;
               padding: 0;
-              background-color: #f5f6fa;
+              background-color: #f0f2f5;
               display: flex;
               justify-content: center;
               align-items: center;
               min-height: 100vh;
             }
-            .standee-card {
-              width: 320px;
-              background-color: #fff;
-              border: 3px solid #c0392b;
-              border-radius: 20px;
-              box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-              padding: 30px;
-              text-align: center;
+            .standee-frame {
+              width: 360px;
+              background: #121212;
+              color: #fff;
+              border: 1px solid rgba(212, 175, 55, 0.3);
+              border-radius: 24px;
+              padding: 6px;
+              box-shadow: 0 20px 50px rgba(0,0,0,0.3);
               box-sizing: border-box;
             }
-            .header-logo {
-              font-size: 26px;
-              font-weight: 800;
-              color: #c0392b;
-              margin-bottom: 4px;
+            .standee-card {
+              border: 2px solid #d4af37;
+              border-radius: 18px;
+              padding: 35px 24px;
+              text-align: center;
+              background: radial-gradient(circle at center, #1c1c1c 0%, #0d0d0d 100%);
+              position: relative;
             }
-            .tagline {
-              font-size: 13px;
+            .standee-card::before {
+              content: '';
+              position: absolute;
+              inset: 4px;
+              border: 1px solid rgba(212, 175, 55, 0.15);
+              border-radius: 14px;
+              pointer-events: none;
+            }
+            .brand-subtitle {
+              font-size: 11px;
               font-weight: 600;
-              color: #7f8c8d;
+              letter-spacing: 3px;
+              color: #d4af37;
               text-transform: uppercase;
+              margin-bottom: 8px;
+            }
+            .brand-title {
+              font-family: 'Playfair Display', serif;
+              font-size: 32px;
+              font-weight: 800;
+              color: #fff;
+              margin: 0 0 4px 0;
+              letter-spacing: 0.5px;
+            }
+            .brand-divider {
+              width: 40px;
+              height: 2px;
+              background-color: #d4af37;
+              margin: 15px auto;
+            }
+            .scan-callout {
+              font-size: 13px;
+              font-weight: 400;
+              color: #a4b0be;
               letter-spacing: 1.5px;
+              text-transform: uppercase;
               margin-bottom: 24px;
             }
             .qr-wrapper {
               display: inline-block;
-              border: 2px solid #f1f2f6;
-              border-radius: 15px;
-              padding: 15px;
-              background-color: #fff;
+              background: #fff;
+              padding: 16px;
+              border-radius: 20px;
+              box-shadow: 0 10px 30px rgba(0,0,0,0.5);
               margin-bottom: 24px;
+              position: relative;
+            }
+            .qr-wrapper::after {
+              content: '';
+              position: absolute;
+              inset: -2px;
+              border: 2px solid #d4af37;
+              border-radius: 22px;
+              pointer-events: none;
             }
             .qr-image {
               display: block;
-              width: 200px;
-              height: 200px;
+              width: 170px;
+              height: 170px;
             }
-            .table-badge {
+            .table-badge-standee {
               display: inline-block;
-              background-color: #c0392b;
-              color: #fff;
-              font-size: 16px;
-              font-weight: 800;
-              padding: 8px 24px;
-              border-radius: 30px;
-              margin-bottom: 20px;
-              letter-spacing: 0.5px;
-            }
-            .scan-instruction {
+              background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+              color: #000;
               font-size: 14px;
-              color: #2c3e50;
-              font-weight: 600;
-              margin-bottom: 30px;
+              font-weight: 800;
+              padding: 8px 30px;
+              border-radius: 30px;
+              letter-spacing: 2px;
+              margin-bottom: 24px;
+              text-transform: uppercase;
+              box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            }
+            .instructions-list {
+              font-size: 12px;
+              color: #bdc5cd;
+              line-height: 1.8;
+              text-align: left;
+              max-width: 240px;
+              margin: 0 auto 30px auto;
+              padding-left: 20px;
             }
             .footer-credits {
-              font-size: 11px;
-              color: #95a5a6;
-              border-top: 1px dashed #bdc3c7;
-              padding-top: 15px;
-              margin-top: 10px;
-              font-weight: 600;
+              font-size: 9px;
+              color: #7f8c8d;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              border-top: 1px solid rgba(255,255,255,0.08);
+              padding-top: 20px;
             }
             .footer-credits a {
-              color: #c0392b;
+              color: #d4af37;
               text-decoration: none;
+              font-weight: 600;
             }
             @media print {
               body {
                 background-color: #fff;
               }
-              .standee-card {
+              .standee-frame {
                 box-shadow: none;
-                border: 3px solid #c0392b;
                 page-break-inside: avoid;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
               }
             }
           </style>
         </head>
         <body>
-          <div class="standee-card">
-            <div class="header-logo">🍕 Cafe Pizza House</div>
-            <div class="tagline">Kawardha ki Sabse Tasty Pizza</div>
-            
-            <div class="qr-wrapper">
-              <img class="qr-image" src="${qrImageUrl}" alt="QR Code">
-            </div>
-            
-            <div>
-              <span class="table-badge">${titleText}</span>
-            </div>
-            <div class="scan-instruction">📱 Scan QR Code to Order Online</div>
-            
-            <div class="footer-credits">
-              Scan to Order | Powered by <a href="mailto:wovrixofficial@gmail.com">Wovrix</a>
+          <div class="standee-frame">
+            <div class="standee-card">
+              <div class="brand-subtitle">Welcome to</div>
+              <div class="brand-title">Cafe Pizza House</div>
+              <div class="brand-divider"></div>
+              
+              <div class="scan-callout">Scan to view menu & order</div>
+              
+              <div class="qr-wrapper">
+                <img class="qr-image" src="${qrImageUrl}" alt="QR Code">
+              </div>
+              
+              <div>
+                <span class="table-badge-standee">${titleText}</span>
+              </div>
+              
+              <ol class="instructions-list">
+                <li>Scan the QR code with your camera</li>
+                <li>Browse our dynamic menu & customize</li>
+                <li>Send your order to WhatsApp instantly</li>
+              </ol>
+              
+              <div class="footer-credits">
+                Crafted with pride by <a href="mailto:wovrixofficial@gmail.com">Wovrix</a>
+              </div>
             </div>
           </div>
           
