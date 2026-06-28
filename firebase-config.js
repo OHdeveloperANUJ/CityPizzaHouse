@@ -1,5 +1,5 @@
 // Shared Firebase configuration. Import this before other scripts that need 'db'.
-const firebaseConfig = {
+const firebaseConfig = window.firebaseConfig || {
   apiKey: "AIzaSyB5h2R-rijQfwj57kG-uyecKze7wELQUiA",
   authDomain: "city-pizza-house.firebaseapp.com",
   databaseURL: "https://city-pizza-house-default-rtdb.firebaseio.com",
