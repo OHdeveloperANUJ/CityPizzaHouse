@@ -469,6 +469,18 @@
       <div class="panel-grid">
         <!-- Settings Form -->
         <div class="contact-form-panel">
+          <h3>🏪 Shop Status</h3>
+          <div style="background-color: var(--background); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <span id="shop-status-badge" class="role-badge" style="background-color: #27ae60; color: white; font-size: 14px; padding: 6px 12px; margin-right: 10px;">🏪 SHOP IS OPEN</span>
+              <p style="color: var(--text-muted); font-size: 13px; margin: 6px 0 0 0;">When closed, customers can view the menu but cannot place orders.</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="shop-status-toggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
           <h3>Restaurant Details</h3>
           <form id="settings-details-form">
             <div class="form-group">
@@ -1362,6 +1374,22 @@
       settingsWhatsAppInput.value = settings.whatsappNumber || '917880105006';
       settingsHoursInput.value = settings.openingHours || '11:00 AM – 10:00 PM';
 
+      // Populate shop status toggle
+      const shopStatus = settings.shopStatus || 'open';
+      const statusToggle = document.getElementById("shop-status-toggle");
+      const statusBadge = document.getElementById("shop-status-badge");
+      if (statusToggle && statusBadge) {
+        if (shopStatus === 'closed') {
+          statusToggle.checked = false;
+          statusBadge.textContent = '🏪 SHOP IS CLOSED';
+          statusBadge.style.backgroundColor = '#e74c3c';
+        } else {
+          statusToggle.checked = true;
+          statusBadge.textContent = '🏪 SHOP IS OPEN';
+          statusBadge.style.backgroundColor = '#27ae60';
+        }
+      }
+
       // Dynamic Brand Name
       const navBrand = document.querySelector(".nav-brand");
       if (navBrand) {
@@ -1402,6 +1430,21 @@
           alert("Billing and receipt settings saved!");
         } catch (err) {
           alert("Failed to save billing settings.");
+        }
+      });
+    }
+
+    const shopStatusToggle = document.getElementById("shop-status-toggle");
+    if (shopStatusToggle) {
+      shopStatusToggle.addEventListener("change", async () => {
+        const newStatus = shopStatusToggle.checked ? "open" : "closed";
+        try {
+          await db.ref("cityhut/cms/settings/shopStatus").set(newStatus);
+          alert(`Shop status updated to ${newStatus.toUpperCase()}!`);
+        } catch (err) {
+          console.error("Failed to update shop status:", err);
+          alert("Failed to update shop status.");
+          shopStatusToggle.checked = !shopStatusToggle.checked;
         }
       });
     }

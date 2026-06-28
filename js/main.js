@@ -11,6 +11,7 @@
   let activeRestaurantName = "Cafe Pizza House";
   let activeOpeningHours = "11:00 AM – 10:00 PM";
   let activeTableCodes = ["Pizza", "Burger", "Sandwich", "Garlic Bread", "Beverage", "Dessert"];
+  let activeShopStatus = "open";
   
   let activeBillSettings = {
     gstEnabled: true,
@@ -291,6 +292,7 @@
         activeRestaurantName = settings.restaurantName || activeRestaurantName;
         activeOpeningHours = settings.openingHours || activeOpeningHours;
         activeTableCodes = settings.tableCodes || activeTableCodes;
+        activeShopStatus = settings.shopStatus || "open";
         if (settings.bill) {
           activeBillSettings = { ...activeBillSettings, ...settings.bill };
         }
@@ -392,6 +394,27 @@
     // Dynamic Document Title
     if (document.title.includes("Cafe Pizza House")) {
       document.title = document.title.replace(/Cafe Pizza House|Cafe Pizza House/g, activeRestaurantName);
+    }
+
+    // Dynamic Shop Closed Banner
+    const banner = document.getElementById("announcement-banner");
+    const bannerText = document.getElementById("announcement-text");
+    if (banner && bannerText) {
+      if (activeShopStatus === "closed") {
+        bannerText.innerHTML = "🚨 <strong>Notice:</strong> We are currently CLOSED for online orders. Feel free to browse our menu!";
+        banner.style.backgroundColor = "#e74c3c";
+        banner.style.color = "#fff";
+        banner.classList.add("visible");
+      } else {
+        const dismissDismissed = sessionStorage.getItem(BANNER_DISMISS_KEY);
+        if (dismissDismissed) {
+          banner.classList.remove("visible");
+        } else {
+          bannerText.innerHTML = "🎉 Free Delivery on orders above ₹199 within Kawardha! Order Now on WhatsApp";
+          banner.style.backgroundColor = "";
+          banner.style.color = "";
+        }
+      }
     }
   }
 
@@ -659,6 +682,41 @@
       cartSummaryContainer.innerHTML = breakdownHtml;
     } else if (cartSubtotalEl) {
       cartSubtotalEl.textContent = `₹${subtotal}`;
+    }
+
+    // Shop Closed Logic for Checkout Button
+    const checkoutBtn = document.getElementById("checkout-btn");
+    const warningEl = document.getElementById("cart-shop-closed-warning");
+    
+    if (activeShopStatus === "closed") {
+      if (checkoutBtn) {
+        checkoutBtn.disabled = true;
+        checkoutBtn.style.opacity = "0.5";
+        checkoutBtn.style.pointerEvents = "none";
+        const mode = sessionStorage.getItem("cityhut_order_mode") || "delivery";
+        if (mode === "dinein") {
+          checkoutBtn.innerHTML = "<span>🍽️</span> Shop Closed (Ordering Disabled)";
+        } else {
+          checkoutBtn.innerHTML = "<span>📱</span> Shop Closed (Ordering Disabled)";
+        }
+      }
+      
+      if (!warningEl && cartCheckoutFooter) {
+        const warning = document.createElement("div");
+        warning.id = "cart-shop-closed-warning";
+        warning.style.cssText = "color: var(--primary); background-color: rgba(192,57,43,0.1); border: 1px solid var(--primary); border-radius: var(--radius); padding: 10px; font-weight: 700; text-align: center; margin-bottom: 12px; font-size: 13px;";
+        warning.textContent = "🏪 Online ordering is temporarily closed. You can browse the menu.";
+        cartCheckoutFooter.insertBefore(warning, cartCheckoutFooter.firstChild);
+      }
+    } else {
+      if (checkoutBtn) {
+        checkoutBtn.disabled = false;
+        checkoutBtn.style.opacity = "1";
+        checkoutBtn.style.pointerEvents = "auto";
+      }
+      if (warningEl) {
+        warningEl.remove();
+      }
     }
   }
 
@@ -1474,6 +1532,11 @@
 
     orderForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      if (activeShopStatus === "closed") {
+        alert("Online Ordering is currently closed. You cannot place orders at this time.");
+        return;
+      }
 
       if (cart.length === 0) {
         alert("Your cart is empty!");

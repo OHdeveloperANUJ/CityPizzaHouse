@@ -116,7 +116,10 @@
 
   <main class="container section-padding" style="padding-top: 40px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-      <h1 style="color: var(--dark); font-size: 28px; margin: 0;">📋 Live Order Dashboard</h1>
+      <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+        <h1 style="color: var(--dark); font-size: 28px; margin: 0;">📋 Live Order Dashboard</h1>
+        <div id="dashboard-shop-status" style="display: flex; align-items: center; gap: 8px;"></div>
+      </div>
       <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
         <!-- Sound Customization Dropdown -->
         <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 12px;">
@@ -511,6 +514,46 @@
       footerText: "Thank you for ordering!\nPlease visit again! 🙏"
     };
 
+    function renderDashboardShopStatus(status) {
+      const container = document.getElementById("dashboard-shop-status");
+      if (!container) return;
+
+      const isOwner = sessionStorage.getItem('adminRole') === 'owner';
+      const isOpen = status === "open";
+      
+      const badgeColor = isOpen ? "#27ae60" : "#e74c3c";
+      const badgeText = isOpen ? "🏪 Shop Open" : "🏪 Shop Closed";
+
+      let toggleButtonHtml = "";
+      if (isOwner) {
+        toggleButtonHtml = `
+          <button onclick="toggleShopStatus('${status}')" class="btn btn-outline" style="font-size: 11px; padding: 4px 8px; min-height: auto; width: auto; margin: 0; background-color: var(--dark); border-color: var(--dark); color: var(--surface);">
+            ${isOpen ? "Close Shop" : "Open Shop"}
+          </button>
+        `;
+      }
+
+      container.innerHTML = `
+        <span class="role-badge" style="background-color: ${badgeColor}; color: white; padding: 4px 8px; font-size: 13px; font-weight: 600;">
+          ${badgeText}
+        </span>
+        ${toggleButtonHtml}
+      `;
+    }
+
+    window.toggleShopStatus = async function(currentStatus) {
+      const newStatus = currentStatus === "open" ? "closed" : "open";
+      const confirmMsg = `Are you sure you want to ${newStatus === "open" ? "OPEN" : "CLOSE"} the shop for online orders?`;
+      if (confirm(confirmMsg)) {
+        try {
+          await db.ref("cityhut/cms/settings/shopStatus").set(newStatus);
+        } catch (err) {
+          console.error("Failed to toggle shop status:", err);
+          alert("Failed to toggle shop status.");
+        }
+      }
+    };
+
     // Load active settings and billing configurations
     db.ref('cityhut/cms/settings').on('value', snap => {
       const settings = snap.val();
@@ -520,6 +563,9 @@
         if (settings.bill) {
           activeBillSettings = { ...activeBillSettings, ...settings.bill };
         }
+
+        const shopStatus = settings.shopStatus || 'open';
+        renderDashboardShopStatus(shopStatus);
         
         // Dynamic Brand Name
         const navBrand = document.querySelector(".nav-brand");
