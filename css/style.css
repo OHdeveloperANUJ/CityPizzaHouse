@@ -170,6 +170,20 @@ h1, h2, h3, h4 {
   box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
 }
 
+.btn-whatsapp-outline {
+  background-color: transparent;
+  color: #25D366;
+  border: 2px solid #25D366;
+  font-weight: bold;
+}
+
+.btn-whatsapp-outline:hover {
+  background-color: #25D366;
+  color: var(--surface);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.2);
+}
+
 .btn-block {
   width: 100%;
 }
@@ -2818,4 +2832,9 @@ body.dark-mode .toast-text {
     opacity: 0;
     transform: translateX(-120%) translateY(0);
   }
+}
+
+#menu-search-input:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.15) !important;
 }

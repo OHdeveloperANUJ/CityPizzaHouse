@@ -118,8 +118,8 @@
         <h1 id="hero-headline">Kawardha ki Sabse Tasty Pizza 🍕</h1>
         <p id="hero-description">Fresh dough made daily, real premium mozzarella cheese, and rich homemade sauces — delivered steaming hot straight to your door.</p>
         <div class="hero-btns">
-          <a href="menu" class="btn btn-primary">View Menu</a>
-          <a href="https://wa.me/917880105006?text=Hello+CityHut+Pizza!+I+want+to+place+an+order." target="_blank" rel="noopener" class="btn btn-outline">Order on WhatsApp</a>
+          <a href="menu" class="btn btn-primary">Order Now</a>
+          <a href="https://wa.me/917880105006?text=Hello+Cafe+Pizza+House!+I+want+to+place+an+order." target="_blank" rel="noopener" class="btn btn-outline" style="opacity: 0.8; font-weight: 500;">WhatsApp</a>
         </div>
         <div class="trust-badges" id="hero-badges-container">
           <div class="trust-badge" id="hero-badge1"><span>🚀</span> <span>Fast Delivery</span></div>
@@ -433,6 +433,12 @@
             <label for="client-address">Delivery Address (required)</label>
             <input type="text" id="client-address" name="address" placeholder="Enter delivery address in Kawardha">
             <span class="form-error" role="alert">Please enter your delivery address.</span>
+            <div style="margin-top: 8px;">
+              <button type="button" class="share-location-btn btn btn-outline" style="font-size: 13px; padding: 6px 12px; min-height: auto; width: auto; display: inline-flex; align-items: center; gap: 4px;">
+                📍 Share Current Location (Optional)
+              </button>
+              <span class="location-status" style="font-size: 12px; margin-left: 8px; color: var(--primary); font-weight: 600;"></span>
+            </div>
           </div>
           <div class="form-group">
             <label for="client-instructions">Special Instructions (optional)</label>
@@ -448,7 +454,7 @@
             <span class="form-error" role="alert">Please enter your mobile number.</span>
           </div>
           <div class="form-group">
-            <label for="client-email-dt">Email Address (required)</label>
+            <label for="client-email-dt">Email Address (optional)</label>
             <input type="email" id="client-email-dt" name="email-dt" placeholder="Enter your email address">
             <span class="form-error" role="alert">Please enter a valid email address.</span>
           </div>
@@ -461,8 +467,8 @@
           </div>
         </div>
 
-        <button type="submit" id="checkout-btn" class="btn btn-whatsapp btn-block">
-          <span>📱</span> Place Order on WhatsApp
+        <button type="submit" id="checkout-btn" class="btn btn-whatsapp-outline btn-block">
+          <span>📱</span> WhatsApp
         </button>
       </form>
     </div>

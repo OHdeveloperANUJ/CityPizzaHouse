@@ -74,6 +74,14 @@
     <div class="section-header" style="text-align: center; margin-bottom: 40px;">
       <h1 style="font-size: 32px; font-weight: 800; color: var(--dark); margin-bottom: 12px;">Explore Our Fresh Fast Food Menu in Kawardha</h1>
       <p style="color: var(--text-muted); max-width: 600px; margin: 10px auto 0; font-size: 15px;">Feast on Kawardha's best pizzas, burgers, sandwiches, garlic bread, and drinks. Place your order online for quick WhatsApp receipt and superfast doorstep delivery.</p>
+      
+      <!-- Search Bar -->
+      <div class="menu-search-container" style="margin-top: 25px; display: flex; justify-content: center; width: 100%;">
+        <div style="position: relative; width: 100%; max-width: 480px;">
+          <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text-muted); pointer-events: none;">🔍</span>
+          <input type="text" id="menu-search-input" placeholder="Search pizza, burger, drinks..." style="width: 100%; padding: 14px 16px 14px 46px; border: 2px solid var(--border); border-radius: 50px; font-size: 16px; font-weight: 600; background-color: var(--surface); color: var(--dark); outline: none; transition: border-color 0.3s, box-shadow 0.3s;">
+        </div>
+      </div>
     </div>
     
     <div id="menu-sections-container">
@@ -216,6 +224,12 @@
             <label for="client-address">Delivery Address (required)</label>
             <input type="text" id="client-address" name="address" autocomplete="street-address" placeholder="Enter delivery address in Kawardha">
             <span class="form-error" role="alert">Please enter your delivery address.</span>
+            <div style="margin-top: 8px;">
+              <button type="button" class="share-location-btn btn btn-outline" style="font-size: 13px; padding: 6px 12px; min-height: auto; width: auto; display: inline-flex; align-items: center; gap: 4px;">
+                📍 Share Current Location (Optional)
+              </button>
+              <span class="location-status" style="font-size: 12px; margin-left: 8px; color: var(--primary); font-weight: 600;"></span>
+            </div>
           </div>
           <div class="form-group">
             <label for="client-instructions">Special Instructions (optional)</label>
@@ -236,7 +250,7 @@
             <span class="form-error" role="alert">Please enter a valid 10-digit mobile number.</span>
           </div>
           <div class="form-group">
-            <label for="client-email-dt">Email Address (required)</label>
+            <label for="client-email-dt">Email Address (optional)</label>
             <input type="email" id="client-email-dt" name="email-dt" autocomplete="email" placeholder="Enter your email address">
             <span class="form-error" role="alert">Please enter a valid email address.</span>
           </div>
@@ -261,8 +275,8 @@
       <div class="delivery-note" role="note">
         <span>🚚</span> Free delivery within Kawardha
       </div>
-      <button type="submit" id="checkout-btn" form="order-form" class="btn btn-whatsapp btn-block">
-        <span>📱</span> Place Order on WhatsApp
+      <button type="submit" id="checkout-btn" form="order-form" class="btn btn-whatsapp-outline btn-block">
+        <span>📱</span> WhatsApp
       </button>
     </div>
   </div>
@@ -321,8 +335,8 @@
             <input type="tel" id="dinein-phone" required placeholder="Enter 10-digit mobile number">
           </div>
           <div class="form-group">
-            <label for="dinein-email">Email Address</label>
-            <input type="email" id="dinein-email" required placeholder="Enter your email address">
+            <label for="dinein-email">Email Address (Optional)</label>
+            <input type="email" id="dinein-email" placeholder="Enter your email address">
           </div>
           <button type="submit" class="btn btn-primary btn-block">Confirm Details & View Menu</button>
         </form>

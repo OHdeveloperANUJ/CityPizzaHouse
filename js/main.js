@@ -724,6 +724,29 @@
      9. DYNAMIC MENU LOGIC (FIREBASE SYNC)
      ========================================================================== */
   function renderMenuStructureAndItems(categoriesList, menuData) {
+    // Custom sequence of groups: Pizza - Snacks - Chinese & Rice - Cold & Hot
+    const sequence = ["pizza", "snakes", "chinase", "drink"];
+    const nameOverrides = {
+      "pizza": "Pizza",
+      "snakes": "Snacks",
+      "chinase": "Chinese & Rice",
+      "drink": "Cold & Hot"
+    };
+
+    categoriesList.sort((a, b) => {
+      let idxA = sequence.indexOf(a.id);
+      let idxB = sequence.indexOf(b.id);
+      if (idxA === -1) idxA = 99;
+      if (idxB === -1) idxB = 99;
+      return idxA - idxB;
+    });
+
+    categoriesList.forEach(cat => {
+      if (nameOverrides[cat.id]) {
+        cat.name = nameOverrides[cat.id];
+      }
+    });
+
     // Render category filter bar
     const filterBar = document.getElementById("menu-filter-bar");
     if (filterBar) {
@@ -843,6 +866,46 @@
             triggerRenderCategory(catId);
           }
         }
+      });
+    }
+
+    // Handle Menu Search
+    const searchInput = document.getElementById("menu-search-input");
+    if (searchInput) {
+      searchInput.value = "";
+      searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        
+        if (query) {
+          // Force render all categories immediately to make sure all items are searchable
+          categoriesList.forEach(cat => {
+            triggerRenderCategory(cat.id);
+          });
+        }
+        
+        const sections = document.querySelectorAll(".menu-section");
+        sections.forEach(section => {
+          const cards = section.querySelectorAll(".product-card");
+          let visibleCount = 0;
+          
+          cards.forEach(card => {
+            const title = card.querySelector(".product-title").textContent.toLowerCase();
+            const desc = (card.querySelector(".product-desc")?.textContent || "").toLowerCase();
+            
+            if (title.includes(query) || desc.includes(query)) {
+              card.style.display = "block";
+              visibleCount++;
+            } else {
+              card.style.display = "none";
+            }
+          });
+          
+          if (visibleCount > 0) {
+            section.style.display = "block";
+          } else {
+            section.style.display = "none";
+          }
+        });
       });
     }
 
@@ -1297,8 +1360,8 @@
         if (deliveryGroup) deliveryGroup.style.display = "block";
         if (dtGroup) dtGroup.style.display = "none";
         if (checkoutBtn) {
-          checkoutBtn.innerHTML = "<span>📱</span> Place Order on WhatsApp";
-          checkoutBtn.className = "btn btn-whatsapp btn-block";
+          checkoutBtn.innerHTML = "<span>📱</span> WhatsApp";
+          checkoutBtn.className = "btn btn-whatsapp-outline btn-block";
         }
       } else {
         if (deliveryGroup) deliveryGroup.style.display = "none";
@@ -1313,8 +1376,8 @@
           // Takeaway
           if (tableGroup) tableGroup.style.display = "none";
           if (checkoutBtn) {
-            checkoutBtn.innerHTML = "<span>📱</span> Place Order on WhatsApp";
-            checkoutBtn.className = "btn btn-whatsapp btn-block";
+            checkoutBtn.innerHTML = "<span>📱</span> WhatsApp";
+            checkoutBtn.className = "btn btn-whatsapp-outline btn-block";
           }
         }
       }
@@ -1352,6 +1415,55 @@
     } else {
       updateFields("delivery");
     }
+
+    // Initialize Share Location buttons
+    document.querySelectorAll(".share-location-btn").forEach(btn => {
+      const parent = btn.closest(".form-group");
+      const status = parent.querySelector(".location-status");
+      const input = parent.querySelector("input");
+      
+      btn.addEventListener("click", () => {
+        if (!navigator.geolocation) {
+          status.textContent = "Not supported by browser.";
+          return;
+        }
+        
+        status.textContent = "Fetching location...";
+        status.style.color = "var(--primary)";
+        btn.disabled = true;
+        
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+            
+            let currentVal = input.value.trim();
+            if (currentVal) {
+              if (currentVal.includes("https://www.google.com/maps")) {
+                currentVal = currentVal.replace(/https:\/\/www\.google\.com\/maps\?q=[-.\d]+,[-.\d]+/g, mapsLink);
+                input.value = currentVal;
+              } else {
+                input.value = `${currentVal} (Map: ${mapsLink})`;
+              }
+            } else {
+              input.value = mapsLink;
+            }
+            
+            status.textContent = "Location added! ✓";
+            status.style.color = "#27ae60";
+            btn.disabled = false;
+          },
+          (error) => {
+            console.error("Geolocation error:", error);
+            status.textContent = "Cannot fetch. Please type manually.";
+            status.style.color = "var(--primary)";
+            btn.disabled = false;
+          },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      });
+    });
   }
 
   /* ==========================================================================
@@ -1440,10 +1552,7 @@
           document.getElementById("client-phone-dt").value = "+" + formattedPhone;
         }
 
-        if (!email) {
-          document.getElementById("client-email-dt").parentNode.querySelector(".form-error").style.display = "block";
-          isValid = false;
-        }
+        // Email is optional, no longer required
         if (selectedMode === "dinein" && !tableNo) {
           document.getElementById("client-table-dt").parentNode.querySelector(".form-error").style.display = "block";
           isValid = false;
