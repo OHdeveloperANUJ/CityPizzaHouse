@@ -1540,6 +1540,41 @@
   function initCheckoutForm() {
     if (!orderForm) return;
 
+    // Restore saved customer info from localStorage
+    try {
+      const savedName = localStorage.getItem("cityhut_cust_name");
+      const savedPhone = localStorage.getItem("cityhut_cust_phone");
+      const savedAddress = localStorage.getItem("cityhut_cust_address");
+      const savedEmail = localStorage.getItem("cityhut_cust_email");
+
+      if (savedName) {
+        const nameEl = document.getElementById("client-name");
+        const nameDtEl = document.getElementById("client-name-dt");
+        if (nameEl) nameEl.value = savedName;
+        if (nameDtEl) nameDtEl.value = savedName;
+      }
+      if (savedPhone) {
+        let displayPhone = savedPhone;
+        if (displayPhone.startsWith("91") && displayPhone.length === 12) {
+          displayPhone = displayPhone.substring(2);
+        }
+        const phoneEl = document.getElementById("client-phone-delivery");
+        const phoneDtEl = document.getElementById("client-phone-dt");
+        if (phoneEl) phoneEl.value = displayPhone;
+        if (phoneDtEl) phoneDtEl.value = displayPhone;
+      }
+      if (savedAddress) {
+        const addrEl = document.getElementById("client-address");
+        if (addrEl) addrEl.value = savedAddress;
+      }
+      if (savedEmail) {
+        const emailEl = document.getElementById("client-email-dt");
+        if (emailEl) emailEl.value = savedEmail;
+      }
+    } catch (e) {
+      console.warn("Could not restore saved customer info:", e);
+    }
+
     orderForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -1633,6 +1668,20 @@
       }
 
       if (!isValid) return;
+
+      // Save customer details to localStorage for future orders
+      try {
+        localStorage.setItem("cityhut_cust_name", name);
+        localStorage.setItem("cityhut_cust_phone", phone);
+        if (selectedMode === "delivery" && address) {
+          localStorage.setItem("cityhut_cust_address", address);
+        }
+        if (email) {
+          localStorage.setItem("cityhut_cust_email", email);
+        }
+      } catch (e) {
+        console.warn("Could not save customer info to localStorage:", e);
+      }
 
       if (selectedMode === "dinein") {
         try {

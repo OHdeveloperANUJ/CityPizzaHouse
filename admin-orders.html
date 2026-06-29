@@ -863,11 +863,24 @@
             ${editButton}
             ${printBillButton}
             ${whatsappButton}
+            <button onclick="deleteOrder('${order.id}')" class="btn btn-outline btn-block" style="margin-top: 8px; font-size: 13px; padding: 8px 16px; min-height: auto; border-color: #e74c3c; color: #e74c3c; background-color: transparent;">
+              🗑️ Delete Order
+            </button>
           </div>
         </div>
       `;
 
       return card;
+    }
+
+    async function deleteOrder(orderId) {
+      if (!confirm("Are you sure you want to permanently delete this order?")) return;
+      try {
+        await db.ref(`cityhut/orders/${orderId}`).remove();
+      } catch (err) {
+        console.error("Error deleting order:", err);
+        alert("Failed to delete order. Please try again.");
+      }
     }
 
     async function updateOrderStatus(orderId, newStatus) {

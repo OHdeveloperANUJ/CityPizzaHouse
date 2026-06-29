@@ -1721,29 +1721,55 @@
         return;
       }
 
-      // Aggregate unique customers based on phone number
-      const customersMap = new Map();
-      ordersList.forEach(o => {
+      const customers = [];
+      const seenPhones = new Set();
+      const seenEmails = new Set();
+
+      // Sort descending by date so we get the most recent name/info first
+      const sortedOrders = [...ordersList].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      sortedOrders.forEach(o => {
         const phone = o.phone ? o.phone.trim() : "";
-        if (!phone) return;
+        const email = o.email ? o.email.trim() : "";
         const name = o.customerName || "Guest";
-        const email = o.email || "N/A";
-        
-        if (!customersMap.has(phone)) {
-          customersMap.set(phone, { name, email, orderCount: 0, totalSpend: 0 });
-        }
-        
-        const cust = customersMap.get(phone);
-        const subtotal = o.items ? Object.values(o.items).reduce((sum, item) => sum + (item.price * item.qty), 0) : 0;
-        cust.orderCount += 1;
-        cust.totalSpend += subtotal;
+
+        // Skip if we have already seen this phone number (if not empty)
+        if (phone && seenPhones.has(phone)) return;
+        // Skip if we have already seen this email (if not empty and not N/A)
+        if (email && email.toLowerCase() !== "n/a" && seenEmails.has(email.toLowerCase())) return;
+
+        if (phone) seenPhones.add(phone);
+        if (email && email.toLowerCase() !== "n/a") seenEmails.add(email.toLowerCase());
+
+        // Calculate total spend & order count for this customer across all orders
+        let orderCount = 0;
+        let totalSpend = 0;
+
+        ordersList.forEach(order => {
+          const matchPhone = phone && order.phone && order.phone.trim() === phone;
+          const matchEmail = email && email.toLowerCase() !== "n/a" && order.email && order.email.trim().toLowerCase() === email.toLowerCase();
+          
+          if (matchPhone || matchEmail) {
+            const subtotal = order.items ? Object.values(order.items).reduce((sum, item) => sum + (item.price * item.qty), 0) : 0;
+            orderCount++;
+            totalSpend += subtotal;
+          }
+        });
+
+        customers.push({
+          name,
+          phone: phone || "N/A",
+          email: email || "N/A",
+          orderCount,
+          totalSpend
+        });
       });
 
       let csvContent = "\uFEFF"; // UTF-8 BOM
       csvContent += "Customer Name,Phone Number,Email,Total Orders,Total Spend (INR)\n";
 
-      customersMap.forEach((cust, phone) => {
-        const row = `"${cust.name.replace(/"/g, '""')}","${phone}","${cust.email.replace(/"/g, '""')}",${cust.orderCount},${cust.totalSpend}`;
+      customers.forEach(cust => {
+        const row = `"${cust.name.replace(/"/g, '""')}","${cust.phone}","${cust.email.replace(/"/g, '""')}",${cust.orderCount},${cust.totalSpend}`;
         csvContent += row + "\n";
       });
 
