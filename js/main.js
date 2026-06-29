@@ -1588,6 +1588,73 @@
         return;
       }
 
+      // Honeypot spam validation
+      const honeypotVal = document.getElementById("client-honeypot")?.value || "";
+      const honeypotDtVal = document.getElementById("client-honeypot-dt")?.value || "";
+      if (honeypotVal !== "" || honeypotDtVal !== "") {
+        console.warn("Honeypot trap triggered!");
+        alert("Order submission blocked due to suspected spam behavior.");
+        return;
+      }
+
+      // Real-Time Price Verification from Firebase to prevent Client-Side Price Manipulation
+      try {
+        const menuSnap = await db.ref("cityhut/cms/menu").once("value");
+        const customSnap = await db.ref("cityhut/cms/customizations").once("value");
+        if (menuSnap.exists()) {
+          const officialMenu = menuSnap.val() || {};
+          const officialCustoms = (customSnap.exists() ? customSnap.val() : {}) || {};
+
+          cart.forEach(item => {
+            let matchedItem = null;
+            for (const key in officialMenu) {
+              if (officialMenu[key] && officialMenu[key].name === item.name) {
+                matchedItem = officialMenu[key];
+                break;
+              }
+            }
+
+            if (matchedItem) {
+              const sizeKey = (item.size || "single").toLowerCase();
+              let basePrice = matchedItem.prices[sizeKey];
+              if (basePrice === undefined) {
+                basePrice = Object.values(matchedItem.prices)[0] || 0;
+              }
+
+              let crustPrice = 0;
+              if (item.crust && item.category) {
+                const categoryCrusts = officialCustoms[item.category]?.crusts || [];
+                const matchedCrust = categoryCrusts.find(c => c.name === item.crust);
+                if (matchedCrust) crustPrice = matchedCrust.price || 0;
+              }
+
+              let addonsPrice = 0;
+              const verifiedAddons = [];
+              if (item.addons && Array.isArray(item.addons) && item.category) {
+                const categoryAddons = officialCustoms[item.category]?.addons || [];
+                item.addons.forEach(addon => {
+                  const matchedAddon = categoryAddons.find(a => a.name === addon.name);
+                  if (matchedAddon) {
+                    addonsPrice += matchedAddon.price || 0;
+                    verifiedAddons.push({
+                      name: matchedAddon.name,
+                      price: matchedAddon.price
+                    });
+                  }
+                });
+              }
+
+              const correctPrice = basePrice + crustPrice + addonsPrice;
+              item.price = correctPrice;
+              item.addons = verifiedAddons;
+            }
+          });
+          saveCart();
+        }
+      } catch (err) {
+        console.warn("Could not verify prices in real-time:", err);
+      }
+
       const selectedMode = orderForm.querySelector('input[name="order-mode"]:checked').value;
       const subtotal = getCartSubtotal();
       
@@ -2679,6 +2746,54 @@
     }, 10000);
   }
 
+  function initPrivacyBanner() {
+    const consentKey = "cityhut_privacy_consent";
+    if (localStorage.getItem(consentKey)) return;
+
+    const banner = document.createElement("div");
+    banner.style.position = "fixed";
+    banner.style.bottom = "20px";
+    banner.style.left = "50%";
+    banner.style.transform = "translateX(-50%) translateY(120px)";
+    banner.style.backgroundColor = "var(--dark)";
+    banner.style.color = "#ffffff";
+    banner.style.padding = "16px 24px";
+    banner.style.borderRadius = "var(--radius)";
+    banner.style.boxShadow = "0 10px 25px rgba(0,0,0,0.3)";
+    banner.style.zIndex = "99999";
+    banner.style.display = "flex";
+    banner.style.alignItems = "center";
+    banner.style.justifyContent = "space-between";
+    banner.style.gap = "20px";
+    banner.style.width = "90%";
+    banner.style.maxWidth = "550px";
+    banner.style.transition = "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)";
+    banner.style.border = "1px solid rgba(255,255,255,0.1)";
+
+    banner.innerHTML = `
+      <div style="font-size: 13px; font-weight: 500; text-align: left; line-height: 1.5; color: rgba(255,255,255,0.9);">
+        🍪 We use cookies and local storage to cache your checkout details. By continuing to browse, you agree to our 
+        <a href="privacy" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Privacy Policy</a>.
+      </div>
+      <button class="btn btn-primary" style="padding: 8px 16px; min-height: auto; font-size: 12px; font-weight: bold; white-space: nowrap; border: none; cursor: pointer; border-radius: 8px; background-color: var(--primary); color: #ffffff;">
+        Accept
+      </button>
+    `;
+
+    document.body.appendChild(banner);
+
+    setTimeout(() => {
+      banner.style.transform = "translateX(-50%) translateY(0)";
+    }, 1500);
+
+    const btn = banner.querySelector("button");
+    btn.addEventListener("click", () => {
+      localStorage.setItem(consentKey, Date.now().toString());
+      banner.style.transform = "translateX(-50%) translateY(150px)";
+      setTimeout(() => banner.remove(), 500);
+    });
+  }
+
   /* ==========================================================================
      APPLICATION INITIATION
      ========================================================================== */
@@ -2701,5 +2816,6 @@
     initContactPage();
     initScrollAnimations();
     initPwaAndBroadcasts();
+    initPrivacyBanner();
   });
 })();
