@@ -1669,6 +1669,18 @@
 
       if (!isValid) return;
 
+      // Client-Side Checkout Rate Limiting (Throttle to 1 order per 60 seconds)
+      const lastOrderTime = localStorage.getItem("cityhut_last_order_time");
+      if (lastOrderTime) {
+        const diff = Date.now() - parseInt(lastOrderTime);
+        const throttleLimit = 60 * 1000; // 60 seconds
+        if (diff < throttleLimit) {
+          const waitSec = Math.ceil((throttleLimit - diff) / 1000);
+          alert(`Please wait ${waitSec} seconds before placing another order to prevent spam.`);
+          return;
+        }
+      }
+
       // Save customer details to localStorage for future orders
       try {
         localStorage.setItem("cityhut_cust_name", name);
@@ -1682,6 +1694,11 @@
       } catch (e) {
         console.warn("Could not save customer info to localStorage:", e);
       }
+
+      // Track successful submission timestamp
+      try {
+        localStorage.setItem("cityhut_last_order_time", Date.now().toString());
+      } catch (e) {}
 
       if (selectedMode === "dinein") {
         try {
