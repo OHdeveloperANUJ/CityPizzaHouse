@@ -1,13 +1,13 @@
 // Shared Firebase configuration. Import this before other scripts that need 'db'.
 const firebaseConfig = window.firebaseConfig || {
-  apiKey: "AIzaSyB5h2R-rijQfwj57kG-uyecKze7wELQUiA",
-  authDomain: "city-pizza-house.firebaseapp.com",
-  databaseURL: "https://city-pizza-house-default-rtdb.firebaseio.com",
-  projectId: "city-pizza-house",
-  storageBucket: "city-pizza-house.firebasestorage.app",
-  messagingSenderId: "507480462438",
-  appId: "1:507480462438:web:8442084c19fdd2bf8dc9a7",
-  measurementId: "G-EHK4FTS0CW"
+  apiKey: "AIzaSyB0mIWQvYIQLePgkpsbCuAVCCwAwAVLit0",
+  authDomain: "cafe-pizza-house.firebaseapp.com",
+  databaseURL: "https://cafe-pizza-house-default-rtdb.firebaseio.com",
+  projectId: "cafe-pizza-house",
+  storageBucket: "cafe-pizza-house.firebasestorage.app",
+  messagingSenderId: "328882657931",
+  appId: "1:328882657931:web:12f0eb0606b15a5d9fd28e",
+  measurementId: "G-NZVTCV53JB"
 };
 
 // Check if the config contains default REPLACE placeholders
